@@ -6,4 +6,5 @@ namespace Steins
 void main()
 {
 	Steins::Print();
+	return 0;
 }
