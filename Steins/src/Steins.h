@@ -2,8 +2,8 @@
 
 // For use by Steins applications
 
-#include <stdio.h>
 #include "Steins/Application.h"
+#include "Steins/Log.h"
 
 // ---Entry Point----------------------------
 #include "Steins/EntryPoint.h"
