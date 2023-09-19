@@ -4,6 +4,9 @@
     <Filter Include="Steins">
       <UniqueIdentifier>{FB7AE7D1-E71C-12A8-D0D7-25FCBC1899F8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Steins\Events">
+      <UniqueIdentifier>{7F9E7B97-EB5E-F7CD-B499-404B20193CAA}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Steins.h" />
@@ -16,9 +19,25 @@
     <ClInclude Include="src\Steins\EntryPoint.h">
       <Filter>Steins</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Events\ApplicationEvent.h">
+      <Filter>Steins\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Events\Event.h">
+      <Filter>Steins\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Events\KeyEvent.h">
+      <Filter>Steins\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Events\MouseEvent.h">
+      <Filter>Steins\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Log.h">
       <Filter>Steins</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\MathTypes.h">
+      <Filter>Steins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stspch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Steins\Application.cpp">
@@ -27,5 +46,6 @@
     <ClCompile Include="src\Steins\Log.cpp">
       <Filter>Steins</Filter>
     </ClCompile>
+    <ClCompile Include="src\stspch.cpp" />
   </ItemGroup>
 </Project>
