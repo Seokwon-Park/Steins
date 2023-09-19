@@ -1,3 +1,6 @@
 [submodule "Steins/vendor/spdlog"]
 	path = Steins/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Steins/vendor/GLFW"]
+	path = Steins/vendor/GLFW
+	url = https://github.com/TheCherno/GLFW
