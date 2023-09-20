@@ -1,6 +1,5 @@
 #pragma once
-#include <stdint.h>
-#include <DirectXMath.h>
+#include "stspch.h"
 
 // unsigned integers
 using u64 = uint64_t;

@@ -75,12 +75,12 @@ namespace Steins
 		template<typename T>
 		bool Dispatch(EventFn<T> func)
 		{
-			if (m_Event.GetEventType() == T::GeStaticType())
+			if (m_Event.GetEventType() == T::GetStaticType())
 			{
 				m_Event.m_Handled = func(*(T*)&m_Event);
 				return true;
 			}
-			return false
+			return false;
 		}
 	private:
 		Event& m_Event;
