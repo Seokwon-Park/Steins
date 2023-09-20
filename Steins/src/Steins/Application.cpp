@@ -3,7 +3,7 @@
 
 #include "Steins/Log.h"
 
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Steins {
 
@@ -23,15 +23,45 @@ namespace Steins {
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
 		STS_CORE_TRACE("{0}", e);
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		{
+			(*--it)->OnEvent(e);
+			if (e.Handled)
+				break;
+		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
 	}
 
 	void Application::Run()
 	{
+		MSG msg = { 0 };
 		while (m_Running)
 		{
-			glClearColor(1, 0, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
-			m_Window->OnUpdate();
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+			else
+			{
+#ifdef STS_PLATFORM_WINDOWS
+				glClearColor(1, 0, 1, 1);
+				glClear(GL_COLOR_BUFFER_BIT);
+#endif
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate();
+
+				m_Window->OnUpdate();
+			}
 		}
 	}
 	bool Application::OnWindowClose(WindowCloseEvent& e)

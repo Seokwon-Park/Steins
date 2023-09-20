@@ -37,6 +37,12 @@
     <ClInclude Include="src\Steins\Events\MouseEvent.h">
       <Filter>Steins\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Layer.h">
+      <Filter>Steins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\LayerStack.h">
+      <Filter>Steins</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Log.h">
       <Filter>Steins</Filter>
     </ClInclude>
@@ -53,6 +59,12 @@
       <Filter>Platform</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Application.cpp">
+      <Filter>Steins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Layer.cpp">
+      <Filter>Steins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\LayerStack.cpp">
       <Filter>Steins</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Log.cpp">

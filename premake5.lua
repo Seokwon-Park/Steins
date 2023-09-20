@@ -13,14 +13,16 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Steins/vendor/GLFW/include"
+IncludeDir["Glad"] = "Steins/vendor/Glad/include"
 
 include "Steins/vendor/GLFW"
+include "Steins/vendor/Glad"
+
 
 project "Steins"
 	location "Steins"
 	kind "SharedLib"
 	language "C++"
-	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -38,12 +40,14 @@ project "Steins"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
@@ -56,6 +60,7 @@ project "Steins"
 		{
 			"STS_PLATFORM_WINDOWS",
 			"STS_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -65,15 +70,18 @@ project "Steins"
 
 	filter "configurations:Debug"
 		defines "STS_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "STS_RELEASE"
-		symbols "On"
+		buildoptions "/MD"
+		optimize "On"
 	
 	filter "configurations:Dist"
 		defines "STS_DIST"
-		symbols "On"
+		buildoptions "/MD"
+		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
@@ -112,12 +120,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "STS_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "STS_RELEASE"
+		buildoptions "/MD"
 		symbols "On"
 	
 	filter "configurations:Dist"
 		defines "STS_DIST"
+		buildoptions "/MD"
 		symbols "On"

@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Core.h"
-#include "Events/Event.h"
-#include "Steins/Events/ApplicationEvent.h"
 
 #include "Window.h"
+#include "Steins/LayerStack.h"
+#include "Steins/Events/Event.h"
+#include "Steins/Events/ApplicationEvent.h"
+
 
 namespace Steins {
 	class STEINS_API Application
@@ -16,11 +18,15 @@ namespace Steins {
 		void Run();
 
 		void OnEvent(Event& e);
+
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
+		LayerStack m_LayerStack;
 	};
 
 	// To be defined in client
