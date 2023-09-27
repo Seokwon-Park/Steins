@@ -44,24 +44,16 @@ namespace Steins {
 
 	void Application::Run()
 	{
-		MSG msg = { 0 };
 		while (m_Running)
 		{
-			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			else
-			{
-#ifdef STS_PLATFORM_WINDOWS
-				glClearColor(1, 0, 1, 1);
-				glClear(GL_COLOR_BUFFER_BIT);
-#endif
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate();
 
-				m_Window->OnUpdate();
-			}
+			glClearColor(1, 0, 1, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
+
+			m_Window->OnUpdate();
 		}
 	}
 	bool Application::OnWindowClose(WindowCloseEvent& e)

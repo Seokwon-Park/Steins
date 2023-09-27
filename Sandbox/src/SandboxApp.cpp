@@ -25,7 +25,7 @@ class Sandbox : public Steins::Application
 public:
 	Sandbox()
 	{
-		//PushLayer(new ExampleLayer());
+		PushLayer(new ExampleLayer());
 	}
 
 	~Sandbox()
