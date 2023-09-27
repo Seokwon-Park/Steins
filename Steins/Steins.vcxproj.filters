@@ -10,11 +10,17 @@
     <Filter Include="Steins\Events">
       <UniqueIdentifier>{7F9E7B97-EB5E-F7CD-B499-404B20193CAA}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{6553d53a-a550-4a0c-8087-c2a4223defb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{93043219-9594-4b0c-aae0-4b1a4428f044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Steins\ImGui">
+      <UniqueIdentifier>{1e802222-34ac-4c6f-80d2-1f329ff3b982}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\WindowsWindow.h">
-      <Filter>Platform</Filter>
-    </ClInclude>
     <ClInclude Include="src\Steins.h" />
     <ClInclude Include="src\Steins\Application.h">
       <Filter>Steins</Filter>
@@ -53,11 +59,17 @@
       <Filter>Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\stspch.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\ImGui\ImGuiLayer.h">
+      <Filter>Steins\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\WindowsWindow.cpp">
-      <Filter>Platform</Filter>
-    </ClCompile>
     <ClCompile Include="src\Steins\Application.cpp">
       <Filter>Steins</Filter>
     </ClCompile>
@@ -71,5 +83,14 @@
       <Filter>Steins</Filter>
     </ClCompile>
     <ClCompile Include="src\stspch.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp">
+      <Filter>Steins\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

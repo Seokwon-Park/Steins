@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>stspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>STS_PLATFORM_WINDOWS;STS_BUILD_DLL;GLFW_INCLUDE_NONE;STS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -91,7 +91,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Steins\Steins.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -104,7 +104,7 @@
       <PrecompiledHeaderFile>stspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>STS_PLATFORM_WINDOWS;STS_BUILD_DLL;GLFW_INCLUDE_NONE;STS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,7 +132,7 @@
       <PrecompiledHeaderFile>stspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>STS_PLATFORM_WINDOWS;STS_BUILD_DLL;GLFW_INCLUDE_NONE;STS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -155,7 +155,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\WindowsWindow.h" />
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Steins.h" />
     <ClInclude Include="src\Steins\Application.h" />
     <ClInclude Include="src\Steins\Core.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="src\Steins\Events\Event.h" />
     <ClInclude Include="src\Steins\Events\KeyEvent.h" />
     <ClInclude Include="src\Steins\Events\MouseEvent.h" />
+    <ClInclude Include="src\Steins\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Steins\Layer.h" />
     <ClInclude Include="src\Steins\LayerStack.h" />
     <ClInclude Include="src\Steins\Log.h" />
@@ -172,8 +174,10 @@
     <ClInclude Include="src\stspch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\WindowsWindow.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Steins\Application.cpp" />
+    <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp" />
     <ClCompile Include="src\Steins\Layer.cpp" />
     <ClCompile Include="src\Steins\LayerStack.cpp" />
     <ClCompile Include="src\Steins\Log.cpp" />
@@ -187,6 +191,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
