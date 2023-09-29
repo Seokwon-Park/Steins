@@ -1,2 +1,2 @@
-# Steins Engine
-짜증나죽겠다 뭘하던 우리집 컴에서만 안된다 .
+# Steins; Engine
+![SteinsEngine copy](https://github.com/Seokwon-Park/Steins/assets/22045739/30397492-0569-415f-943d-5cdc11ac2345)
