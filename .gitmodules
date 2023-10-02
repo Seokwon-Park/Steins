@@ -7,3 +7,6 @@
 [submodule "Steins/vendor/imgui"]
 	path = Steins/vendor/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "Steins/vendor/glm"]
+	path = Steins/vendor/glm
+	url = https://github.com/g-truc/glm
