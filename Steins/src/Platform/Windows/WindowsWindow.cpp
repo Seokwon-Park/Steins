@@ -31,7 +31,7 @@ namespace Steins
 
 	WindowsWindow::~WindowsWindow()
 	{
-
+		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)

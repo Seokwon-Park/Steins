@@ -12,12 +12,16 @@
 	#error Steins only support Windows!
 #endif
 
+#ifdef STS_DEBUG
+	#define STS_ENABLE_ASSERTS
+#endif
+
 #ifdef STS_ENABLE_ASSERTS
-#define STS_ASSERT(x, ...) {if(!(x)) {STS_ERROR("Assertion Failed: {0}", __VA_ARGS); __debugbreak(); } }
-#define STS_CORE_ASSERT(x, ...) { if(!(x)) {STS_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define STS_ASSERT(x, ...) {if(!(x)) {STS_ERROR("Assertion Failed: {0}", __VA_ARGS); __debugbreak(); } }
+	#define STS_CORE_ASSERT(x, ...) { if(!(x)) {STS_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
-#define STS_ASSERT(x, ...)
-#define STS_CORE_ASSERT(x, ...)
+	#define STS_ASSERT(x, ...)
+	#define STS_CORE_ASSERT(x, ...)
 #endif
 
 #define BIT(x) (1 << x)
