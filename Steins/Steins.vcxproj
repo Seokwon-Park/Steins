@@ -165,10 +165,12 @@
     <ClInclude Include="src\Steins\Events\MouseEvent.h" />
     <ClInclude Include="src\Steins\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Steins\Input.h" />
+    <ClInclude Include="src\Steins\KeyCodes.h" />
     <ClInclude Include="src\Steins\Layer.h" />
     <ClInclude Include="src\Steins\LayerStack.h" />
     <ClInclude Include="src\Steins\Log.h" />
     <ClInclude Include="src\Steins\MathTypes.h" />
+    <ClInclude Include="src\Steins\MouseButtonCodes.h" />
     <ClInclude Include="src\Steins\Window.h" />
     <ClInclude Include="src\stspch.h" />
   </ItemGroup>
