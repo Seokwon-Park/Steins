@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <d3d11.h>
 #include <DirectXMath.h>
 
 #include "Steins/Log.h"
