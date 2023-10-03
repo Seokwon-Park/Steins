@@ -161,6 +161,8 @@
     <ClInclude Include="src\Steins\Log.h" />
     <ClInclude Include="src\Steins\MathTypes.h" />
     <ClInclude Include="src\Steins\MouseButtonCodes.h" />
+    <ClInclude Include="src\Steins\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Steins\Window.h" />
     <ClInclude Include="src\stspch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -581,6 +583,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Steins\Application.cpp" />

@@ -1,16 +1,9 @@
 #pragma once
 
 #include "Steins/Window.h"
+#include "Steins/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
-
-#include <d3dcompiler.h>
-#include <d3d11.h>
-
-#include <wrl.h>
-
-using namespace DirectX;
-using namespace Microsoft::WRL;
 
 namespace Steins
 {
@@ -37,6 +30,7 @@ namespace Steins
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_glfwWindow;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{
