@@ -3,14 +3,14 @@
 
 // unsigned integers
 using u64 = uint64_t;
-using u32 = uint32_t;
+using u32 = unsigned int;
 using u16 = uint16_t;
 using u8 = uint8_t; //0-254 0000 0001
 
 // signed integers
 
 using s64 = int64_t;
-using s32 = int32_t;
+using s32 = int;
 using s16 = int16_t;
 using s8 = int8_t;
 

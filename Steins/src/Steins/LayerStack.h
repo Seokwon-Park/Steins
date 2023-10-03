@@ -22,6 +22,6 @@ namespace Steins
 		std::vector<Layer*>::iterator end() { return m_Layers.end(); }
 	private:
 		std::vector<Layer*> m_Layers;
-		std::vector<Layer*>::iterator m_LayerInsert;
+		u32 m_LayerInsertIndex = 0;
 	};
 }

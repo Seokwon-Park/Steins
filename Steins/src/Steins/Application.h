@@ -7,6 +7,8 @@
 #include "Steins/Events/Event.h"
 #include "Steins/Events/ApplicationEvent.h"
 
+#include "Steins/ImGui/ImGuiLayer.h"
+
 
 namespace Steins {
 	class STEINS_API Application
@@ -28,6 +30,7 @@ namespace Steins {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 	private:

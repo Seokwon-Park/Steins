@@ -24,9 +24,10 @@ include "Steins/vendor/imgui"
 
 project "Steins"
 	location "Steins"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -62,7 +63,6 @@ project "Steins"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -72,31 +72,27 @@ project "Steins"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
-
 	filter "configurations:Debug"
 		defines "STS_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "STS_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 	
 	filter "configurations:Dist"
 		defines "STS_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -111,6 +107,7 @@ project "Sandbox"
 	{
 		"Steins/vendor/spdlog/include",
 		"Steins/src",
+		"Steins/vendor",
 		"%{IncludeDir.glm}"
 	}
 
@@ -120,8 +117,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -132,14 +127,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "STS_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "STS_RELEASE"
 		runtime "Release"
-		symbols "On"
+		symbols "on"
 	
 	filter "configurations:Dist"
 		defines "STS_DIST"
 		runtime "Release"
-		symbols "On"
+		symbols "on"
