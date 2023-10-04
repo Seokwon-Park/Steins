@@ -164,6 +164,7 @@
     <ClInclude Include="src\Steins\MathTypes.h" />
     <ClInclude Include="src\Steins\MouseButtonCodes.h" />
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\Steins\Renderer\Shader.h" />
     <ClInclude Include="src\Steins\Window.h" />
     <ClInclude Include="src\stspch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -594,6 +595,7 @@
     <ClCompile Include="src\Steins\Layer.cpp" />
     <ClCompile Include="src\Steins\LayerStack.cpp" />
     <ClCompile Include="src\Steins\Log.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Shader.cpp" />
     <ClCompile Include="src\stspch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

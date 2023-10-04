@@ -9,6 +9,8 @@
 
 #include "Steins/ImGui/ImGuiLayer.h"
 
+#include "Steins/Renderer/Shader.h"
+
 
 namespace Steins {
 	class STEINS_API Application
@@ -35,6 +37,7 @@ namespace Steins {
 		LayerStack m_LayerStack;
 
 		u32  m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 	private:
 		static Application* s_Instance;
 	};
