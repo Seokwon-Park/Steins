@@ -1,12 +1,12 @@
 [submodule "Steins/vendor/spdlog"]
 	path = Steins/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Steins/vendor/GLFW"]
-	path = Steins/vendor/GLFW
-	url = https://github.com/TheCherno/GLFW
 [submodule "Steins/vendor/glm"]
 	path = Steins/vendor/glm
 	url = https://github.com/g-truc/glm
 [submodule "Steins/vendor/imgui"]
 	path = Steins/vendor/imgui
 	url = https://github.com/Seokwon-Park/imgui
+[submodule "Steins/vendor/GLFW"]
+	path = Steins/vendor/GLFW
+	url = https://github.com/Seokwon-Park/glfw
