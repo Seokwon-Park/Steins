@@ -1,6 +1,10 @@
 #include "stspch.h"
 #include "D3D11Context.h"
 
+//temp
+#include "imgui.h"
+#include "backends/imgui_impl_dx11.h"
+
 #include <GLFW/glfw3.h>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -55,6 +59,8 @@ namespace Steins
 			HRESULT hr = D3D11CreateDevice(NULL, driverType, NULL,
 				m_DebugLayerEnabled ? D3D11_CREATE_DEVICE_DEBUG : D3D11_CREATE_DEVICE_SINGLETHREADED,
 				NULL, NULL, D3D11_SDK_VERSION, &D3DDevice, &m_D3DFeatureLevel, &D3DContext);
+			if (FAILED(hr)) continue;
+
 			D3DDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_MSAAQuality);
 
 			DXGI_SWAP_CHAIN_DESC scd;
@@ -106,6 +112,11 @@ namespace Steins
 			}
 
 			Resize();
+
+			//https://github.com/CybernetHacker14/Sentinel/tree/main/Engine/Source/Platform/ImGui 참고하라고 ㅋㅋ
+			ImGui_ImplDX11_Init(D3DDevice, D3DContext);
+
+			if (SUCCEEDED(hr))return;
 		}
 	}
 

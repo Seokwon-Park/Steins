@@ -12,7 +12,6 @@
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 
-
 namespace Steins
 {
 	ImGuiLayer::ImGuiLayer()
@@ -48,8 +47,8 @@ namespace Steins
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
-		//ImGui_ImplDX11_Init(m_d3dDevice.Get(), m_d3dContext.Get())
+		//ImGui_ImplOpenGL3_Init("#version 410");
+
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -67,7 +66,8 @@ namespace Steins
 
 	void ImGuiLayer::Begin()
 	{
-		ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
