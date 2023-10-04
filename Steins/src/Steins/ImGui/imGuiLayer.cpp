@@ -47,9 +47,9 @@ namespace Steins
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
-		//ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplGlfw_InitForOther(window, true);
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
+		//ImGui_ImplDX11_Init(m_d3dDevice.Get(), m_d3dContext.Get())
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -67,7 +67,6 @@ namespace Steins
 
 	void ImGuiLayer::Begin()
 	{
-		//ImGui_ImplDX11_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

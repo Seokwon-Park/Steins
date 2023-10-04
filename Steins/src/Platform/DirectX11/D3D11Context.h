@@ -21,6 +21,8 @@ namespace Steins
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 
+		const ID3D11Device* GetDevice() { return D3DDevice; }
+		const ID3D11DeviceContext* GetContext() { return D3DContext; }
 		void Resize();
 	private:
 		void SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view);
