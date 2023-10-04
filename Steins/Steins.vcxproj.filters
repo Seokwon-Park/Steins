@@ -54,6 +54,12 @@
     <ClInclude Include="src\Platform\DirectX11\D3D11Context.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\DXCommon.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -111,7 +117,16 @@
     <ClInclude Include="src\Steins\MouseButtonCodes.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\Buffer.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\Renderer.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\Shader.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Window.h">
@@ -1368,14 +1383,13 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Renderer\Shader.h" />
-    <ClInclude Include="src\Steins\Renderer\Buffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="src\Steins\Renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Context.cpp">
       <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1404,12 +1418,17 @@
     <ClCompile Include="src\Steins\Log.cpp">
       <Filter>src\Steins</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\Buffer.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\Renderer.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\Shader.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\stspch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Steins\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\Steins\Renderer\Renderer.cpp" />
   </ItemGroup>
 </Project>

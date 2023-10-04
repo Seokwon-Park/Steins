@@ -5,6 +5,7 @@
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_dx11.h"
 
 #include "Steins/Application.h"
 
@@ -46,7 +47,8 @@ namespace Steins
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		//ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplGlfw_InitForOther(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
@@ -65,6 +67,7 @@ namespace Steins
 
 	void ImGuiLayer::Begin()
 	{
+		//ImGui_ImplDX11_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

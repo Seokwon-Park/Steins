@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Steins/Window.h"
+
 #include "Steins/Renderer/GraphicsContext.h"
 
 using namespace DirectX;
@@ -14,11 +16,12 @@ namespace Steins
 
 
 	public:
-		D3D11Context(GLFWwindow* windowHandle);
+		D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps);
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 
+		void Resize();
 	private:
 		void SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view);
 	public:
@@ -41,5 +44,6 @@ namespace Steins
 		ID3D11Debug* m_DebugLayer;
 
 		HWND m_WindowHandle;
+		WindowProps m_WindowProps;
 	};
 }

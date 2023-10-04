@@ -45,7 +45,7 @@ namespace Steins {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		glGenVertexArrays(1, &m_VertexArray);
+		/*glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
 
 		float vertices[3 * 7] =
@@ -121,7 +121,7 @@ namespace Steins {
 			}
 		)";
 
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));*/
 	}
 	Application::~Application()
 	{
@@ -156,12 +156,12 @@ namespace Steins {
 	{
 		while (m_Running)
 		{
-			glClearColor(.1f, .1f, .1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			//glClearColor(.1f, .1f, .1f, 1);
+			//glClear(GL_COLOR_BUFFER_BIT);
 
-			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			//m_Shader->Bind();
+			//glBindVertexArray(m_VertexArray);
+			//glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

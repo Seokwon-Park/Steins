@@ -54,8 +54,8 @@ namespace Steins
 
 		m_glfwWindow = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
-		m_Context = new OpenGLContext(m_glfwWindow);
-		//m_Context = new D3D11Context(m_glfwWindow);
+		//m_Context = new OpenGLContext(m_glfwWindow);
+		m_Context = new D3D11Context(m_glfwWindow, props);
 		m_Context->Init();
 		// ^
 		
