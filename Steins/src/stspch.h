@@ -15,7 +15,11 @@
 #include <unordered_set>
 
 #include <d3d11.h>
+#include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
+
+#include <wrl.h> 
 
 #include "Steins/Log.h"
 #include "Steins/MathTypes.h"
