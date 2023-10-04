@@ -22,10 +22,10 @@ namespace Steins
 	private:
 		void SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view);
 	public:
-		IDXGISwapChain* swapChain;
-		ID3D11Device* d3dDevice;
-		ID3D11DeviceContext* d3dContext;
-		ID3D11RenderTargetView* backBuffer;
+		IDXGISwapChain* SwapChain;
+		ID3D11Device* D3DDevice;
+		ID3D11DeviceContext* D3DContext;
+		ID3D11RenderTargetView* BackBuffer;
 
 	private:
 		D3D_FEATURE_LEVEL m_D3DFeatureLevel;
