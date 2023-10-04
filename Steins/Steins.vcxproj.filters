@@ -1369,6 +1369,9 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Shader.h" />
+    <ClInclude Include="src\Steins\Renderer\Buffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\Steins\Renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Context.cpp">
@@ -1405,5 +1408,8 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Renderer.cpp" />
   </ItemGroup>
 </Project>

@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Platform\DirectX11\D3D11Context.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
@@ -163,7 +164,9 @@
     <ClInclude Include="src\Steins\Log.h" />
     <ClInclude Include="src\Steins\MathTypes.h" />
     <ClInclude Include="src\Steins\MouseButtonCodes.h" />
+    <ClInclude Include="src\Steins\Renderer\Buffer.h" />
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\Steins\Renderer\Renderer.h" />
     <ClInclude Include="src\Steins\Renderer\Shader.h" />
     <ClInclude Include="src\Steins\Window.h" />
     <ClInclude Include="src\stspch.h" />
@@ -586,6 +589,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Context.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
@@ -595,6 +599,8 @@
     <ClCompile Include="src\Steins\Layer.cpp" />
     <ClCompile Include="src\Steins\LayerStack.cpp" />
     <ClCompile Include="src\Steins\Log.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Steins\Renderer\Shader.cpp" />
     <ClCompile Include="src\stspch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

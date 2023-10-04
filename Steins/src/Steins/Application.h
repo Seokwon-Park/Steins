@@ -10,6 +10,7 @@
 #include "Steins/ImGui/ImGuiLayer.h"
 
 #include "Steins/Renderer/Shader.h"
+#include "Steins/Renderer/Buffer.h"
 
 
 namespace Steins {
@@ -36,8 +37,10 @@ namespace Steins {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		u32  m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		u32  m_VertexArray;
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	private:
 		static Application* s_Instance;
 	};
