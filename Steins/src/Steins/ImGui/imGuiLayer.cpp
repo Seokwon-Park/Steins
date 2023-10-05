@@ -49,14 +49,15 @@ namespace Steins
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		switch (Renderer::GetAPI()) {
-		case RendererAPI::Direct3D11:
+		case RendererAPI::API::Direct3D11:
 		{
 			//auto device = m_Context->GetDevice();
 			//auto nativeContext = m_Context->GetContext();
+			ImGui_ImplGlfw_InitForOther(window, true);
 			//ImGui_ImplDX11_Init(device, nativeContext);
 			break;
 		}
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 		{
 			ImGui_ImplGlfw_InitForOpenGL(window, true);
 			ImGui_ImplOpenGL3_Init("#version 410");

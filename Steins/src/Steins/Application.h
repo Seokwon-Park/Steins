@@ -13,6 +13,7 @@
 #include "Steins/Renderer/Buffer.h"
 #include "Steins/Renderer/VertexArray.h"
 
+#include "Steins/Renderer/OrthographicCamera.h"
 
 namespace Steins {
 	class STEINS_API Application
@@ -43,6 +44,8 @@ namespace Steins {
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareVA;
+
+		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};
