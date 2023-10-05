@@ -13,27 +13,6 @@ namespace Steins {
 
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Steins::ShaderDataType::None:	return GL_FLOAT;
-		case Steins::ShaderDataType::Float:	return GL_FLOAT;
-		case Steins::ShaderDataType::Float2:return GL_FLOAT;
-		case Steins::ShaderDataType::Float3:return GL_FLOAT;
-		case Steins::ShaderDataType::Float4:return GL_FLOAT;
-		case Steins::ShaderDataType::Mat3:	return GL_FLOAT;
-		case Steins::ShaderDataType::Mat4:	return GL_FLOAT;
-		case Steins::ShaderDataType::Int:	return GL_INT;
-		case Steins::ShaderDataType::Int2:	return GL_INT;
-		case Steins::ShaderDataType::Int3:	return GL_INT;
-		case Steins::ShaderDataType::Int4:	return GL_INT;
-		case Steins::ShaderDataType::Bool:	return GL_BOOL;
-		}
-		STS_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
-	}
-
 	Application::Application()
 	{
 		STS_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -45,49 +24,52 @@ namespace Steins {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		/*glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
 			-.5f, -.5f, 0.f, 1.0f, 0.0f, 1.0f, 1.0f,
 			 .5f, -.5f, 0.f, 0.0f, 1.0f, 1.0f, 1.0f,
-		 	 0.f,  .5f, 0.f, 1.0f, 0.0f, 1.0f, 1.0f,
+			 0.f,  .5f, 0.f, 1.0f, 0.0f, 1.0f, 1.0f,
 		};
 
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer>vertexBuffer;
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-		{
-			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position", true},
-				{ ShaderDataType::Float4, "a_Color", true},
-			};
-			m_VertexBuffer->SetLayout(layout);
-		}
-
-		u32 index = 0;
-		const auto& layout = m_VertexBuffer->GetLayout();
-		for (const auto& element : m_VertexBuffer->GetLayout())
-		{
-		glEnableVertexAttribArray(index);		
-		glVertexAttribPointer(index, 
-			element.GetComponentCount(), 
-			ShaderDataTypeToOpenGLBaseType( element.Type), 
-			element.Normalized? GL_TRUE:GL_FALSE, 
-			layout.GetStride(),
-			(const void*)element.Offset);
-		index++;
-		}
-
-		//In DX11
-		//std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements = {
-		//{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		//{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		//{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 3 + 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		//};
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position", true},
+			{ ShaderDataType::Float4, "a_Color", true},
+		};
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indices[3] = { 0,1,2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(u32)));
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32)));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+
+		m_SquareVA.reset(VertexArray::Create());
+
+		float squareVertices[3 * 4] =
+		{
+			-.5f, -.5f, 0.f,
+			 .5f, -.5f, 0.f,
+			 0.5f,  .5f, 0.f,
+			 -0.5f,  .5f, 0.f
+		};
+
+		std::shared_ptr<VertexBuffer> squareVB; 
+		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		BufferLayout squareVBLayout = {
+			{ ShaderDataType::Float3, "a_Position", true},
+		};
+		squareVB->SetLayout(squareVBLayout);
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32)));
+		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -121,7 +103,38 @@ namespace Steins {
 			}
 		)";
 
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));*/
+		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+
+		std::string blueShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+
+			out vec3 v_Position;		
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string blueShaderfragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+			in vec4 v_Color;
+
+			void main()
+			{
+				color = vec4(0.2, 0.3, 0.8, 1.0);
+			}
+		)";
+
+		m_BlueShader.reset(new Shader(blueShaderVertexSrc, blueShaderfragmentSrc));
+
 	}
 	Application::~Application()
 	{
@@ -156,12 +169,16 @@ namespace Steins {
 	{
 		while (m_Running)
 		{
-			//glClearColor(.1f, .1f, .1f, 1);
-			//glClear(GL_COLOR_BUFFER_BIT);
+			glClearColor(.1f, .1f, .1f, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
 
-			//m_Shader->Bind();
-			//glBindVertexArray(m_VertexArray);
-			//glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_BlueShader->Bind();
+			m_SquareVA->Bind();
+			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+			m_Shader->Bind();
+			m_VertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

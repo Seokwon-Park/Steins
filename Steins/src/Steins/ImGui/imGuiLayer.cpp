@@ -8,6 +8,8 @@
 #include "backends/imgui_impl_dx11.h"
 
 #include "Steins/Application.h"
+#include "Steins/Renderer/Renderer.h"
+#include "Steins/Renderer/GraphicsContext.h"
 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
@@ -46,9 +48,23 @@ namespace Steins
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		//ImGui_ImplOpenGL3_Init("#version 410");
-
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::Direct3D11:
+		{
+			//auto device = m_Context->GetDevice();
+			//auto nativeContext = m_Context->GetContext();
+			//ImGui_ImplDX11_Init(device, nativeContext);
+			break;
+		}
+		case RendererAPI::OpenGL:
+		{
+			ImGui_ImplGlfw_InitForOpenGL(window, true);
+			ImGui_ImplOpenGL3_Init("#version 410");
+			break;
+		}
+		STS_CORE_ASSERT(false, "API::None currently not supported"); 
+		break;
+		}
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -66,8 +82,8 @@ namespace Steins
 
 	void ImGuiLayer::Begin()
 	{
-		//ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplDX11_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}

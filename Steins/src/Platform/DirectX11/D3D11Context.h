@@ -21,22 +21,23 @@ namespace Steins
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 
-		const ID3D11Device* GetDevice() { return D3DDevice; }
-		const ID3D11DeviceContext* GetContext() { return D3DContext; }
+		virtual ID3D11Device* GetDevice() { return m_D3DDevice; }
+		virtual ID3D11DeviceContext* GetContext() { return m_D3DContext; }
 		void Resize();
 	private:
 		void SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view);
 	public:
-		IDXGISwapChain* SwapChain;
-		ID3D11Device* D3DDevice;
-		ID3D11DeviceContext* D3DContext;
-		ID3D11RenderTargetView* BackBuffer;
 
 	private:
 		D3D_FEATURE_LEVEL m_D3DFeatureLevel;
 		u32 m_MSAAQuality = 0;
 		bool m_MSAAEnabled;
 		bool m_DebugLayerEnabled;
+
+		IDXGISwapChain* m_SwapChain;
+		ID3D11Device* m_D3DDevice;
+		ID3D11DeviceContext* m_D3DContext;
+		ID3D11RenderTargetView* m_BackBuffer;
 
 		ID3D11RenderTargetView* m_RenderTargetView;
 		ID3D11DepthStencilView* m_DepthStencilView;

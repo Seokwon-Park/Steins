@@ -32,8 +32,8 @@ namespace Steins
 		STS_CORE_ASSERT(windowHandle, "Window handle is null!")
 	}
 
-	// 1. m_d3dDevice, m_d3dContext, 
-	// 2. m_swapChain,
+	// 1. m_m_D3DDevice, m_m_D3DContext, 
+	// 2. m_m_SwapChain,
 	// 3. m_renderTargetView,
 	// 4. m_screenViewport,
 	// 5. m_rasterizerState
@@ -56,12 +56,24 @@ namespace Steins
 		{
 			driverType = driverTypes[driverTypeIndex];
 
-			HRESULT hr = D3D11CreateDevice(NULL, driverType, NULL,
+			HRESULT hr = D3D11CreateDevice(
+				NULL,
+				driverType,
+				NULL,
 				m_DebugLayerEnabled ? D3D11_CREATE_DEVICE_DEBUG : D3D11_CREATE_DEVICE_SINGLETHREADED,
-				NULL, NULL, D3D11_SDK_VERSION, &D3DDevice, &m_D3DFeatureLevel, &D3DContext);
-			if (FAILED(hr)) continue;
+				NULL,
+				NULL,
+				D3D11_SDK_VERSION,
+				&m_D3DDevice,
+				&m_D3DFeatureLevel,
+				&m_D3DContext);
 
-			D3DDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_MSAAQuality);
+			if (FAILED(hr))
+			{
+				STS_CORE_ERROR("Failed to Create m_D3DDevice!");
+			}
+
+			m_D3DDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_MSAAQuality);
 
 			DXGI_SWAP_CHAIN_DESC scd;
 			ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
@@ -87,10 +99,10 @@ namespace Steins
 			IDXGIAdapter* dxgiAdapter = 0;
 			IDXGIFactory* dxgiFactory = 0;
 
-			D3DDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
+			m_D3DDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 			dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 			dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
-			dxgiFactory->CreateSwapChain(D3DDevice, &scd, &SwapChain);
+			dxgiFactory->CreateSwapChain(m_D3DDevice, &scd, &m_SwapChain);
 
 			dxgiFactory->Release();
 			dxgiAdapter->Release();
@@ -98,11 +110,11 @@ namespace Steins
 
 			if (m_DebugLayerEnabled)
 			{
-				D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_DebugLayer));
+				m_D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_DebugLayer));
 				m_DebugLayer->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
 
 				ID3D11InfoQueue* infoQueue;
-				D3DDevice->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&infoQueue));
+				m_D3DDevice->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&infoQueue));
 				D3D11_MESSAGE_ID hide[] = { D3D11_MESSAGE_ID_DEVICE_DRAW_SAMPLER_NOT_SET };
 				D3D11_INFO_QUEUE_FILTER filter;
 				memset(&filter, 0, sizeof(filter));
@@ -114,7 +126,6 @@ namespace Steins
 			Resize();
 
 			//https://github.com/CybernetHacker14/Sentinel/tree/main/Engine/Source/Platform/ImGui 참고하라고 ㅋㅋ
-			ImGui_ImplDX11_Init(D3DDevice, D3DContext);
 
 			if (SUCCEEDED(hr))return;
 		}
@@ -129,11 +140,12 @@ namespace Steins
 		ReleaseCOM(m_DepthStencilView);
 		ReleaseCOM(m_DepthStencilBuffer);
 
-		SwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+		m_SwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 
 		ID3D11Texture2D* backBuffer;
-		SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-		D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
+		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+		assert(backBuffer);
+		m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
 		backBuffer->Release();
 
 		D3D11_TEXTURE2D_DESC depthStencilDesc;
@@ -150,8 +162,8 @@ namespace Steins
 		depthStencilDesc.CPUAccessFlags = 0;
 		depthStencilDesc.MiscFlags = 0;
 
-		D3DDevice->CreateTexture2D(&depthStencilDesc, 0, &m_DepthStencilBuffer);
-		D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer, 0, &m_DepthStencilView);
+		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, &m_DepthStencilBuffer);
+		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer, 0, &m_DepthStencilView);
 		SetRenderTargets(m_RenderTargetView, m_DepthStencilView);
 
 		m_ScreenViewport.TopLeftX = 0;
@@ -160,7 +172,7 @@ namespace Steins
 		m_ScreenViewport.Height = (float)height;
 		m_ScreenViewport.MinDepth = 0.0f;
 		m_ScreenViewport.MaxDepth = 1.0f;
-		D3DContext->RSSetViewports(1, &m_ScreenViewport);
+		m_D3DContext->RSSetViewports(1, &m_ScreenViewport);
 
 		D3D11_RASTERIZER_DESC rasterDesc;
 		rasterDesc.AntialiasedLineEnable = false;
@@ -175,18 +187,18 @@ namespace Steins
 		rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 		ID3D11RasterizerState* rs;
-		D3DDevice->CreateRasterizerState(&rasterDesc, &rs);
-		D3DContext->RSSetState(rs);
+		m_D3DDevice->CreateRasterizerState(&rasterDesc, &rs);
+		m_D3DContext->RSSetState(rs);
 		ReleaseCOM(rs);
 	}
 
 	void D3D11Context::SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view)
 	{
-		D3DContext->OMSetRenderTargets(1, &target, view);
+		m_D3DContext->OMSetRenderTargets(1, &target, view);
 	}
 
 	void D3D11Context::SwapBuffers()
 	{
-		SwapChain->Present(1, 0);
+		m_SwapChain->Present(1, 0);
 	}
 }
