@@ -24,7 +24,7 @@ public:
 			 0.f,  .5f, 0.f, 1.0f, 0.0f, 1.0f, 1.0f,
 		};
 
-		std::shared_ptr<Steins::VertexBuffer>vertexBuffer;
+		Steins::Ref<Steins::VertexBuffer>vertexBuffer;
 		vertexBuffer.reset(Steins::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		Steins::BufferLayout layout = {
@@ -35,7 +35,7 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indices[3] = { 0,1,2 };
-		std::shared_ptr<Steins::IndexBuffer> indexBuffer;
+		Steins::Ref<Steins::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
@@ -49,7 +49,7 @@ public:
 			 -0.5f,  .5f, 0.f
 		};
 
-		std::shared_ptr<Steins::VertexBuffer> squareVB;
+		Steins::Ref<Steins::VertexBuffer> squareVB;
 		squareVB.reset(Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		Steins::BufferLayout squareVBLayout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
@@ -58,7 +58,7 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
-		std::shared_ptr<Steins::IndexBuffer> squareIB;
+		Steins::Ref<Steins::IndexBuffer> squareIB;
 		squareIB.reset(Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -207,11 +207,11 @@ public:
 	}
 
 private:
-	std::shared_ptr<Steins::Shader> m_Shader;
-	std::shared_ptr<Steins::VertexArray> m_VertexArray;
+	Steins::Ref<Steins::Shader> m_Shader;
+	Steins::Ref<Steins::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Steins::Shader> m_BlueShader;
-	std::shared_ptr<Steins::VertexArray> m_SquareVA;
+	Steins::Ref<Steins::Shader> m_BlueShader;
+	Steins::Ref<Steins::VertexArray> m_SquareVA;
 
 	Steins::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
