@@ -21,6 +21,7 @@
 
 #include "Steins/Renderer/Buffer.h"
 #include "Steins/Renderer/Shader.h"
+#include "Steins/Renderer/Texture.h"
 #include "Steins/Renderer/VertexArray.h"
 
 #include "Steins/Renderer/OrthographicCamera.h"

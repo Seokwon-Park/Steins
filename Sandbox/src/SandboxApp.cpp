@@ -41,18 +41,19 @@ public:
 
 		m_SquareVA.reset(Steins::VertexArray::Create());
 
-		float squareVertices[3 * 4] =
+		float squareVertices[5 * 4] =
 		{
-			-.5f, -.5f, 0.f,
-			 .5f, -.5f, 0.f,
-			 0.5f,  .5f, 0.f,
-			 -0.5f,  .5f, 0.f
+			-.5f, -.5f, 0.f, 0.0f,	0.0f,
+			 .5f, -.5f, 0.f, 1.0f,	0.0f,
+			 0.5f,  .5f, 0.f, 1.0f, 1.0f,
+			 -0.5f, .5f, 0.f, 0.0f,1.0f
 		};
 
 		Steins::Ref<Steins::VertexBuffer> squareVB;
 		squareVB.reset(Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		Steins::BufferLayout squareVBLayout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
+			{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
 		};
 		squareVB->SetLayout(squareVBLayout);
 		m_SquareVA->AddVertexBuffer(squareVB);
@@ -132,7 +133,49 @@ public:
 		)";
 
 		m_BlueShader.reset(Steins::Shader::Create(blueShaderVertexSrc, blueShaderfragmentSrc));
+
+		std::string texureShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;		
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(Steins::Shader::Create(texureShaderVertexSrc, textureShaderFragmentSrc));
+
+		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
+
+
 
 	void OnUpdate(Steins::Timestep dt) override
 	{
@@ -189,8 +232,11 @@ public:
 			}
 		}
 
-		//Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
-		Steins::Renderer::Submit(m_Shader, m_VertexArray);
+		m_Texture->Bind();
+		Steins::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		// Triangle
+		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Steins::Renderer::EndScene();
 	}
@@ -210,8 +256,10 @@ private:
 	Steins::Ref<Steins::Shader> m_Shader;
 	Steins::Ref<Steins::VertexArray> m_VertexArray;
 
-	Steins::Ref<Steins::Shader> m_BlueShader;
+	Steins::Ref<Steins::Shader> m_BlueShader, m_TextureShader;
 	Steins::Ref<Steins::VertexArray> m_SquareVA;
+
+	Steins::Ref<Steins::Texture2D> m_Texture;
 
 	Steins::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

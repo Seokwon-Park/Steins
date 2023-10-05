@@ -44,6 +44,7 @@ IncludeDir["GLFW"] = "Steins/vendor/GLFW/include"
 IncludeDir["Glad"] = "Steins/vendor/Glad/include"
 IncludeDir["ImGui"] = "Steins/vendor/imgui"
 IncludeDir["glm"] = "Steins/vendor/glm"
+IncludeDir["stb_image"] = "Steins/vendor/stb_image"
 
 include "Steins/vendor/GLFW"
 include "Steins/vendor/Glad"
@@ -67,6 +68,8 @@ project "Steins"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
@@ -78,7 +81,8 @@ project "Steins"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links
