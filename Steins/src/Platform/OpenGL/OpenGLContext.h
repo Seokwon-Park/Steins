@@ -15,5 +15,9 @@ namespace Steins
 		virtual void SwapBuffers() override;
 	private:
 		GLFWwindow* m_WindowHandle;
+
+		// Inherited via GraphicsContext
+		ID3D11Device* GetDevice() override;
+		ID3D11DeviceContext* GetContext() override;
 	};
 }

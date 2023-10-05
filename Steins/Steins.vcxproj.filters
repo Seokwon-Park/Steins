@@ -19,6 +19,9 @@
     <Filter Include="src\Steins">
       <UniqueIdentifier>{3254462F-1E0C-887C-8713-61D873EA226D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Steins\Core">
+      <UniqueIdentifier>{CAE77514-3673-E3D8-3F84-66CDAB8E3FD9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Steins\Events">
       <UniqueIdentifier>{D613B10E-422A-AFA4-8BA1-3AC6F7F67F2C}</UniqueIdentifier>
     </Filter>
@@ -54,10 +57,22 @@
     <ClInclude Include="src\Platform\DirectX11\D3D11Context.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\D3D11RendererAPI.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\D3D11VertexArray.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
@@ -74,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="src\Steins\Core.h">
       <Filter>src\Steins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\Timestep.h">
+      <Filter>src\Steins\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\EntryPoint.h">
       <Filter>src\Steins</Filter>
@@ -120,10 +138,22 @@
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\OrthographicCamera.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\RenderCommand.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Renderer.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\RendererAPI.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Shader.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\VertexArray.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Window.h">
@@ -1380,21 +1410,28 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Steins\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Steins\Renderer\RenderCommand.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\Steins\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Platform\DirectX11\D3D11Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Context.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\D3D11RendererAPI.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\D3D11VertexArray.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
@@ -1424,20 +1461,27 @@
     <ClCompile Include="src\Steins\Renderer\Buffer.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\RenderCommand.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Renderer.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\RendererAPI.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Shader.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\VertexArray.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\stspch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Steins\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Steins\Renderer\RenderCommand.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\Steins\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp" />
   </ItemGroup>
 </Project>

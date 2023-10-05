@@ -25,6 +25,8 @@ namespace Steins
 	D3D11Context::D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps)
 		:m_WindowHandle(glfwGetWin32Window(windowHandle)), m_WindowProps(windowProps)
 	{
+		glfwMakeContextCurrent(windowHandle);
+
 		m_RenderTargetView = nullptr;
 		m_DepthStencilView = nullptr;
 		m_DepthStencilBuffer = nullptr;
@@ -104,6 +106,16 @@ namespace Steins
 			dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
 			dxgiFactory->CreateSwapChain(m_D3DDevice, &scd, &m_SwapChain);
 
+			char videoCardDescription[128];
+			std::string vendor, major, minor, release, build, version;
+			LARGE_INTEGER driverVersion;
+
+			DXGI_ADAPTER_DESC adapterDescription;
+			SecureZeroMemory(&adapterDescription, sizeof(DXGI_ADAPTER_DESC));
+
+			dxgiAdapter->GetDesc(&adapterDescription);
+			wcstombs_s(NULL, videoCardDescription, 128, adapterDescription.Description, 128);
+
 			dxgiFactory->Release();
 			dxgiAdapter->Release();
 			dxgiDevice->Release();
@@ -125,7 +137,10 @@ namespace Steins
 
 			Resize();
 
-			//https://github.com/CybernetHacker14/Sentinel/tree/main/Engine/Source/Platform/ImGui 참고하라고 ㅋㅋ
+			STS_CORE_INFO("DirectX11 Info:");
+			STS_CORE_INFO("  Vendeor: {0}", 1);
+			STS_CORE_INFO("  Renderer: {0}", videoCardDescription);
+			STS_CORE_INFO("  Version: {0}", 3);
 
 			if (SUCCEEDED(hr))return;
 		}

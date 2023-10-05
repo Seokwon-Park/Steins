@@ -17,7 +17,12 @@
 namespace Steins
 {
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer")
+		: Layer("ImGuiLayer"), m_Context(nullptr)
+	{
+	}
+
+	ImGuiLayer::ImGuiLayer(GraphicsContext* context)
+		: Layer("ImGuiLayer"), m_Context(context)
 	{
 	}
 
@@ -51,10 +56,10 @@ namespace Steins
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
-			//auto device = m_Context->GetDevice();
-			//auto nativeContext = m_Context->GetContext();
+			ID3D11Device* device = m_Context->GetDevice();
+			ID3D11DeviceContext* context = m_Context->GetContext();
 			ImGui_ImplGlfw_InitForOther(window, true);
-			//ImGui_ImplDX11_Init(device, nativeContext);
+			ImGui_ImplDX11_Init(device, context);
 			break;
 		}
 		case RendererAPI::API::OpenGL:
@@ -63,7 +68,7 @@ namespace Steins
 			ImGui_ImplOpenGL3_Init("#version 410");
 			break;
 		}
-		STS_CORE_ASSERT(false, "API::None currently not supported"); 
+		STS_CORE_ASSERT(false, "API::None currently not supported");
 		break;
 		}
 	}
@@ -83,8 +88,18 @@ namespace Steins
 
 	void ImGuiLayer::Begin()
 	{
-		ImGui_ImplOpenGL3_NewFrame();
-		//ImGui_ImplDX11_NewFrame();
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::Direct3D11:
+		{
+			ImGui_ImplDX11_NewFrame();
+			break;
+		}
+		case RendererAPI::API::OpenGL:
+		{
+			ImGui_ImplOpenGL3_NewFrame();
+			break;
+		}
+		}
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
@@ -96,8 +111,21 @@ namespace Steins
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 		//Rendering
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::Direct3D11:
+		{
+			ImGui::Render();
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+			break;
+		}
+		case RendererAPI::API::OpenGL:
+		{
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			break;
+		}
+		}
+		
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{

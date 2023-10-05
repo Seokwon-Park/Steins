@@ -6,6 +6,8 @@
 #include "Steins/Layer.h"
 #include "Steins/Log.h"
 
+#include "Steins/Core/Timestep.h"
+
 #include "Steins/Input.h"
 #include "Steins/KeyCodes.h"
 #include "Steins/MouseButtonCodes.h"

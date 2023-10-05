@@ -17,6 +17,8 @@ namespace Steins
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::Direct3D11:
+			break;
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -32,6 +34,8 @@ namespace Steins
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, size);
+		case RendererAPI::API::Direct3D11:
+			break;
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");

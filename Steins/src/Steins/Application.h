@@ -7,6 +7,8 @@
 #include "Steins/Events/Event.h"
 #include "Steins/Events/ApplicationEvent.h"
 
+#include "Steins/Core/Timestep.h"
+
 #include "Steins/ImGui/ImGuiLayer.h"
 
 namespace Steins {
@@ -32,8 +34,8 @@ namespace Steins {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
-	
+		float m_LastFrameTime = 0.0f;
+			
 	private:
 		static Application* s_Instance;
 	};

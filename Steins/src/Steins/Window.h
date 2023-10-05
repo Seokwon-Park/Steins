@@ -4,6 +4,8 @@
 
 #include "Steins/Core.h"
 #include "Steins/Events/Event.h"
+#include "Steins/Renderer/GraphicsContext.h"
+
 
 namespace Steins
 {
@@ -39,6 +41,8 @@ namespace Steins
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
+
+		virtual inline GraphicsContext* GetContext() const = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 

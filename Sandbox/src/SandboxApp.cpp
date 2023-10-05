@@ -8,7 +8,7 @@ public:
 	ExampleLayer()
 		:Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
 	{
-		m_VertexArray.reset(Steins::VertexArray::Create());
+		/*m_VertexArray.reset(Steins::VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
@@ -121,7 +121,7 @@ public:
 			}
 		)";
 
-		m_BlueShader.reset(new Steins::Shader(blueShaderVertexSrc, blueShaderfragmentSrc));
+		m_BlueShader.reset(new Steins::Shader(blueShaderVertexSrc, blueShaderfragmentSrc));*/
 	}
 
 	void OnUpdate() override
@@ -137,11 +137,11 @@ public:
 
 		 if (Steins::Input::IsKeyPressed(STS_KEY_UP))
 		{
-			m_CameraPosition.y -= m_CameraMoveSpeed;
+			m_CameraPosition.y += m_CameraMoveSpeed;
 		}
 		else if (Steins::Input::IsKeyPressed(STS_KEY_DOWN))
 		{
-			m_CameraPosition.y += m_CameraMoveSpeed;
+			m_CameraPosition.y -= m_CameraMoveSpeed;
 		}
 
 		 if (Steins::Input::IsKeyPressed(STS_KEY_A))
@@ -157,15 +157,15 @@ public:
 		Steins::RenderCommand::SetClearColor({ .1f, .1f, .1f, 1 });
 		Steins::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		//m_Camera.SetPosition(m_CameraPosition);
+		//m_Camera.SetRotation(m_CameraRotation);
 
-		Steins::Renderer::BeginScene(m_Camera);
+		//Steins::Renderer::BeginScene(m_Camera);
 
-		Steins::Renderer::Submit(m_BlueShader, m_SquareVA);
-		Steins::Renderer::Submit(m_Shader, m_VertexArray);
+		//Steins::Renderer::Submit(m_BlueShader, m_SquareVA);
+		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
-		Steins::Renderer::EndScene();
+		//Steins::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override

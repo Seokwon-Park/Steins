@@ -23,6 +23,10 @@ namespace Steins
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 
+		// rty3394 - 코드에 문제가 생기면 보통 내 잘못 임 ㅇㅇ;
+		inline GraphicsContext* GetContext() const { return m_Context; }
+		///////////
+
 		inline virtual void* GetNativeWindow() const { return m_glfwWindow; }
 	private:
 		// for GLFW

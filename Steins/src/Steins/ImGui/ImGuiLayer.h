@@ -6,12 +6,15 @@
 #include "Steins/Events/MouseEvent.h"
 #include "Steins/Events/ApplicationEvent.h"
 
+#include "Steins/Renderer/GraphicsContext.h"
+
 namespace Steins
 {
 	class STEINS_API ImGuiLayer :public Layer
 	{
 	public:
 		ImGuiLayer();
+		ImGuiLayer(GraphicsContext* context);
 		~ImGuiLayer();
 
 		virtual void OnAttach() override;
@@ -22,5 +25,6 @@ namespace Steins
 		void End();
 	private:
 		float m_Time = 0.0f;
+		GraphicsContext* m_Context;
 	};
 }
