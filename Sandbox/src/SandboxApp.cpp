@@ -1,8 +1,12 @@
 #include <Steins.h>
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 #include "imgui/imgui.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 class ExampleLayer : public Steins::Layer
 {
@@ -93,7 +97,7 @@ public:
 			}
 		)";
 
-		m_Shader.reset(new Steins::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Steins::Shader::Create(vertexSrc, fragmentSrc));
 
 		std::string blueShaderVertexSrc = R"(
 			#version 330 core
@@ -127,7 +131,7 @@ public:
 			}
 		)";
 
-		m_BlueShader.reset(new Steins::Shader(blueShaderVertexSrc, blueShaderfragmentSrc));
+		m_BlueShader.reset(Steins::Shader::Create(blueShaderVertexSrc, blueShaderfragmentSrc));
 	}
 
 	void OnUpdate(Steins::Timestep dt) override
@@ -172,15 +176,8 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		glm::vec4 redColor(.8f, .2f, .3f, 1.f);
-		glm::vec4 blueColor(.2f, .3f, .8f, 1.f);
-
-		Steins::MaterialRef material = new Steins::Material(m_BlueShader);
-		Steins::MaterialInstanceRef mi = new Steins::MaterialInstance(material);
-
-		mi->SetValue("u_Color", redColor);
-		mi->SetTexture("u_AlbedoMap", texture);
-		squareMesh->SetMaterial(material);
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -188,11 +185,6 @@ public:
 			{
 				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				if (x % 2 == 0)
-					m_BlueShader->UploadUniformFloat4("u_Color",redColor);
-				else
-					m_BlueShader->UploadUniformFloat4("u_Color",blueColor);
-
 				Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
 			}
 		}
@@ -205,6 +197,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
 	void OnEvent(Steins::Event& event) override
@@ -221,8 +216,11 @@ private:
 	Steins::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
 	float m_CameraMoveSpeed = 1.0f;
+
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 10.0f;
+
+	glm::vec4 m_SquareColor = { .2f, .3f, .8f, 1.f };
 };
 
 class Sandbox : public Steins::Application

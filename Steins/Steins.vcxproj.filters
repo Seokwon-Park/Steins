@@ -1411,6 +1411,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\D3D11Buffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Context.cpp">
@@ -1483,5 +1484,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>
