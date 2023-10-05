@@ -12,6 +12,18 @@
 
 #include "Steins/ImGui/ImGuiLayer.h"
 
+// ---Renderer-------------------------------
+
+#include "Steins/Renderer/Renderer.h"
+#include "Steins/Renderer/RenderCommand.h"
+
+#include "Steins/Renderer/Buffer.h"
+#include "Steins/Renderer/Shader.h"
+#include "Steins/Renderer/VertexArray.h"
+
+#include "Steins/Renderer/OrthographicCamera.h"
+// ------------------------------------------
+
 // ---Entry Point----------------------------
 #include "Steins/EntryPoint.h"
 // ------------------------------------------

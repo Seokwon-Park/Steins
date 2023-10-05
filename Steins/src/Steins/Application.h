@@ -9,14 +9,8 @@
 
 #include "Steins/ImGui/ImGuiLayer.h"
 
-#include "Steins/Renderer/Shader.h"
-#include "Steins/Renderer/Buffer.h"
-#include "Steins/Renderer/VertexArray.h"
-
-#include "Steins/Renderer/OrthographicCamera.h"
-
 namespace Steins {
-	class STEINS_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -39,13 +33,7 @@ namespace Steins {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<Shader> m_BlueShader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-
-		OrthographicCamera m_Camera;
+	
 	private:
 		static Application* s_Instance;
 	};
