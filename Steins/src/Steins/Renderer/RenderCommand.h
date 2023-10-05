@@ -21,6 +21,11 @@ namespace Steins
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
 
+		inline static void SetContext(GraphicsContext* context)
+		{
+			s_RendererAPI->SetContext(context);
+		}
+
 		//static void SetAPI();
 
 	private:

@@ -9,7 +9,7 @@ class ExampleLayer : public Steins::Layer
 public:
 	ExampleLayer()
 		:Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-		m_CameraPosition(0.0f), m_SquarePosition(0.f)
+		m_CameraPosition(0.0f)
 	{
 		m_VertexArray.reset(Steins::VertexArray::Create());
 
@@ -118,11 +118,12 @@ public:
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
-			in vec4 v_Color;
+
+			uniform vec4 u_Color;
 
 			void main()
 			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = u_Color;
 			}
 		)";
 
@@ -169,13 +170,29 @@ public:
 
 		Steins::Renderer::BeginScene(m_Camera);
 
-		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		glm::vec4 redColor(.8f, .2f, .3f, 1.f);
+		glm::vec4 blueColor(.2f, .3f, .8f, 1.f);
+
+		Steins::MaterialRef material = new Steins::Material(m_BlueShader);
+		Steins::MaterialInstanceRef mi = new Steins::MaterialInstance(material);
+
+		mi->SetValue("u_Color", redColor);
+		mi->SetTexture("u_AlbedoMap", texture);
+		squareMesh->SetMaterial(material);
+
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
 				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				if (x % 2 == 0)
+					m_BlueShader->UploadUniformFloat4("u_Color",redColor);
+				else
+					m_BlueShader->UploadUniformFloat4("u_Color",blueColor);
+
 				Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
 			}
 		}

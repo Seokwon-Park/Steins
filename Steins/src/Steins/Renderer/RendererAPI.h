@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "VertexArray.h"
+#include "GraphicsContext.h"
 
 namespace Steins
 {
@@ -21,8 +22,10 @@ namespace Steins
 
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) = 0;
 
+		void SetContext(GraphicsContext* context) { m_Context = context; }
 		inline static API GetAPI() { return s_API; }
 	private:
 		static API s_API;
+		GraphicsContext* m_Context;
 	};
 }
