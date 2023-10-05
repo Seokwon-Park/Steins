@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Steins/Core.h"
+#include "Steins/Core/Timestep.h"
 #include "Steins/Events/Event.h"
 
 namespace Steins
@@ -13,7 +14,7 @@ namespace Steins
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep dt) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

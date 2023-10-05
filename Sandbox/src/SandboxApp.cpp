@@ -8,7 +8,7 @@ public:
 	ExampleLayer()
 		:Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
 	{
-		/*m_VertexArray.reset(Steins::VertexArray::Create());
+		m_VertexArray.reset(Steins::VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
@@ -121,51 +121,53 @@ public:
 			}
 		)";
 
-		m_BlueShader.reset(new Steins::Shader(blueShaderVertexSrc, blueShaderfragmentSrc));*/
+		m_BlueShader.reset(new Steins::Shader(blueShaderVertexSrc, blueShaderfragmentSrc));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Steins::Timestep dt) override
 	{
+		STS_TRACE("Delta time: {0}s ({1}ms)", dt.GetSeconds(), dt.GetMilliseconds());
+
 		if (Steins::Input::IsKeyPressed(STS_KEY_LEFT))
 		{
-			m_CameraPosition.x -= m_CameraMoveSpeed;
+			m_CameraPosition.x -= m_CameraMoveSpeed * dt;
 		}
 		else if (Steins::Input::IsKeyPressed(STS_KEY_RIGHT))
 		{
-			m_CameraPosition.x += m_CameraMoveSpeed;
+			m_CameraPosition.x += m_CameraMoveSpeed * dt;
 		}
 
 		 if (Steins::Input::IsKeyPressed(STS_KEY_UP))
 		{
-			m_CameraPosition.y += m_CameraMoveSpeed;
+			m_CameraPosition.y += m_CameraMoveSpeed * dt;
 		}
 		else if (Steins::Input::IsKeyPressed(STS_KEY_DOWN))
 		{
-			m_CameraPosition.y -= m_CameraMoveSpeed;
+			m_CameraPosition.y -= m_CameraMoveSpeed * dt;
 		}
 
 		 if (Steins::Input::IsKeyPressed(STS_KEY_A))
 		 {
-			 m_CameraRotation += m_CameraRotationSpeed;
+			 m_CameraRotation += m_CameraRotationSpeed* dt;
 		 }
 		 else if (Steins::Input::IsKeyPressed(STS_KEY_D))
 		 {
-			 m_CameraRotation -= m_CameraRotationSpeed;
+			 m_CameraRotation -= m_CameraRotationSpeed*dt;
 		 }
 
 
 		Steins::RenderCommand::SetClearColor({ .1f, .1f, .1f, 1 });
 		Steins::RenderCommand::Clear();
 
-		//m_Camera.SetPosition(m_CameraPosition);
-		//m_Camera.SetRotation(m_CameraRotation);
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 
-		//Steins::Renderer::BeginScene(m_Camera);
+		Steins::Renderer::BeginScene(m_Camera);
 
-		//Steins::Renderer::Submit(m_BlueShader, m_SquareVA);
-		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
+		Steins::Renderer::Submit(m_BlueShader, m_SquareVA);
+		Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
-		//Steins::Renderer::EndScene();
+		Steins::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override
@@ -185,9 +187,9 @@ private:
 
 	Steins::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 0.1f;
+	float m_CameraMoveSpeed = 1.0f;
 	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 0.1f;
+	float m_CameraRotationSpeed = 10.0f;
 };
 
 class Sandbox : public Steins::Application

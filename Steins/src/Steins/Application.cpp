@@ -9,6 +9,7 @@
 #include "Input.h"
 
 #include <GLFW/glfw3.h>
+#include <imgui.h>
 
 namespace Steins {
 
@@ -60,11 +61,12 @@ namespace Steins {
 	{
 		while (m_Running)
 		{
-			float time = glfwGetTime(); // Platform::GetTime
+			float time = (float)glfwGetTime(); // Platform::GetTime
+			Timestep timestep = ImGui::GetIO().DeltaTime;
 			m_LastFrameTime = time;
 
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

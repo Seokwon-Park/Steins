@@ -30,13 +30,4 @@ namespace Steins
 	{
 		glfwSwapBuffers(m_WindowHandle);
 	}
-
-	ID3D11Device* OpenGLContext::GetDevice()
-	{
-		return nullptr;
-	}
-	ID3D11DeviceContext* OpenGLContext::GetContext()
-	{
-		return nullptr;
-	}
 }

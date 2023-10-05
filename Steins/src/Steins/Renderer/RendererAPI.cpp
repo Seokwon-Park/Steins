@@ -3,5 +3,5 @@
 
 namespace Steins
 {
-	RendererAPI::API RendererAPI::s_API = RendererAPI::API::Direct3D11;
+	RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
 }

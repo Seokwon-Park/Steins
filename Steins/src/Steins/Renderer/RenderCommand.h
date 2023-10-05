@@ -20,6 +20,9 @@ namespace Steins
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
+
+		//static void SetAPI();
+
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

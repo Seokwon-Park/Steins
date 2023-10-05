@@ -10,6 +10,7 @@
 #include "Steins/Application.h"
 #include "Steins/Renderer/Renderer.h"
 #include "Steins/Renderer/GraphicsContext.h"
+#include "Platform/DirectX11/D3D11Context.h"
 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
@@ -56,8 +57,8 @@ namespace Steins
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
-			ID3D11Device* device = m_Context->GetDevice();
-			ID3D11DeviceContext* context = m_Context->GetContext();
+			auto device = static_cast<D3D11Context*>(m_Context)->GetD3DDevice();
+			auto context = static_cast<D3D11Context*>(m_Context)->GetD3DContext();
 			ImGui_ImplGlfw_InitForOther(window, true);
 			ImGui_ImplDX11_Init(device, context);
 			break;
