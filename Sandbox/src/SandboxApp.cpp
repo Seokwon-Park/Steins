@@ -14,7 +14,7 @@ public:
 		:Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
 		m_CameraPosition(0.0f)
 	{
-		m_VertexArray.reset(Steins::VertexArray::Create());
+		/*m_VertexArray.reset(Steins::VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
@@ -139,7 +139,7 @@ void main()
 		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
 		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);*/
 	}
 
 
@@ -179,37 +179,37 @@ void main()
 		Steins::RenderCommand::SetClearColor({ .1f, .1f, .1f, 1 });
 		Steins::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		//m_Camera.SetPosition(m_CameraPosition);
+		//m_Camera.SetRotation(m_CameraRotation);
 
-		Steins::Renderer::BeginScene(m_Camera);
+		//Steins::Renderer::BeginScene(m_Camera);
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		//glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
+		//std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
+		//std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 
-		for (int y = 0; y < 20; y++)
-		{
-			for (int x = 0; x < 20; x++)
-			{
-				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
-			}
-		}
+		//for (int y = 0; y < 20; y++)
+		//{
+		//	for (int x = 0; x < 20; x++)
+		//	{
+		//		glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
+		//		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+		//		Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
+		//	}
+		//}
 
-		auto textureShader = m_ShaderLibrary.Get("Texture");
+		//auto textureShader = m_ShaderLibrary.Get("Texture");
 
-		m_Texture->Bind();
-		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		m_LogoTexture->Bind();
-		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		//m_Texture->Bind();
+		//Steins::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		//m_LogoTexture->Bind();
+		//Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-		// Triangle
-		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
+		//// Triangle
+		////Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
-		Steins::Renderer::EndScene();
+		//Steins::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override

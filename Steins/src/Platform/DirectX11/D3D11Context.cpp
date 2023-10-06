@@ -26,17 +26,7 @@ namespace Steins
 
 	D3D11Context* D3D11Context::instance()
 	{
-		if (m_Instance == NULL)
-		{
-			try
-			{
-				m_Instance = new D3D11Context(m_GLFWHandle, m_WindowProps);
-			}
-			catch (HRESULT hr)
-			{
-				throw hr;
-			}
-		}
+		return m_Instance;
 	}
 
 	D3D11Context::D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps)
@@ -121,7 +111,7 @@ namespace Steins
 			m_D3DDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 			dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 			dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
-			dxgiFactory->CreateSwapChain(m_D3DDevice, &scd, &m_SwapChain);
+			dxgiFactory->CreateSwapChain(m_D3DDevice.Get(), &scd, &m_SwapChain);
 
 			char videoCardDescription[128];
 			std::string vendor, major, minor, release, build, version;

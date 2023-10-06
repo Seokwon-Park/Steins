@@ -7,9 +7,9 @@ namespace Steins
 	class RenderCommand
 	{
 	public:
-		inline static void Init()
+		inline static void Init(GraphicsContext* context)
 		{
-			s_RendererAPI->Init();
+			s_RendererAPI->Init(context);
 		}
 
 		inline static void SetClearColor(const glm::vec4& color)

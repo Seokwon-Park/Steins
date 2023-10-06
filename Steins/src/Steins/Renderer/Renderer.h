@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GraphicsContext.h"
+
 #include "RenderCommand.h"
 
 #include "OrthographicCamera.h"
@@ -10,7 +12,7 @@ namespace Steins
 	class Renderer
 	{
 	public:
-		static void Init();
+		static void Init(GraphicsContext* context);
 
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();

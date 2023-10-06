@@ -60,7 +60,7 @@ namespace Steins
 			auto device = static_cast<D3D11Context*>(m_Context)->GetD3DDevice();
 			auto context = static_cast<D3D11Context*>(m_Context)->GetD3DContext();
 			ImGui_ImplGlfw_InitForOther(window, true);
-			ImGui_ImplDX11_Init(device, context);
+			ImGui_ImplDX11_Init(device.Get(), context.Get());
 			break;
 		}
 		case RendererAPI::API::OpenGL:

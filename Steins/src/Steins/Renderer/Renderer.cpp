@@ -7,9 +7,9 @@ namespace Steins
 {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 
-	void Renderer::Init()
+	void Renderer::Init(GraphicsContext* context)
 	{
-		RenderCommand::Init();
+		RenderCommand::Init(context);
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera)

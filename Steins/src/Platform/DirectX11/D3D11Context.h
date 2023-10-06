@@ -14,14 +14,16 @@ namespace Steins
 	class D3D11Context : public GraphicsContext
 	{
 	public:
-		D3D11Context* instance();
+		static D3D11Context* instance();
 		D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps);
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 
-		ID3D11Device* GetD3DDevice() { return this->m_D3DDevice; }
-		ID3D11DeviceContext* GetD3DContext() { return m_D3DContext; }
+		ComPtr<ID3D11Device> GetD3DDevice() { return this->m_D3DDevice; }
+		ComPtr<ID3D11DeviceContext> GetD3DContext() { return this->m_D3DContext; }
+		ID3D11RenderTargetView* GetRTV() { return this->m_RenderTargetView; }
+		ID3D11DepthStencilView* GetDSV() { return this->m_DepthStencilView; }
 
 		void Resize();
 	private:
@@ -37,8 +39,8 @@ namespace Steins
 		bool m_DebugLayerEnabled;
 
 		IDXGISwapChain* m_SwapChain;
-		ID3D11Device* m_D3DDevice;
-		ID3D11DeviceContext* m_D3DContext;
+		ComPtr<ID3D11Device> m_D3DDevice;
+		ComPtr<ID3D11DeviceContext> m_D3DContext;
 		ID3D11RenderTargetView* m_BackBuffer;
 
 		ID3D11RenderTargetView* m_RenderTargetView;
