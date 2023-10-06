@@ -186,7 +186,7 @@ namespace Steins
 
 		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, &m_DepthStencilBuffer);
 		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer, 0, &m_DepthStencilView);
-		SetRenderTargets(m_RenderTargetView, m_DepthStencilView);
+		SetRenderTargets(m_RenderTargetView.Get(), m_DepthStencilView);
 
 		m_ScreenViewport.TopLeftX = 0;
 		m_ScreenViewport.TopLeftY = 0;
@@ -214,9 +214,36 @@ namespace Steins
 		ReleaseCOM(rs);
 	}
 
+
+
 	void D3D11Context::SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view)
 	{
 		m_D3DContext->OMSetRenderTargets(1, &target, view);
+	}
+
+	void D3D11Context::SetViewport(int width, int height)
+	{
+		// Set the viewport
+		ZeroMemory(&m_ScreenViewport, sizeof(D3D11_VIEWPORT));
+		m_ScreenViewport.TopLeftX = 0;
+		m_ScreenViewport.TopLeftY = 0;
+		m_ScreenViewport.Width = width;
+		m_ScreenViewport.Height = height;
+		//m_screenViewport.Width = static_cast<float>(m_screenHeight);
+		m_ScreenViewport.MinDepth = 0.0f;
+		m_ScreenViewport.MaxDepth = 1.0f;
+
+		m_D3DContext->RSSetViewports(1, &m_ScreenViewport);
+	}
+
+	void D3D11Context::CreateRenderTargetView()
+	{
+		ComPtr<ID3D11Texture2D> backBuffer;
+		m_SwapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
+		if (backBuffer) {
+			m_D3DDevice->CreateRenderTargetView(backBuffer.Get(), nullptr,
+				m_RenderTargetView.GetAddressOf());
+		}
 	}
 
 	void D3D11Context::SwapBuffers()

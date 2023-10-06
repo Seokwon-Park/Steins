@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 #include "Steins/Renderer/Renderer.h"
+#include "Platform/DirectX11/D3D11Context.h"
 
 #include "Input.h"
 
@@ -36,8 +37,17 @@ namespace Steins {
 
 	void Application::OnEvent(Event& e)
 	{
+		//STS_CORE_INFO("{0}", e);
+		//STS_CORE_INFO("{0}, {1}", m_Window->GetWidth(), m_Window->GetHeight());
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+		if (e.GetEventType() == WindowResizeEvent::GetStaticType())
+		{
+			dynamic_cast<D3D11Context*>(m_Window->GetContext())->
+				ResizeSwapChain(m_Window->GetWidth(), m_Window->GetHeight());
+		}
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -63,6 +73,7 @@ namespace Steins {
 	{
 		while (m_Running)
 		{
+
 			float time = (float)glfwGetTime(); // Platform::GetTime
 			Timestep timestep = ImGui::GetIO().DeltaTime;
 			m_LastFrameTime = time;

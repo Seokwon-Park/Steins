@@ -57,8 +57,8 @@ namespace Steins
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
-			auto device = static_cast<D3D11Context*>(m_Context)->GetD3DDevice();
-			auto context = static_cast<D3D11Context*>(m_Context)->GetD3DContext();
+			auto device = dynamic_cast<D3D11Context*>(m_Context)->GetD3DDevice();
+			auto context = dynamic_cast<D3D11Context*>(m_Context)->GetD3DContext();
 			ImGui_ImplGlfw_InitForOther(window, true);
 			ImGui_ImplDX11_Init(device.Get(), context.Get());
 			break;
@@ -121,12 +121,20 @@ namespace Steins
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+		//STS_TRACE("{0}, {1}", io.DisplaySize.x, io.DisplaySize.y);
+		STS_TRACE("{0}, {1}", io.MousePos.x, io.MousePos.y);
+
 
 		//Rendering
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
 			ImGui::Render();
+			ID3D11RenderTargetView* rtvs[] =
+			{
+				dynamic_cast<D3D11Context*>(m_Context)->GetRTV().Get()
+			};
+			dynamic_cast<D3D11Context*>(m_Context)->GetD3DContext()->OMSetRenderTargets(1, rtvs, nullptr);
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 			break;
 		}
@@ -138,7 +146,6 @@ namespace Steins
 		}
 		}
 		
-
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();

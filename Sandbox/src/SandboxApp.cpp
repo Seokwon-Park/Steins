@@ -146,7 +146,7 @@ void main()
 
 	void OnUpdate(Steins::Timestep dt) override
 	{
-		STS_TRACE("Delta time: {0}s ({1}ms)", dt.GetSeconds(), dt.GetMilliseconds());
+		//STS_TRACE("Delta time: {0}s ({1}ms)", dt.GetSeconds(), dt.GetMilliseconds());
 
 		if (Steins::Input::IsKeyPressed(STS_KEY_LEFT))
 		{
