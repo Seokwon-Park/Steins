@@ -76,7 +76,18 @@ namespace Steins
 
 	void ImGuiLayer::OnDetach()
 	{
-		ImGui_ImplOpenGL3_Shutdown();
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::Direct3D11:
+		{
+			ImGui_ImplDX11_Shutdown();
+			break;
+		}
+		case RendererAPI::API::OpenGL:
+		{
+			ImGui_ImplOpenGL3_Shutdown();
+			break;
+		}
+		}
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
