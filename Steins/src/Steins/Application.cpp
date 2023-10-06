@@ -25,6 +25,8 @@ namespace Steins {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer(m_Window->GetContext());
 		PushOverlay(m_ImGuiLayer);
 	}

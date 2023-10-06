@@ -17,6 +17,7 @@ namespace Steins
 			Direct3D11 = 2,
 		};
 	public:
+		virtual void Init() = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() = 0;
 

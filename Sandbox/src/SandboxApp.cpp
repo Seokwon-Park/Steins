@@ -170,6 +170,7 @@ public:
 		m_TextureShader.reset(Steins::Shader::Create(texureShaderVertexSrc, textureShaderFragmentSrc));
 
 		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
 		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -234,6 +235,8 @@ public:
 
 		m_Texture->Bind();
 		Steins::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_LogoTexture->Bind();
+		Steins::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// Triangle
 		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
@@ -259,7 +262,7 @@ private:
 	Steins::Ref<Steins::Shader> m_BlueShader, m_TextureShader;
 	Steins::Ref<Steins::VertexArray> m_SquareVA;
 
-	Steins::Ref<Steins::Texture2D> m_Texture;
+	Steins::Ref<Steins::Texture2D> m_Texture, m_LogoTexture;
 
 	Steins::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
