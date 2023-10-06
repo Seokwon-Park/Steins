@@ -13,15 +13,14 @@ namespace Steins
 {
 	class D3D11Context : public GraphicsContext
 	{
-
-
 	public:
+		D3D11Context* instance();
 		D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps);
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 
-		ID3D11Device* GetD3DDevice() { return m_D3DDevice; }
+		ID3D11Device* GetD3DDevice() { return this->m_D3DDevice; }
 		ID3D11DeviceContext* GetD3DContext() { return m_D3DContext; }
 
 		void Resize();
@@ -30,6 +29,8 @@ namespace Steins
 	public:
 
 	private:
+		static D3D11Context* m_Instance;
+		
 		D3D_FEATURE_LEVEL m_D3DFeatureLevel;
 		u32 m_MSAAQuality = 0;
 		bool m_MSAAEnabled;
@@ -47,6 +48,7 @@ namespace Steins
 
 		ID3D11Debug* m_DebugLayer;
 
+		GLFWwindow* m_GLFWHandle;
 		HWND m_WindowHandle;
 		WindowProps m_WindowProps;
 	};

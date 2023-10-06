@@ -7,7 +7,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
 class ExampleLayer : public Steins::Layer
 {
 public:
@@ -98,7 +97,7 @@ void main()
 }
 )";
 
-		m_Shader.reset(Steins::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Steins::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 		std::string blueShaderVertexSrc = R"(
 			#version 330 core
@@ -132,15 +131,15 @@ void main()
 			}
 		)";
 
-		m_BlueShader.reset(Steins::Shader::Create(blueShaderVertexSrc, blueShaderfragmentSrc));
+		m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);
 
-		m_TextureShader.reset(Steins::Shader::Create("assets/GLshaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
 
 		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 
@@ -200,10 +199,12 @@ void main()
 			}
 		}
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+
 		m_Texture->Bind();
-		Steins::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_LogoTexture->Bind();
-		Steins::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// Triangle
 		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
@@ -223,10 +224,12 @@ void main()
 	}
 
 private:
+	Steins::ShaderLibrary m_ShaderLibrary;
+
 	Steins::Ref<Steins::Shader> m_Shader;
 	Steins::Ref<Steins::VertexArray> m_VertexArray;
 
-	Steins::Ref<Steins::Shader> m_BlueShader, m_TextureShader;
+	Steins::Ref<Steins::Shader> m_BlueShader;
 	Steins::Ref<Steins::VertexArray> m_SquareVA;
 
 	Steins::Ref<Steins::Texture2D> m_Texture, m_LogoTexture;
