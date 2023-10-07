@@ -43,7 +43,7 @@ namespace Steins {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
-		if (e.GetEventType() == WindowResizeEvent::GetStaticType())
+		if (e.GetEventType() == WindowResizeEvent::GetStaticType() && Renderer::GetAPI() == RendererAPI::API::Direct3D11)
 		{
 			dynamic_cast<D3D11Context*>(m_Window->GetContext())->
 				ResizeSwapChain(m_Window->GetWidth(), m_Window->GetHeight());

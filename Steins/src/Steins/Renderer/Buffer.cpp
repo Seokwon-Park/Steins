@@ -4,6 +4,7 @@
 #include "Renderer.h"
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Platform/DirectX11/D3D11Buffer.h"
 
 
 namespace Steins
@@ -18,7 +19,7 @@ namespace Steins
 		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, size);
 		case RendererAPI::API::Direct3D11:
-			break;
+			return new D3D11VertexBuffer(vertices, size);
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");
