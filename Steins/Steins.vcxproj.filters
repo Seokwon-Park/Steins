@@ -1430,6 +1430,7 @@
     </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\D3D11Shader.h" />
     <ClInclude Include="src\Platform\DirectX11\D3D11Texture.h" />
+    <ClInclude Include="src\Steins\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1518,5 +1519,6 @@
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\D3D11Shader.cpp" />
     <ClCompile Include="src\Platform\DirectX11\D3D11Texture.cpp" />
+    <ClCompile Include="src\Steins\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

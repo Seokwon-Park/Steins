@@ -42,12 +42,7 @@ namespace Steins {
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-
-		if (e.GetEventType() == WindowResizeEvent::GetStaticType() && Renderer::GetAPI() == RendererAPI::API::Direct3D11)
-		{
-			dynamic_cast<D3D11Context*>(m_Window->GetContext())->
-				ResizeSwapChain(m_Window->GetWidth(), m_Window->GetHeight());
-		}
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -92,6 +87,16 @@ namespace Steins {
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
+		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (Renderer::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			static_cast<D3D11Context*>(m_Window->GetContext())->
+				ResizeSwapChain(e.GetWidth(), e.GetHeight());
+		}
 		return true;
 	}
 

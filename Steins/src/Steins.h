@@ -11,6 +11,7 @@
 #include "Steins/Input.h"
 #include "Steins/KeyCodes.h"
 #include "Steins/MouseButtonCodes.h"
+#include "Steins/OrthographicCameraController.h"
 
 #include "Steins/ImGui/ImGuiLayer.h"
 

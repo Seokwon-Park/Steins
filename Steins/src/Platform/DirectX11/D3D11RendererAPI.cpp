@@ -6,7 +6,7 @@ namespace Steins
 {
 	void D3D11RendererAPI::Init(GraphicsContext* context)
 	{
-		m_Context = dynamic_cast<D3D11Context*>(context);
+		m_Context = static_cast<D3D11Context*>(context);
 	}
 
 	void D3D11RendererAPI::SetClearColor(const glm::vec4& color)
@@ -19,9 +19,11 @@ namespace Steins
 	void D3D11RendererAPI::Clear()
 	{
 		m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTV().Get(), m_ClearColor);
-		m_Context->GetD3DContext()->ClearDepthStencilView(m_Context->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		m_Context->GetD3DContext()->ClearDepthStencilView(m_Context->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	}
 	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 	{
+		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_Context->GetD3DContext()->DrawIndexed(vertexArray->GetIndexBuffer()->GetCount(), 0, 0);
 	}
 }

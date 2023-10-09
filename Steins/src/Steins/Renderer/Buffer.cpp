@@ -36,7 +36,7 @@ namespace Steins
 		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, size);
 		case RendererAPI::API::Direct3D11:
-			break;
+			return new D3D11IndexBuffer(indices,size);;
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");

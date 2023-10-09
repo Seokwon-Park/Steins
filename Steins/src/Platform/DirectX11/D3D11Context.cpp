@@ -22,13 +22,6 @@ namespace Steins
 		x = nullptr;	\
 	}
 
-	D3D11Context* D3D11Context::m_Instance;
-
-	D3D11Context* D3D11Context::instance()
-	{
-		return m_Instance;
-	}
-
 	D3D11Context::D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps)
 		:m_GLFWHandle(windowHandle), m_WindowHandle(glfwGetWin32Window(windowHandle)), m_WindowProps(windowProps)
 	{

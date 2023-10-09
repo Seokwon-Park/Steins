@@ -15,7 +15,6 @@ namespace Steins
 	class D3D11Context : public GraphicsContext
 	{
 	public:
-		static D3D11Context* instance();
 		D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps);
 
 		virtual void Init() override;
@@ -25,7 +24,7 @@ namespace Steins
 		ComPtr<ID3D11Device> GetD3DDevice() { return this->m_D3DDevice; }
 		ComPtr<ID3D11DeviceContext> GetD3DContext() { return this->m_D3DContext; }
 		ComPtr<ID3D11RenderTargetView> GetRTV() { return this->m_RenderTargetView; }
-		ID3D11DepthStencilView* GetDSV() { return this->m_DepthStencilView; }
+		ComPtr<ID3D11DepthStencilView> GetDSV() { return this->m_DepthStencilView; }
 
 		void Resize();
 		void ResizeSwapChain(u32 width ,u32 height)
@@ -35,16 +34,14 @@ namespace Steins
 			this->SetViewport(width, height);
 			CreateRenderTargetView();
 		}
+
 	private:
 		void SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view);
 		void SetViewport(int width, int height);
 		void CreateRenderTargetView();
 	public:
 
-
-	private:
-		static D3D11Context* m_Instance;
-		
+	private:		
 		D3D_FEATURE_LEVEL m_D3DFeatureLevel;
 		u32 m_MSAAQuality = 0;
 		bool m_MSAAEnabled;

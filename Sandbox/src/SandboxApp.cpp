@@ -11,10 +11,9 @@ class ExampleLayer : public Steins::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-		m_CameraPosition(0.0f)
+		:Layer("Example"), m_CameraController(1280.f/720.f)
 	{
-		/*m_VertexArray.reset(Steins::VertexArray::Create());
+		m_VertexArray.reset(Steins::VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
@@ -96,6 +95,7 @@ void main()
 	color = v_Color;
 }
 )";
+		
 
 		m_Shader = Steins::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
@@ -139,77 +139,47 @@ void main()
 		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
 		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);*/
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 
 
 	void OnUpdate(Steins::Timestep dt) override
 	{
-		//STS_TRACE("Delta time: {0}s ({1}ms)", dt.GetSeconds(), dt.GetMilliseconds());
+		// Update
+		m_CameraController.OnUpdate(dt);
 
-		if (Steins::Input::IsKeyPressed(STS_KEY_LEFT))
-		{
-			m_CameraPosition.x -= m_CameraMoveSpeed * dt;
-		}
-		else if (Steins::Input::IsKeyPressed(STS_KEY_RIGHT))
-		{
-			m_CameraPosition.x += m_CameraMoveSpeed * dt;
-		}
-
-		if (Steins::Input::IsKeyPressed(STS_KEY_UP))
-		{
-			m_CameraPosition.y += m_CameraMoveSpeed * dt;
-		}
-		else if (Steins::Input::IsKeyPressed(STS_KEY_DOWN))
-		{
-			m_CameraPosition.y -= m_CameraMoveSpeed * dt;
-		}
-
-		if (Steins::Input::IsKeyPressed(STS_KEY_A))
-		{
-			m_CameraRotation += m_CameraRotationSpeed * dt;
-		}
-		else if (Steins::Input::IsKeyPressed(STS_KEY_D))
-		{
-			m_CameraRotation -= m_CameraRotationSpeed * dt;
-		}
-
-
+		// Render
 		Steins::RenderCommand::SetClearColor({ .1f, .1f, .1f, 1 });
 		Steins::RenderCommand::Clear();
 
-		//m_Camera.SetPosition(m_CameraPosition);
-		//m_Camera.SetRotation(m_CameraRotation);
+		Steins::Renderer::BeginScene(m_CameraController.GetCamera());
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		//Steins::Renderer::BeginScene(m_Camera);
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 
-		//glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
+			}
+		}
 
-		//std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
-		//std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
+		auto textureShader = m_ShaderLibrary.Get("Texture");
 
-		//for (int y = 0; y < 20; y++)
-		//{
-		//	for (int x = 0; x < 20; x++)
-		//	{
-		//		glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
-		//		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-		//		Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
-		//	}
-		//}
+		m_Texture->Bind();
+		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_LogoTexture->Bind();
+		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-		//auto textureShader = m_ShaderLibrary.Get("Texture");
+		// Triangle
+		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
-		//m_Texture->Bind();
-		//Steins::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		//m_LogoTexture->Bind();
-		//Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-		//// Triangle
-		////Steins::Renderer::Submit(m_Shader, m_VertexArray);
-
-		//Steins::Renderer::EndScene();
+		Steins::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override
@@ -219,8 +189,9 @@ void main()
 		ImGui::End();
 	}
 
-	void OnEvent(Steins::Event& event) override
+	void OnEvent(Steins::Event& e) override
 	{
+		m_CameraController.OnEvent(e);
 	}
 
 private:
@@ -234,13 +205,7 @@ private:
 
 	Steins::Ref<Steins::Texture2D> m_Texture, m_LogoTexture;
 
-	Steins::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 1.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 10.0f;
-
+	Steins::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { .2f, .3f, .8f, 1.f };
 };
 

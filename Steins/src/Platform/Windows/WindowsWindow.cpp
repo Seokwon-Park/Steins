@@ -6,6 +6,7 @@
 #include "Steins/Events/ApplicationEvent.h"
 
 #include "Steins/Renderer/Renderer.h"
+#include "Steins/Renderer/RendererAPI.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 #include "Platform/DirectX11/D3D11Context.h"
 
@@ -15,7 +16,7 @@ namespace Steins
 	{
 		static bool s_GLFWInitialized = false;
 
-		static void GLFWErrorCallback(int error , const char* description)
+		static void GLFWErrorCallback(int error, const char* description)
 		{
 			STS_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 		}
@@ -55,11 +56,23 @@ namespace Steins
 
 		m_glfwWindow = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
-		//m_Context = new OpenGLContext(m_glfwWindow);
-		m_Context = new D3D11Context(m_glfwWindow, props);
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::Direct3D11:
+		{
+			m_Context = new D3D11Context(m_glfwWindow, props);
+			break;
+		}
+		case RendererAPI::API::OpenGL:
+		{
+			m_Context = new OpenGLContext(m_glfwWindow);
+			break;
+		}
+		STS_CORE_ASSERT(false, "API::None currently not supported");
+		return;
+		}
 		m_Context->Init();
 		// ^
-		
+
 		glfwSetWindowUserPointer(m_glfwWindow, &m_Data);
 		SetVSync(true);
 
@@ -68,7 +81,7 @@ namespace Steins
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				data.Width = width;
-				data.Height = height;				
+				data.Height = height;
 
 				WindowResizeEvent event(width, height);
 				data.EventCallback(event);
@@ -87,24 +100,24 @@ namespace Steins
 
 				switch (action)
 				{
-					case GLFW_PRESS:
-					{
-						KeyPressedEvent event(key, 0);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						KeyReleasedEvent event(key);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_REPEAT:
-					{
-						KeyPressedEvent event(key, 1);
-						data.EventCallback(event);
-						break;
-					}
+				case GLFW_PRESS:
+				{
+					KeyPressedEvent event(key, 0);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					KeyReleasedEvent event(key);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					KeyPressedEvent event(key, 1);
+					data.EventCallback(event);
+					break;
+				}
 				}
 			});
 
@@ -119,21 +132,21 @@ namespace Steins
 		glfwSetMouseButtonCallback(m_glfwWindow, [](GLFWwindow* window, int button, int action, int mods)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				
+
 				switch (action)
 				{
-					case GLFW_PRESS:
-					{
-						MouseButtonPressedEvent event(button);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						MouseButtonReleasedEvent event(button);
-						data.EventCallback(event);
-						break;
-					}
+				case GLFW_PRESS:
+				{
+					MouseButtonPressedEvent event(button);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					MouseButtonReleasedEvent event(button);
+					data.EventCallback(event);
+					break;
+				}
 				}
 			});
 
@@ -167,7 +180,7 @@ namespace Steins
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
-	
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		if (enabled)
@@ -185,5 +198,5 @@ namespace Steins
 	bool WindowsWindow::IsVSync() const
 	{
 		return m_Data.VSync;
-	}	
+	}
 }

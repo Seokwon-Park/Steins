@@ -179,6 +179,7 @@
     <ClInclude Include="src\Steins\Log.h" />
     <ClInclude Include="src\Steins\MathTypes.h" />
     <ClInclude Include="src\Steins\MouseButtonCodes.h" />
+    <ClInclude Include="src\Steins\OrthographicCameraController.h" />
     <ClInclude Include="src\Steins\Renderer\Buffer.h" />
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Steins\Renderer\OrthographicCamera.h" />
@@ -629,6 +630,7 @@
     <ClCompile Include="src\Steins\Layer.cpp" />
     <ClCompile Include="src\Steins\LayerStack.cpp" />
     <ClCompile Include="src\Steins\Log.cpp" />
+    <ClCompile Include="src\Steins\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Steins\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Steins\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Steins\Renderer\RenderCommand.cpp" />

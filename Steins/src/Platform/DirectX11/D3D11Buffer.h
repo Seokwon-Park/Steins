@@ -18,7 +18,7 @@ namespace Steins
 		virtual const BufferLayout& GetLayout() const override { return m_Layout; }
 		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
 	private:
-		ComPtr<ID3D11Buffer> m_vertexBuffer;
+		ComPtr<ID3D11Buffer> m_VertexBuffer;
 		u32 m_RendererID;
 		BufferLayout m_Layout;
 	};
