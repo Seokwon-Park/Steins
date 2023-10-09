@@ -4,7 +4,7 @@
 
 namespace Steins
 {
-    D3D11VertexBuffer::D3D11VertexBuffer(float* vertices, u32 size)
+	D3D11VertexBuffer::D3D11VertexBuffer(float* vertices, u32 size)
     {
 		std::vector<float> vec_vertices{ vertices, vertices + (size / sizeof(float)) };
 

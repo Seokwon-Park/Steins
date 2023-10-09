@@ -26,8 +26,9 @@ namespace Steins {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-		Renderer::Init(m_Window->GetContext());
-
+		m_Context = m_Window->GetContext();
+		Renderer::Init(m_Context);
+		
 		m_ImGuiLayer = new ImGuiLayer(m_Window->GetContext());
 		PushOverlay(m_ImGuiLayer);
 	}
@@ -68,7 +69,6 @@ namespace Steins {
 	{
 		while (m_Running)
 		{
-
 			float time = (float)glfwGetTime(); // Platform::GetTime
 			Timestep timestep = ImGui::GetIO().DeltaTime;
 			m_LastFrameTime = time;
@@ -77,7 +77,6 @@ namespace Steins {
 			{
 				for (Layer* layer : m_LayerStack)
 					layer->OnUpdate(timestep);
-
 			}
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

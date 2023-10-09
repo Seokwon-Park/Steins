@@ -15,9 +15,11 @@
 
 #include "Steins/ImGui/ImGuiLayer.h"
 
+
 // ---Renderer-------------------------------
 
 #include "Steins/Renderer/Renderer.h"
+#include "Steins/Renderer/Renderer2D.h"
 #include "Steins/Renderer/RenderCommand.h"
 
 #include "Steins/Renderer/Buffer.h"

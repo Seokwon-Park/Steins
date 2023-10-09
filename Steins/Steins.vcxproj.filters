@@ -1438,6 +1438,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\PerspectiveCamera.h" />
+    <ClInclude Include="src\Steins\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1534,5 +1535,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\PerspectiveCamera.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

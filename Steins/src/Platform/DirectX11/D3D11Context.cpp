@@ -140,7 +140,7 @@ namespace Steins
 			STS_CORE_INFO("DirectX11 Info:");
 			STS_CORE_INFO("  Vendeor: {0}", 1);
 			STS_CORE_INFO("  Renderer: {0}", videoCardDescription);
-			STS_CORE_INFO("  Version: {0}", 3);
+			STS_CORE_INFO("  Version: {0}", 3);			
 
 			if (SUCCEEDED(hr))return;
 		}
@@ -220,8 +220,8 @@ namespace Steins
 		ZeroMemory(&m_ScreenViewport, sizeof(D3D11_VIEWPORT));
 		m_ScreenViewport.TopLeftX = 0;
 		m_ScreenViewport.TopLeftY = 0;
-		m_ScreenViewport.Width = width;
-		m_ScreenViewport.Height = height;
+		m_ScreenViewport.Width = (float)width;
+		m_ScreenViewport.Height = (float)height;
 		//m_screenViewport.Width = static_cast<float>(m_screenHeight);
 		m_ScreenViewport.MinDepth = 0.0f;
 		m_ScreenViewport.MaxDepth = 1.0f;

@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Renderer2D.h"
 
 namespace Steins
 {
@@ -10,6 +11,7 @@ namespace Steins
 	void Renderer::Init(GraphicsContext* context)
 	{
 		RenderCommand::Init(context);
+		Renderer2D::Init();
 	}
 
 	void Renderer::OnWindowResize(u32 width, u32 height)
