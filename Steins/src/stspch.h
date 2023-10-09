@@ -22,8 +22,8 @@
 
 #include <wrl.h> 
 
-#include "Steins/Log.h"
-#include "Steins/MathTypes.h"
+#include "Steins/Core/Log.h"
+#include "Steins/Core/MathTypes.h"
 
 //platforms
 

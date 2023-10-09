@@ -3,11 +3,11 @@
 #include "Core.h"
 
 #include "Window.h"
-#include "Steins/LayerStack.h"
+#include "LayerStack.h"
 #include "Steins/Events/Event.h"
 #include "Steins/Events/ApplicationEvent.h"
 
-#include "Steins/Core/Timestep.h"
+#include "Timestep.h"
 
 #include "Steins/ImGui/ImGuiLayer.h"
 

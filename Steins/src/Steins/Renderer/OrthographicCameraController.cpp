@@ -1,8 +1,8 @@
 #include "stspch.h"
 #include "OrthographicCameraController.h"
 
-#include "Steins/Input.h"
-#include "Steins/KeyCodes.h"
+#include "Steins/Core/Input.h"
+#include "Steins/Core/KeyCodes.h"
 
 Steins::OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
 	: m_AspectRatio(aspectRatio),m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),

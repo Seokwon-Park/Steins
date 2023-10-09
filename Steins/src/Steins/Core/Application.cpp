@@ -1,7 +1,7 @@
 #include "stspch.h"
 #include "Application.h"
 
-#include "Steins/Log.h"
+#include "Log.h"
 
 #include <glad/glad.h>
 #include "Steins/Renderer/Renderer.h"

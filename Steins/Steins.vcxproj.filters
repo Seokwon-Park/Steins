@@ -66,6 +66,12 @@
     <ClInclude Include="src\Platform\DirectX11\D3D11RendererAPI.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\D3D11Shader.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\D3D11Texture.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\D3D11VertexArray.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
@@ -96,16 +102,16 @@
     <ClInclude Include="src\Steins.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Application.h">
+    <ClInclude Include="src\Steins\Core\Application.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Core.h">
+    <ClInclude Include="src\Steins\Core\Core.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\Timestep.h">
       <Filter>src\Steins\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\EntryPoint.h">
+    <ClInclude Include="src\Steins\Core\EntryPoint.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Events\ApplicationEvent.h">
@@ -123,25 +129,28 @@
     <ClInclude Include="src\Steins\ImGui\ImGuiLayer.h">
       <Filter>src\Steins\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Input.h">
+    <ClInclude Include="src\Steins\Core\Input.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\KeyCodes.h">
+    <ClInclude Include="src\Steins\Core\KeyCodes.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Layer.h">
+    <ClInclude Include="src\Steins\Core\Layer.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\LayerStack.h">
+    <ClInclude Include="src\Steins\Core\LayerStack.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Log.h">
+    <ClInclude Include="src\Steins\Core\Log.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\MathTypes.h">
+    <ClInclude Include="src\Steins\Core\MathTypes.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\MouseButtonCodes.h">
+    <ClInclude Include="src\Steins\Core\MouseButtonCodes.h">
+      <Filter>src\Steins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\OrthographicCameraController.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Buffer.h">
@@ -171,7 +180,7 @@
     <ClInclude Include="src\Steins\Renderer\VertexArray.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Window.h">
+    <ClInclude Include="src\Steins\Core\Window.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\stspch.h">
@@ -1428,9 +1437,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\DirectX11\D3D11Shader.h" />
-    <ClInclude Include="src\Platform\DirectX11\D3D11Texture.h" />
-    <ClInclude Include="src\Steins\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1440,6 +1446,12 @@
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\D3D11RendererAPI.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\D3D11Shader.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\D3D11Texture.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\D3D11VertexArray.cpp">
@@ -1469,7 +1481,7 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Application.cpp">
+    <ClCompile Include="src\Steins\Core\Application.cpp">
       <Filter>src\Steins</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\ImGui\ImGuiBuild.cpp">
@@ -1478,13 +1490,16 @@
     <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp">
       <Filter>src\Steins\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Layer.cpp">
+    <ClCompile Include="src\Steins\Core\Layer.cpp">
       <Filter>src\Steins</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\LayerStack.cpp">
+    <ClCompile Include="src\Steins\Core\LayerStack.cpp">
       <Filter>src\Steins</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Log.cpp">
+    <ClCompile Include="src\Steins\Core\Log.cpp">
+      <Filter>src\Steins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\OrthographicCameraController.cpp">
       <Filter>src\Steins</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Buffer.cpp">
@@ -1517,8 +1532,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\DirectX11\D3D11Shader.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\D3D11Texture.cpp" />
-    <ClCompile Include="src\Steins\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

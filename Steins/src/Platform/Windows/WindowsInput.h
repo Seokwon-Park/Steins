@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Steins/Input.h"
+#include "Steins/Core/Input.h"
 
 namespace Steins
 {

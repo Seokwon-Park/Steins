@@ -7,7 +7,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_dx11.h"
 
-#include "Steins/Application.h"
+#include "Steins/Core/Application.h"
 #include "Steins/Renderer/Renderer.h"
 #include "Steins/Renderer/GraphicsContext.h"
 #include "Platform/DirectX11/D3D11Context.h"

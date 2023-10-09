@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Steins/Core.h"
-#include "Steins/MathTypes.h"
-
+#include "Steins/Core/Core.h"
 
 namespace Steins
 {

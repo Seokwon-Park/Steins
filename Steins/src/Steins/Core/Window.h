@@ -2,7 +2,7 @@
 
 #include "stspch.h"
 
-#include "Steins/Core.h"
+#include "Core.h"
 #include "Steins/Events/Event.h"
 #include "Steins/Renderer/GraphicsContext.h"
 

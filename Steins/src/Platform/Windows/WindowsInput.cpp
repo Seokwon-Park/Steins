@@ -1,7 +1,7 @@
 #include "stspch.h"
 #include "WindowsInput.h"
 
-#include "Steins/Application.h"
+#include "Steins/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Steins

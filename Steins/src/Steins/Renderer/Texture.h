@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Steins/Core.h"
+#include "Steins/Core/Core.h"
 
 namespace Steins
 {

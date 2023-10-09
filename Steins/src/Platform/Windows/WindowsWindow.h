@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Steins/Window.h"
+#include "Steins/Core/Window.h"
 #include "Steins/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>

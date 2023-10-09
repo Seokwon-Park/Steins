@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Steins/Core.h"
-#include "Steins/Core/Timestep.h"
+#include "Core.h"
+#include "Timestep.h"
 #include "Steins/Events/Event.h"
 
 namespace Steins
