@@ -17,8 +17,12 @@ public:
 private:
 	Steins::OrthographicCameraController m_CameraController;
 
+	// Temp
 	Steins::Ref<Steins::VertexArray> m_SquareVA;
 	Steins::Ref<Steins::Shader> m_FlatColorShader;
+
+	Steins::Ref<Steins::Texture2D> m_CheckerboardTexture;
+
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

@@ -9,6 +9,8 @@ namespace Steins
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glEnable(GL_DEPTH_TEST);
 	}
 	void OpenGLRendererAPI::SetViewport(u32 x, u32 y, u32 width, u32 height)
 	{
