@@ -73,9 +73,12 @@ namespace Steins {
 			Timestep timestep = ImGui::GetIO().DeltaTime;
 			m_LastFrameTime = time;
 
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+			if (!m_Minimized)
+			{
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(timestep);
 
+			}
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
@@ -92,11 +95,19 @@ namespace Steins {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
 		if (Renderer::GetAPI() == RendererAPI::API::Direct3D11)
 		{
 			static_cast<D3D11Context*>(m_Window->GetContext())->
 				ResizeSwapChain(e.GetWidth(), e.GetHeight());
 		}
+
+		m_Minimized = false;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		return true;
 	}
 

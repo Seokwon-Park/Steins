@@ -176,7 +176,6 @@ namespace Steins
 
 	void WindowsWindow::OnUpdate()
 	{
-
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}

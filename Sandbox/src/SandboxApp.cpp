@@ -11,7 +11,7 @@ class ExampleLayer : public Steins::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_CameraController(1280.f/720.f)
+		:Layer("Example"), m_CameraController(1280.f/720.f, true)
 	{
 		m_VertexArray.reset(Steins::VertexArray::Create());
 
@@ -192,6 +192,11 @@ void main()
 	void OnEvent(Steins::Event& e) override
 	{
 		m_CameraController.OnEvent(e);
+
+		if (e.GetEventType() == Steins::EventType::WindowResize)
+		{
+			auto& re = (Steins::WindowResizeEvent&)e;
+		}
 	}
 
 private:

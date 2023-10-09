@@ -18,6 +18,7 @@ namespace Steins
 		};
 	public:
 		virtual void Init(GraphicsContext* context) = 0;
+		virtual void SetViewport(u32 x, u32 y, u32 width, u32 height) = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() = 0;
 
