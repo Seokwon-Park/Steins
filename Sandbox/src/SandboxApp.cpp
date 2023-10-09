@@ -1,4 +1,5 @@
 #include <Steins.h>
+#include <Steins/Core/EntryPoint.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -7,13 +8,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Sandbox2D.h"
+
 class ExampleLayer : public Steins::Layer
 {
 public:
 	ExampleLayer()
 		:Layer("Example"), m_CameraController(1280.f/720.f, true)
 	{
-		m_VertexArray.reset(Steins::VertexArray::Create());
+		m_VertexArray = Steins::VertexArray::Create();
 
 		float vertices[3 * 7] =
 		{
@@ -37,7 +40,7 @@ public:
 		indexBuffer.reset(Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-		m_SquareVA.reset(Steins::VertexArray::Create());
+		m_SquareVA = Steins::VertexArray::Create();
 
 		float squareVertices[5 * 4] =
 		{
@@ -191,7 +194,7 @@ void main()
 
 	void OnEvent(Steins::Event& e) override
 	{
-		m_CameraController.OnEvent(e);
+		//m_CameraController.OnEvent(e);
 
 		if (e.GetEventType() == Steins::EventType::WindowResize)
 		{
@@ -219,7 +222,8 @@ class Sandbox : public Steins::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()

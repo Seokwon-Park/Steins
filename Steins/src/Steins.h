@@ -27,7 +27,3 @@
 
 #include "Steins/Renderer/OrthographicCamera.h"
 // ------------------------------------------
-
-// ---Entry Point----------------------------
-#include "Steins/Core/EntryPoint.h"
-// ------------------------------------------

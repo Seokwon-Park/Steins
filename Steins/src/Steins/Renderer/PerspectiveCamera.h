@@ -4,10 +4,10 @@
 
 namespace Steins
 {
-	class OrthographicCamera
+	class PerspectiveCamera
 	{
 	public:
-		OrthographicCamera(float left, float right, float bottom, float top);
+		PerspectiveCamera(float left, float right, float bottom, float top);
 
 		void SetProjection(float left, float right, float bottom, float top);
 
@@ -18,8 +18,8 @@ namespace Steins
 		}
 
 		float GetRotation() const { return m_Rotation; }
-		void SetRotation(float rotation) { 
-			m_Rotation = rotation; 
+		void SetRotation(float rotation) {
+			m_Rotation = rotation;
 			RecalculateViewMatrix();
 		}
 

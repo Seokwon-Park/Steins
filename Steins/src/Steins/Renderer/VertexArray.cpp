@@ -6,7 +6,7 @@
 #include "Platform/DirectX11/D3D11VertexArray.h"
 
 namespace Steins {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -14,9 +14,9 @@ namespace Steins {
 			STS_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return std::make_shared<OpenGLVertexArray>();
 		case RendererAPI::API::Direct3D11:
-			return new D3D11VertexArray();
+			return std::make_shared<D3D11VertexArray>();
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");
