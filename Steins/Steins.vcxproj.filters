@@ -1439,6 +1439,7 @@
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\PerspectiveCamera.h" />
     <ClInclude Include="src\Steins\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Steins\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">

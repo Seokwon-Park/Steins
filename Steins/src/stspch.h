@@ -23,6 +23,9 @@
 #include <wrl.h> 
 
 #include "Steins/Core/Log.h"
+
+#include "Steins/Debug/Instrumentor.h"
+
 #include "Steins/Core/MathTypes.h"
 
 //platforms
