@@ -1,10 +1,18 @@
 #pragma once
 
+#include "D3D11Context.h"
 #include "Steins/Renderer/Shader.h"
 #include <glm/glm.hpp>
 
 namespace Steins
 {
+	struct BasicVertexConstantBuffer {
+		XMMATRIX world;			//XMMATRIX float(4byte)*4*4 = 64byte 아무튼 16배수
+		XMMATRIX invTranspose;
+		XMMATRIX view;
+		XMMATRIX projection;
+	};
+
 	class D3D11Shader : public Shader
 	{
 	public:
@@ -23,7 +31,7 @@ namespace Steins
 
 		virtual const std::string& GetName() const override { return m_Name; }
 
-		void UploadUniformInt(const std::string& name, int value);
+		/*void UploadUniformInt(const std::string& name, int value);
 
 		void UploadUniformFloat(const std::string& name, float value);
 		void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
@@ -31,10 +39,15 @@ namespace Steins
 		void UploadUniformFloat4(const std::string& name, const glm::vec4& values);
 
 		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
-		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);*/
 	private:
-		std::string ReadFile(const std::string& filepath);
+		//std::string ReadFile(const std::string& filepath);
+		void CreateInputLayout();
 	private:
+		D3D11Context* m_Context;
+		ComPtr<ID3D11VertexShader> m_VertexShader;
+		ComPtr<ID3D11PixelShader> m_PixelShader;
+		ComPtr<ID3D11InputLayout> m_InputLayout;
 		u32 m_RendererID;
 		std::string m_Name;
 	};

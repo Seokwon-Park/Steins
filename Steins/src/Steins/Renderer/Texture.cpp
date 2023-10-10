@@ -3,6 +3,7 @@
 
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
+#include "Platform/DirectX11/D3D11Texture.h"
 
 namespace Steins
 {
@@ -31,8 +32,8 @@ namespace Steins
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return CreateRef<OpenGLTexture2D>(path);
-		/*case RendererAPI::API::Direct3D11:
-			return new D3D11VertexArray();*/
+		case RendererAPI::API::Direct3D11:
+			return CreateRef<D3D11Texture2D>(path);
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");

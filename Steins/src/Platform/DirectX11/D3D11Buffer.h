@@ -22,8 +22,8 @@ namespace Steins
 	private:
 		D3D11Context* m_Context;
 		ComPtr<ID3D11Buffer> m_VertexBuffer;
-		UINT m_Stride;
-		UINT m_Offset = 0;
+		u32 m_Stride;
+		u32 m_Offset = 0;
 		BufferLayout m_Layout;
 	};
 

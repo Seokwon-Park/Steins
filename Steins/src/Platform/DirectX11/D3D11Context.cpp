@@ -12,6 +12,8 @@
 #define GLFW_NATIVE_INCLUDE_NONE
 #include <GLFW/glfw3native.h>
 
+#include <map>
+
 namespace Steins
 {
 
@@ -21,6 +23,22 @@ namespace Steins
 		x->Release();	\
 		x = nullptr;	\
 	}
+	namespace
+	{
+		std::string GetVendor(int vendorCode)
+		{
+			switch (vendorCode)
+			{
+			case 0x10DE: return "NVIDIA Corporation";
+			case 0x1002: return "AMD Inc.";
+			case 0x8086: return "Intel";
+			case 0x1414: return "Microsoft";
+			}
+			STS_CORE_ERROR("Not a valid VendorID");
+			return "";
+		}
+	} //anonymous namespace
+
 
 	D3D11Context::D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps)
 		:m_GLFWHandle(windowHandle), m_WindowHandle(glfwGetWin32Window(windowHandle)), m_WindowProps(windowProps)
@@ -107,14 +125,24 @@ namespace Steins
 			dxgiFactory->CreateSwapChain(m_D3DDevice.Get(), &scd, &m_SwapChain);
 
 			char videoCardDescription[128];
-			std::string vendor, major, minor, release, build, version;
 			LARGE_INTEGER driverVersion;
-
+			
 			DXGI_ADAPTER_DESC adapterDescription;
 			SecureZeroMemory(&adapterDescription, sizeof(DXGI_ADAPTER_DESC));
 
 			dxgiAdapter->GetDesc(&adapterDescription);
+			dxgiAdapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &driverVersion);
 			wcstombs_s(NULL, videoCardDescription, 128, adapterDescription.Description, 128);
+
+			std::string major, minor, release, build;
+
+			major = std::to_string(HIWORD(driverVersion.HighPart));
+			minor = std::to_string(LOWORD(driverVersion.HighPart));
+			release = std::to_string(HIWORD(driverVersion.LowPart));
+			build = std::to_string(LOWORD(driverVersion.LowPart));
+
+			std::string version;
+			version = major + "." + minor + "." + release + "." + build;
 
 			dxgiFactory->Release();
 			dxgiAdapter->Release();
@@ -138,9 +166,9 @@ namespace Steins
 			Resize();
 
 			STS_CORE_INFO("DirectX11 Info:");
-			STS_CORE_INFO("  Vendeor: {0}", 1);
+			STS_CORE_INFO("  Vendor: {0}", GetVendor(adapterDescription.VendorId));
 			STS_CORE_INFO("  Renderer: {0}", videoCardDescription);
-			STS_CORE_INFO("  Version: {0}", 3);			
+			STS_CORE_INFO("  Version: {0}", version);			
 
 			if (SUCCEEDED(hr))return;
 		}

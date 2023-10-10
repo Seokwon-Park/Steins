@@ -1,6 +1,8 @@
 #include "stspch.h"
 #include "D3D11VertexArray.h"
 
+#include "Steins/Core/Application.h"
+
 namespace Steins
 {
 	static DXGI_FORMAT GetDXGIFormat(ShaderDataType type)
@@ -26,6 +28,8 @@ namespace Steins
 
 	D3D11VertexArray::D3D11VertexArray()
 	{
+		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+
 		//glCreateVertexArrays(1, &m_RendererID);
 	}
 	D3D11VertexArray::~D3D11VertexArray()
@@ -54,7 +58,6 @@ namespace Steins
 		//{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 3 + 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		//};
 
-
 		u32 index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
 		std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
@@ -71,12 +74,12 @@ namespace Steins
 			D3D11_INPUT_ELEMENT_DESC DXLayout = {element.Name.c_str(), 0, GetDXGIFormat(element.Type), 0, element.Offset, D3D11_INPUT_PER_VERTEX_DATA, 0};
 			inputElements.push_back(DXLayout);
 		}
+		m_Context->SetInputElements(inputElements);
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 	void D3D11VertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 	{
 		indexBuffer->Bind();
-
 		m_IndexBuffer = indexBuffer;
 	}
 }

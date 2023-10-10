@@ -20,17 +20,24 @@ public:
 
 		float vertices[3 * 7] =
 		{
-			-.5f, -.5f, 0.f, 1.0f, 0.0f, 1.0f, 1.0f,
-			 .5f, -.5f, 0.f, 0.0f, 1.0f, 1.0f, 1.0f,
-			 0.f,  .5f, 0.f, 1.0f, 0.0f, 1.0f, 1.0f,
+			-.5f, -.5f, 0.f, 0.0f, 0.0f, 1.0f, 1.0f,
+			 .5f, -.5f, 0.f, 0.0f, 1.0f, 0.0f, 1.0f,
+			 0.f,  .5f, 0.f, 1.0f, 0.0f, 0.0f, 1.0f,
 		};
 
 		Steins::Ref<Steins::VertexBuffer>vertexBuffer;
 		vertexBuffer = Steins::VertexBuffer::Create(vertices, sizeof(vertices), 3);
 
-		Steins::BufferLayout layout = {
+		//OpenGLStyle
+		/*Steins::BufferLayout layout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
 			{ Steins::ShaderDataType::Float4, "a_Color", true},
+		};*/
+
+		//DX11Style
+		Steins::BufferLayout layout = {
+			{ Steins::ShaderDataType::Float3, "POSITION", true},
+			{ Steins::ShaderDataType::Float4, "COLOR", true},
 		};
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
@@ -40,69 +47,102 @@ public:
 		indexBuffer= Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-		m_SquareVA = Steins::VertexArray::Create();
+		//m_SquareVA = Steins::VertexArray::Create();
 
-		float squareVertices[5 * 4] =
-		{
-			-.5f, -.5f, 0.f, 0.0f,	0.0f,
-			 .5f, -.5f, 0.f, 1.0f,	0.0f,
-			 0.5f,  .5f, 0.f, 1.0f, 1.0f,
-			 -0.5f, .5f, 0.f, 0.0f,1.0f
-		};
+		//float squareVertices[5 * 4] =
+		//{
+		//	-.5f, -.5f, 0.f, 0.0f,	0.0f,
+		//	 .5f, -.5f, 0.f, 1.0f,	0.0f,
+		//	 0.5f,  .5f, 0.f, 1.0f, 1.0f,
+		//	 -0.5f, .5f, 0.f, 0.0f,1.0f
+		//};
 
-		Steins::Ref<Steins::VertexBuffer> squareVB;
-		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
-		Steins::BufferLayout squareVBLayout = {
-			{ Steins::ShaderDataType::Float3, "a_Position", true},
-			{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
-		};
-		squareVB->SetLayout(squareVBLayout);
-		m_SquareVA->AddVertexBuffer(squareVB);
+		//Steins::Ref<Steins::VertexBuffer> squareVB;
+		//squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
+		//Steins::BufferLayout squareVBLayout = {
+		//	{ Steins::ShaderDataType::Float3, "a_Position", true},
+		//	{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
+		//};
+		//squareVB->SetLayout(squareVBLayout);
+		//m_SquareVA->AddVertexBuffer(squareVB);
 
-		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
-		Steins::Ref<Steins::IndexBuffer> squareIB;
-		squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
-		m_SquareVA->SetIndexBuffer(squareIB);
+		//unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
+		//Steins::Ref<Steins::IndexBuffer> squareIB;
+		//squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
+		//m_SquareVA->SetIndexBuffer(squareIB);
 
-		std::string vertexSrc = R"(
-#version 330 core
-
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-
-uniform mat4 u_ViewProjection;
-uniform mat4 u_Transform;
-
-out vec3 v_Position;		
-out vec4 v_Color;	
-
-void main()
+//		std::string vertexSrc = R"(
+//#version 330 core
+//
+//layout(location = 0) in vec3 a_Position;
+//layout(location = 1) in vec4 a_Color;
+//
+//uniform mat4 u_ViewProjection;
+//uniform mat4 u_Transform;
+//
+//out vec3 v_Position;		
+//out vec4 v_Color;	
+//
+//void main()
+//{
+//	v_Position = a_Position;
+//	v_Color = a_Color;
+//	gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+//}
+//)";
+		std::string vertexShader = R"(
+struct VS_Input
 {
-	v_Position = a_Position;
-	v_Color = a_Color;
-	gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+    float3 pos : POSITION;
+    float4 color : COLOR;
+};
+
+struct VS_Output
+{
+    float4 position : SV_POSITION;
+    float4 color : COLOR;
+};
+
+VS_Output vs_main(VS_Input input)
+{
+    VS_Output output;
+    output.position = float4(input.pos, 1.0f);
+    output.color = input.color;
+
+    return output;
 }
 )";
 
-		std::string fragmentSrc = R"(
-#version 330 core
+//		std::string fragmentSrc = R"(
+//#version 330 core
+//
+//layout(location = 0) out vec4 color;
+//
+//in vec3 v_Position;
+//in vec4 v_Color;
+//
+//void main()
+//{
+//	color = vec4(v_Position*0.5+0.5, 1.0);
+//	color = v_Color;
+//}
+//)";
 
-layout(location = 0) out vec4 color;
-
-in vec3 v_Position;
-in vec4 v_Color;
-
-void main()
+		std::string pixelShader = R"(
+struct VS_Output
 {
-	color = vec4(v_Position*0.5+0.5, 1.0);
-	color = v_Color;
+    float4 position : SV_POSITION;
+    float4 color : COLOR;
+};
+
+float4 ps_main(VS_Output input) : SV_TARGET
+{
+	return input.color;
 }
 )";
-		
+		m_Shader = Steins::Shader::Create("VertexPosColor", vertexShader, pixelShader);
 
-		m_Shader = Steins::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
-
-		std::string blueShaderVertexSrc = R"(
+		/*std::string blueShaderVertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
@@ -134,15 +174,15 @@ void main()
 			}
 		)";
 
-		m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);
+		m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);*/
 
-		auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
+		//auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
 
-		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
+		//m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
+		//m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		//std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
+		//std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 
@@ -159,28 +199,28 @@ void main()
 		Steins::Renderer::BeginScene(m_CameraController.GetCamera());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
+		/*std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->Bind();
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);*/
 
-		for (int y = 0; y < 20; y++)
-		{
-			for (int x = 0; x < 20; x++)
-			{
-				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
-			}
-		}
+		//for (int y = 0; y < 20; y++)
+		//{
+		//	for (int x = 0; x < 20; x++)
+		//	{
+		//		glm::vec3 pos(x * 0.11f, y * 0.11f, 0.f);
+		//		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+		//		Steins::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
+		//	}
+		//}
 
-		auto textureShader = m_ShaderLibrary.Get("Texture");
+		//auto textureShader = m_ShaderLibrary.Get("Texture");
 
-		m_Texture->Bind();
+		/*m_Texture->Bind();
 		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_LogoTexture->Bind();
-		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));*/
 
 		// Triangle
-		//Steins::Renderer::Submit(m_Shader, m_VertexArray);
+		Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Steins::Renderer::EndScene();
 	}

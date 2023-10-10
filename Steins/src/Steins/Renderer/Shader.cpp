@@ -3,6 +3,7 @@
 
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h" 
+#include "Platform/DirectX11/D3D11Shader.h" 
 
 namespace Steins {
 	Ref<Shader> Shader::Create(const std::string& filepath)
@@ -13,9 +14,9 @@ namespace Steins {
 			STS_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(filepath);
-			/*case RendererAPI::API::Direct3D11:
-				return new D3D11VertexArray();*/
+			return CreateRef<OpenGLShader>(filepath);
+		case RendererAPI::API::Direct3D11:
+			return CreateRef<D3D11Shader>(filepath);
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -30,9 +31,9 @@ namespace Steins {
 			STS_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
-		/*case RendererAPI::API::Direct3D11:
-			return new D3D11VertexArray();*/
+			return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
+		case RendererAPI::API::Direct3D11:
+			return CreateRef<D3D11Shader>(name, vertexSrc, fragmentSrc);
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");

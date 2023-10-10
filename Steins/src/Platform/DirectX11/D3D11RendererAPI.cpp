@@ -2,11 +2,14 @@
 #include "D3D11RendererAPI.h"
 #include "D3D11Context.h"
 
+#include "Steins/Core/Application.h"
+
 namespace Steins
 {
 	void D3D11RendererAPI::Init(GraphicsContext* context)
 	{
-		m_Context = static_cast<D3D11Context*>(context);
+		//m_Context = static_cast<D3D11Context*>(context);
+		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 	}
 
 	void D3D11RendererAPI::SetViewport(u32 x, u32 y, u32 width, u32 height)
