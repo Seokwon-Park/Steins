@@ -1,5 +1,7 @@
 #pragma once
 
+#include "D3D11Context.h"
+
 #include "Steins/Renderer/Buffer.h"
 
 namespace Steins
@@ -9,7 +11,7 @@ namespace Steins
 	class D3D11VertexBuffer : public VertexBuffer
 	{
 	public:
-		D3D11VertexBuffer(float* vertices, u32 size);
+		D3D11VertexBuffer(float* vertices, u32 size, u32 count);
 		virtual ~D3D11VertexBuffer();
 
 		virtual void Bind() const override;
@@ -18,8 +20,10 @@ namespace Steins
 		virtual const BufferLayout& GetLayout() const override { return m_Layout; }
 		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
 	private:
+		D3D11Context* m_Context;
 		ComPtr<ID3D11Buffer> m_VertexBuffer;
-		u32 m_RendererID;
+		UINT m_Stride;
+		UINT m_Offset = 0;
 		BufferLayout m_Layout;
 	};
 
@@ -34,6 +38,8 @@ namespace Steins
 
 		virtual u32 GetCount() const { return m_Count; };
 	private:
+		D3D11Context* m_Context;
+		ComPtr<ID3D11Buffer> m_IndexBuffer;
 		u32 m_RendererID;
 		u32 m_Count;
 	};

@@ -12,7 +12,7 @@ namespace Steins
 		OpenGLContext(GLFWwindow* windowHandle);
 
 		virtual void Init() override;
-		virtual void SwapBuffers() override;
+		virtual void SwapBuffers(bool VSync) override;
 	private:
 		GLFWwindow* m_WindowHandle;
 	};

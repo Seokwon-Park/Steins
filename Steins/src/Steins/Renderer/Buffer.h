@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GraphicsContext.h"
+
 namespace Steins
 {
 	enum class ShaderDataType
@@ -46,7 +48,7 @@ namespace Steins
 		u32 Size;
 		u32 Offset;
 		bool Normalized;
-
+		
 		BufferElement() {}
 
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
@@ -122,7 +124,7 @@ namespace Steins
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static Ref<VertexBuffer> Create(float* vertices, u32 size);
+		static Ref<VertexBuffer> Create(float* vertices, u32 size, u32 count);
 	};
 
 	class IndexBuffer
@@ -135,6 +137,6 @@ namespace Steins
 
 		virtual u32 GetCount() const = 0;
 
-		static IndexBuffer* Create(u32* vertices, u32 size);
+		static Ref<IndexBuffer> Create(u32* vertices, u32 size);
 	};
 }

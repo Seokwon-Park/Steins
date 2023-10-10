@@ -3,6 +3,27 @@
 
 namespace Steins
 {
+	static DXGI_FORMAT GetDXGIFormat(ShaderDataType type)
+	{
+		switch (type)
+		{
+		case ShaderDataType::Float:	return DXGI_FORMAT_R32_FLOAT;
+		case ShaderDataType::Float2:return DXGI_FORMAT_R32G32_FLOAT;
+		case ShaderDataType::Float3:return DXGI_FORMAT_R32G32B32_FLOAT;
+		case ShaderDataType::Float4:return DXGI_FORMAT_R32G32B32A32_FLOAT;
+		case ShaderDataType::Mat3:	return DXGI_FORMAT_UNKNOWN;
+		case ShaderDataType::Mat4:	return DXGI_FORMAT_UNKNOWN;
+		case ShaderDataType::Int:	return DXGI_FORMAT_R32_UINT;
+		case ShaderDataType::Int2:	return DXGI_FORMAT_R32G32_UINT;
+		case ShaderDataType::Int3:	return DXGI_FORMAT_R32G32B32_UINT;
+		case ShaderDataType::Int4:	return DXGI_FORMAT_R32G32B32A32_UINT;
+		case ShaderDataType::Bool:	return DXGI_FORMAT_UNKNOWN;
+		}
+
+		STS_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		return DXGI_FORMAT_UNKNOWN;
+	}
+
 	D3D11VertexArray::D3D11VertexArray()
 	{
 		//glCreateVertexArrays(1, &m_RendererID);
@@ -36,6 +57,7 @@ namespace Steins
 
 		u32 index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
+		std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
 		for (const auto& element : layout)
 		{
 			/*glEnableVertexAttribArray(index);
@@ -46,6 +68,8 @@ namespace Steins
 				layout.GetStride(),
 				(const void*)element.Offset);
 			index++;*/
+			D3D11_INPUT_ELEMENT_DESC DXLayout = {element.Name.c_str(), 0, GetDXGIFormat(element.Type), 0, element.Offset, D3D11_INPUT_PER_VERTEX_DATA, 0};
+			inputElements.push_back(DXLayout);
 		}
 		m_VertexBuffers.push_back(vertexBuffer);
 	}

@@ -35,7 +35,7 @@ namespace Steins
 		};
 
 		Ref<VertexBuffer> squareVB;
-		squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
 		squareVB->SetLayout(
 			{
 				{ ShaderDataType::Float3, "a_Position"},
@@ -46,7 +46,7 @@ namespace Steins
 
 		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
 		Ref<IndexBuffer> squareIB;
-		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32)));
+		squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
 		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
 
 		s_Data->WhiteTexture = Texture2D::Create(1, 1);

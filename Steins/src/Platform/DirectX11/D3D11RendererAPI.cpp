@@ -9,6 +9,10 @@ namespace Steins
 		m_Context = static_cast<D3D11Context*>(context);
 	}
 
+	void D3D11RendererAPI::SetViewport(u32 x, u32 y, u32 width, u32 height)
+	{
+	}
+
 	void D3D11RendererAPI::SetClearColor(const glm::vec4& color)
 	{
 		m_ClearColor[0] = color.r;

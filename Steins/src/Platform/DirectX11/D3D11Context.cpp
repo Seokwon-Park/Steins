@@ -239,8 +239,8 @@ namespace Steins
 		}
 	}
 
-	void D3D11Context::SwapBuffers()
+	void D3D11Context::SwapBuffers(bool VSync)
 	{
-		m_SwapChain->Present(1, 0);
+		m_SwapChain->Present(VSync, 0);
 	}
 }

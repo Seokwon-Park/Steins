@@ -190,7 +190,7 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		glfwPollEvents();
-		m_Context->SwapBuffers();
+		m_Context->SwapBuffers(m_Data.VSync);
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Sandbox2D.h"
+//#include "Sandbox2D.h"
 
 class ExampleLayer : public Steins::Layer
 {
@@ -26,7 +26,7 @@ public:
 		};
 
 		Steins::Ref<Steins::VertexBuffer>vertexBuffer;
-		vertexBuffer = Steins::VertexBuffer::Create(vertices, sizeof(vertices));
+		vertexBuffer = Steins::VertexBuffer::Create(vertices, sizeof(vertices), 3);
 
 		Steins::BufferLayout layout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
@@ -37,7 +37,7 @@ public:
 
 		unsigned int indices[3] = { 0,1,2 };
 		Steins::Ref<Steins::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32)));
+		indexBuffer= Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		m_SquareVA = Steins::VertexArray::Create();
@@ -51,7 +51,7 @@ public:
 		};
 
 		Steins::Ref<Steins::VertexBuffer> squareVB;
-		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
 		Steins::BufferLayout squareVBLayout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
 			{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
@@ -61,7 +61,7 @@ public:
 
 		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
 		Steins::Ref<Steins::IndexBuffer> squareIB;
-		squareIB.reset(Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32)));
+		squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrc = R"(
@@ -217,13 +217,17 @@ private:
 	glm::vec4 m_SquareColor = { .2f, .3f, .8f, 1.f };
 };
 
+using namespace Steins;
+
+
+
 class Sandbox : public Steins::Application
 {
 public:
 	Sandbox()
 	{
-		//PushLayer(new ExampleLayer());
-		PushLayer(new Sandbox2D());
+		PushLayer(new ExampleLayer());
+		//PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()

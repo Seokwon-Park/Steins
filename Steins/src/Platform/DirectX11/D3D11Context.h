@@ -18,7 +18,7 @@ namespace Steins
 		D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps);
 
 		virtual void Init() override;
-		virtual void SwapBuffers() override;
+		virtual void SwapBuffers(bool VSync) override;
 
 		ComPtr<IDXGISwapChain> GetSwapChain() { return this->m_SwapChain; }
 		ComPtr<ID3D11Device> GetD3DDevice() { return this->m_D3DDevice; }

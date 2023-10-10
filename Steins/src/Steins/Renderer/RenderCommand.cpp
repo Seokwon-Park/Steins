@@ -6,7 +6,7 @@
 
 namespace Steins
 {
-	RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
+	RendererAPI* RenderCommand::s_RendererAPI = new D3D11RendererAPI;
 	//void RenderCommand::SetAPI()
 	//{
 	//	switch (RendererAPI::GetAPI())

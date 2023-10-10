@@ -28,7 +28,7 @@ namespace Steins
 	
 	}
 
-	void OpenGLContext::SwapBuffers()
+	void OpenGLContext::SwapBuffers(bool VSync)
 	{
 		STS_PROFILE_FUNCTION();
 
