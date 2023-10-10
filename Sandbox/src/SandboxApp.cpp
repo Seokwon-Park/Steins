@@ -26,7 +26,7 @@ public:
 		};
 
 		Steins::Ref<Steins::VertexBuffer>vertexBuffer;
-		vertexBuffer.reset(Steins::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Steins::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		Steins::BufferLayout layout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
@@ -51,7 +51,7 @@ public:
 		};
 
 		Steins::Ref<Steins::VertexBuffer> squareVB;
-		squareVB.reset(Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		Steins::BufferLayout squareVBLayout = {
 			{ Steins::ShaderDataType::Float3, "a_Position", true},
 			{ Steins::ShaderDataType::Float2, "a_TexCoord", true},

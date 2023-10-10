@@ -122,7 +122,7 @@ namespace Steins
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static VertexBuffer* Create(float* vertices, u32 size);
+		static Ref<VertexBuffer> Create(float* vertices, u32 size);
 	};
 
 	class IndexBuffer
