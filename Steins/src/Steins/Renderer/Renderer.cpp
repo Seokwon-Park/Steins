@@ -10,8 +10,15 @@ namespace Steins
 
 	void Renderer::Init(GraphicsContext* context)
 	{
+		STS_PROFILE_FUNCTION();
+
 		RenderCommand::Init(context);
 		Renderer2D::Init();
+	}
+
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(u32 width, u32 height)

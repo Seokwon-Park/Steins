@@ -9,6 +9,8 @@ namespace Steins
 	public:
 		inline static void Init(GraphicsContext* context)
 		{
+			STS_PROFILE_FUNCTION();
+
 			s_RendererAPI->Init(context);
 		}
 

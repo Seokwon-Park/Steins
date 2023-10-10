@@ -33,6 +33,8 @@ namespace Steins
 
 	void ImGuiLayer::OnAttach()
 	{
+		STS_PROFILE_FUNCTION();
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
@@ -76,6 +78,8 @@ namespace Steins
 
 	void ImGuiLayer::OnDetach()
 	{
+		STS_PROFILE_FUNCTION();
+
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
@@ -94,6 +98,8 @@ namespace Steins
 
 	void ImGuiLayer::Begin()
 	{
+		STS_PROFILE_FUNCTION();
+
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
@@ -112,6 +118,8 @@ namespace Steins
 
 	void ImGuiLayer::End()
 	{
+		STS_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());

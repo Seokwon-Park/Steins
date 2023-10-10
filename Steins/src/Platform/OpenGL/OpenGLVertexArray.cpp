@@ -28,22 +28,32 @@ namespace Steins
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		STS_PROFILE_FUNCTION();
+
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		STS_PROFILE_FUNCTION();
+
 		glDeleteBuffers(1, &m_RendererID);
 	}
 	void OpenGLVertexArray::Bind() const
 	{
+		STS_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 	}
 	void OpenGLVertexArray::UnBind() const
 	{
+		STS_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
+		STS_PROFILE_FUNCTION();
+
 		STS_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!");
 		
 		glBindVertexArray(m_RendererID);
@@ -74,6 +84,8 @@ namespace Steins
 	}
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
+		STS_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 

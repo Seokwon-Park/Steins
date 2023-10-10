@@ -5,27 +5,29 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Sandbox2D::Sandbox2D()
-	:Layer("Snadbox2D"), m_CameraController(16.f/9.f)
+	:Layer("Snadbox2D"), m_CameraController(16.f / 9.f)
 {
 }
 
 void Sandbox2D::OnAttach()
-{	
+{
+	STS_PROFILE_FUNCTION();
+
 	m_CheckerboardTexture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 void Sandbox2D::OnDetach()
 {
+	STS_PROFILE_FUNCTION();
+
 }
 
 
 void Sandbox2D::OnUpdate(Steins::Timestep dt)
 {
 	STS_PROFILE_FUNCTION();
+
 	// Update
-	{
-		STS_PROFILE_SCOPE("CameraController::OnUpdate");
-		m_CameraController.OnUpdate(dt);
-	}
+	m_CameraController.OnUpdate(dt);
 
 	// Render
 	{
@@ -47,7 +49,7 @@ void Sandbox2D::OnUpdate(Steins::Timestep dt)
 	// TODO: Add these functions - Shader::SetMat4, Shader::SetFloat4
 	//std::dynamic_pointer_cast<Steins::OpenGLShader>(m_FlatColorShader)->Bind();
 	//std::dynamic_pointer_cast<Steins::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
-}	
+}
 
 void Sandbox2D::OnImGuiRender()
 {

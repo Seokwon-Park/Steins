@@ -22,23 +22,29 @@ namespace Steins
 		}
 	}//anonymous namespace
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		STS_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		STS_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		STS_PROFILE_FUNCTION();
+
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -48,13 +54,17 @@ namespace Steins
 		//glfw
 		if (!s_GLFWInitialized)
 		{
+			STS_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
 			STS_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
 
-		m_glfwWindow = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		{
+			STS_PROFILE_SCOPE("glfwCreateWindow");
+			m_glfwWindow = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		}
 
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
@@ -169,6 +179,7 @@ namespace Steins
 
 	void WindowsWindow::Shutdown()
 	{
+		STS_PROFILE_FUNCTION();
 
 		glfwDestroyWindow(m_glfwWindow);
 
@@ -176,12 +187,16 @@ namespace Steins
 
 	void WindowsWindow::OnUpdate()
 	{
+		STS_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		STS_PROFILE_FUNCTION();
+
 		if (enabled)
 		{
 			glfwSwapInterval(1);
