@@ -24,12 +24,15 @@ namespace Steins
 		virtual void Unbind() const override;
 
 		virtual void SetInt(const std::string& name, int value) override;
+		virtual void SetIntArray(const std::string& name, int* values, u32 count) override;
 		virtual void SetFloat(const std::string& name, float value) override;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) override;
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
 
 		virtual const std::string& GetName() const override { return m_Name; }
+
+
 
 		/*void UploadUniformInt(const std::string& name, int value);
 
@@ -42,12 +45,13 @@ namespace Steins
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);*/
 	private:
 		//std::string ReadFile(const std::string& filepath);
-		void CreateInputLayout();
+		std::wstring GetFilepath(std::string filepath);
 	private:
 		D3D11Context* m_Context;
 		ComPtr<ID3D11VertexShader> m_VertexShader;
 		ComPtr<ID3D11PixelShader> m_PixelShader;
 		ComPtr<ID3D11InputLayout> m_InputLayout;
+		u32 m_CbufferIndex;
 		u32 m_RendererID;
 		std::string m_Name;
 	};

@@ -18,8 +18,16 @@ namespace Steins
 		virtual void SetData(void* data, u32 size) override;
 
 		virtual void Bind(u32 slot = 0) const override;
+
+		bool operator==(const Texture& other) const override
+		{
+			return false;
+		}
+
 	private:
+		D3D11Context* m_Context;
 		ComPtr<ID3D11Texture2D> m_Texture;
+		ComPtr<ID3D11ShaderResourceView> m_TextureResourceView;
 		std::string m_Path;
 		u32 m_Width, m_Height;
 		u32 m_RendererID;

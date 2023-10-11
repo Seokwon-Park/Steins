@@ -126,7 +126,7 @@ namespace Steins
 
 		virtual void SetData(const void* data, u32 size) = 0;
 
-		static Ref<VertexBuffer> Create(u32 size);
+		static Ref<VertexBuffer> Create(u32 size, u32 vertexSize);
 		static Ref<VertexBuffer> Create(float* vertices, u32 size, u32 count);
 	};
 

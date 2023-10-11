@@ -9,7 +9,7 @@
 
 namespace Steins
 {
-	Ref<Steins::VertexBuffer> VertexBuffer::Create(u32 size)
+	Ref<Steins::VertexBuffer> VertexBuffer::Create(u32 size, u32 vertexSize)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -19,7 +19,7 @@ namespace Steins
 		case RendererAPI::API::OpenGL:
 			return CreateRef<OpenGLVertexBuffer>(size);
 		case RendererAPI::API::Direct3D11:
-			return CreateRef<D3D11VertexBuffer>(size);
+			return CreateRef<D3D11VertexBuffer>(size, vertexSize);
 		}
 
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");

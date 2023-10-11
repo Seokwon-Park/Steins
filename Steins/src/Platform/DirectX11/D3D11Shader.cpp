@@ -7,12 +7,14 @@
 
 namespace Steins
 {
+	
 	D3D11Shader::D3D11Shader(const std::string& filepath)
+		:m_CbufferIndex(0)
 	{
 		ID3DBlob* vsBlob;
 
 		ID3DBlob* shaderCompileErrorsBlob;
-		HRESULT hResult = D3DCompileFromFile(L"shaders.hlsl", nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vsBlob, &shaderCompileErrorsBlob);
+		HRESULT hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vsBlob, &shaderCompileErrorsBlob);
 		if (FAILED(hResult))
 		{
 			const char* errorString = NULL;
@@ -34,9 +36,13 @@ namespace Steins
 				&m_VertexShader);
 		assert(SUCCEEDED(hResult));
 
+		m_Context->GetD3DDevice()->CreateInputLayout(m_Context->GetInputElements().data(), UINT(m_Context->GetInputElements().size()),
+			vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(),
+			&m_InputLayout);
+
 		// Create Pixel Shader
 		ID3DBlob* psBlob;
-		hResult = D3DCompileFromFile(L"shaders.hlsl", nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &psBlob, &shaderCompileErrorsBlob);
+		hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &psBlob, &shaderCompileErrorsBlob);
 		if (FAILED(hResult))
 		{
 			const char* errorString = NULL;
@@ -61,6 +67,7 @@ namespace Steins
 
 	}
 	D3D11Shader::D3D11Shader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc)
+		:m_CbufferIndex(0)
 	{
 		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 
@@ -121,6 +128,11 @@ namespace Steins
 	void D3D11Shader::SetInt(const std::string& name, int value)
 	{
 	}
+	void D3D11Shader::SetIntArray(const std::string& name, int* values, u32 count)
+	{
+		throw std::logic_error("The method or operation is not implemented.");
+	}
+
 	void D3D11Shader::SetFloat(const std::string& name, float value)
 	{
 	}
@@ -132,5 +144,26 @@ namespace Steins
 	}
 	void D3D11Shader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		//TODO:update constant buffer ex)..viewproj,
+	}
+
+	std::wstring D3D11Shader::GetFilepath(std::string filepath)
+	{
+		TCHAR buffer[MAX_PATH] = { 0 };
+		GetModuleFileName(NULL, buffer, MAX_PATH);
+		std::wstring::size_type pos = std::wstring(buffer).find(L"Steins");
+		std::wstring wFilepath;
+		wFilepath.assign(filepath.begin(), filepath.end());
+
+		std::wstring newFilepath = std::wstring(buffer).substr(0, pos);
+		std::wstring::size_type found = newFilepath.find(L"\\");
+
+		while (found != std::wstring::npos) {
+			newFilepath.replace(newFilepath.find(L"\\"), 1, L"/");
+			found = newFilepath.find(L"\\");
+		}
+
+		newFilepath += std::wstring(L"Steins/Sandbox/") + wFilepath;
+		return newFilepath;
 	}
 }

@@ -67,10 +67,23 @@ public:
 
 		Steins::Ref<Steins::VertexBuffer> squareVB;
 		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
-		Steins::BufferLayout squareVBLayout = {
-			{ Steins::ShaderDataType::Float3, "a_Position", true},
-			{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
-		};
+		Steins::BufferLayout squareVBLayout;
+		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
+			//OpenGLStyle
+		{
+			squareVBLayout = {
+				{ Steins::ShaderDataType::Float3, "a_Position", true},
+				{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
+			};
+		}
+		else
+			//DX11Style
+		{
+			squareVBLayout = {
+				{ Steins::ShaderDataType::Float3, "POSITION", true},
+				{ Steins::ShaderDataType::Float2, "TEXCOORD", true},
+			};
+		}
 		squareVB->SetLayout(squareVBLayout);
 		m_SquareVA->AddVertexBuffer(squareVB);
 
@@ -166,8 +179,10 @@ float4 ps_main(VS_Output input) : SV_TARGET
 
 
 
-
-		std::string blueShaderVertexSrc = R"(
+		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
+			//OpenGLStyle
+		{
+			std::string blueShaderVertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
@@ -184,7 +199,7 @@ float4 ps_main(VS_Output input) : SV_TARGET
 			}
 		)";
 
-		std::string blueShaderfragmentSrc = R"(
+			std::string blueShaderfragmentSrc = R"(
 			#version 330 core
 
 			layout(location = 0) out vec4 color;
@@ -199,15 +214,18 @@ float4 ps_main(VS_Output input) : SV_TARGET
 			}
 		)";
 
-		m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);
+			m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);
+			auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
 
-		auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
+			std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
+			std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		}
+
 
 		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		
 	}
 
 

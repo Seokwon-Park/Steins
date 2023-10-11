@@ -11,7 +11,7 @@ namespace Steins
 	class D3D11VertexBuffer : public VertexBuffer
 	{
 	public:
-		D3D11VertexBuffer(u32 size);
+		D3D11VertexBuffer(u32 size, u32 vertexSize);
 		D3D11VertexBuffer(float* vertices, u32 size, u32 count);
 		virtual ~D3D11VertexBuffer();
 

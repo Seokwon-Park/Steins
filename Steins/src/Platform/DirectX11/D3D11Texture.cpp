@@ -2,6 +2,7 @@
 #include "D3D11Texture.h"
 
 #include "stb_image.h"
+#include "Steins/Core/Application.h"
 
 Steins::D3D11Texture2D::D3D11Texture2D(u32 width, u32 height)
 {
@@ -10,6 +11,8 @@ Steins::D3D11Texture2D::D3D11Texture2D(u32 width, u32 height)
 Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
 {
 	STS_PROFILE_FUNCTION();
+
+	m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 
 	int width, height, channels;
 	stbi_set_flip_vertically_on_load(1);
@@ -47,29 +50,15 @@ Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
 	// Fill in the subresource data.
 	D3D11_SUBRESOURCE_DATA InitData;
 	InitData.pSysMem = data;
-	InitData.SysMemPitch = txtDesc.Width * sizeof(uint8_t) * 4;
+	InitData.SysMemPitch = txtDesc.Width * sizeof(uint8_t) * internalFormat;
 	// InitData.SysMemSlicePitch = 0;
 
-	/*device->CreateTexture2D(&txtDesc, &InitData, m_Texture.GetAddressOf());
-	device->CreateShaderResourceView(m_Texture.Get(), nullptr,
-		textureResourceView.GetAddressOf());
-
-
-
+	m_Context->GetD3DDevice()->CreateTexture2D(&txtDesc, &InitData, m_Texture.GetAddressOf());
+	m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr,
+		m_TextureResourceView.GetAddressOf());
 
 	STS_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
-
-	glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-	glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
-
-	glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);*/
-
+	
 	stbi_image_free(data);
 }
 
