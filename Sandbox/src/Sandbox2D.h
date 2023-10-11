@@ -22,6 +22,7 @@ private:
 	Steins::Ref<Steins::Shader> m_FlatColorShader;
 
 	Steins::Ref<Steins::Texture2D> m_CheckerboardTexture;
+	Steins::Ref<Steins::Texture2D> m_LogoTexture;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

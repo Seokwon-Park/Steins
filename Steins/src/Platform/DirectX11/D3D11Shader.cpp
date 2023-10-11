@@ -144,7 +144,6 @@ namespace Steins
 	}
 	void D3D11Shader::Bind() const
 	{
-		m_Context->GetD3DContext()->OMSetDepthStencilState(m_Context->GetDSS().Get(), 0);
 		m_Context->GetD3DContext()->PSSetSamplers(0, 1, m_SamplerState.GetAddressOf());
 		m_Context->GetD3DContext()->IASetInputLayout(m_InputLayout.Get());
 		m_Context->GetD3DContext()->VSSetShader(m_VertexShader.Get(), nullptr, 0);
