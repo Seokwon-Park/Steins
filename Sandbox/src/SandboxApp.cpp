@@ -65,32 +65,32 @@ public:
 			 -0.5f, .5f, 0.f, 0.0f,1.0f
 		};
 
-		Steins::Ref<Steins::VertexBuffer> squareVB;
-		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
-		Steins::BufferLayout squareVBLayout;
-		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
-			//OpenGLStyle
-		{
-			squareVBLayout = {
-				{ Steins::ShaderDataType::Float3, "a_Position", true},
-				{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
-			};
-		}
-		else
-			//DX11Style
-		{
-			squareVBLayout = {
-				{ Steins::ShaderDataType::Float3, "POSITION", true},
-				{ Steins::ShaderDataType::Float2, "TEXCOORD", true},
-			};
-		}
-		squareVB->SetLayout(squareVBLayout);
-		m_SquareVA->AddVertexBuffer(squareVB);
+		//Steins::Ref<Steins::VertexBuffer> squareVB;
+		//squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
+		//Steins::BufferLayout squareVBLayout;
+		//if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
+		//	//OpenGLStyle
+		//{
+		//	squareVBLayout = {
+		//		{ Steins::ShaderDataType::Float3, "a_Position", true},
+		//		{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
+		//	};
+		//}
+		//else
+		//	//DX11Style
+		//{
+		//	squareVBLayout = {
+		//		{ Steins::ShaderDataType::Float3, "POSITION", true},
+		//		{ Steins::ShaderDataType::Float2, "TEXCOORD", true},
+		//	};
+		//}
+		//squareVB->SetLayout(squareVBLayout);
+		//m_SquareVA->AddVertexBuffer(squareVB);
 
-		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
-		Steins::Ref<Steins::IndexBuffer> squareIB;
-		squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
-		m_SquareVA->SetIndexBuffer(squareIB);
+		//unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
+		//Steins::Ref<Steins::IndexBuffer> squareIB;
+		//squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
+		//m_SquareVA->SetIndexBuffer(squareIB);
 
 
 		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
@@ -176,9 +176,6 @@ float4 ps_main(VS_Output input) : SV_TARGET
 			m_Shader = Steins::Shader::Create("VertexPosColor", vertexShader, pixelShader);
 		}
 
-
-
-
 		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
 			//OpenGLStyle
 		{
@@ -220,10 +217,13 @@ float4 ps_main(VS_Output input) : SV_TARGET
 			std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
 			std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 		}
+		else
+		{
 
+		}
 
-		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
+		//m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
+		//m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
 		
 	}
@@ -263,6 +263,7 @@ float4 ps_main(VS_Output input) : SV_TARGET
 		Steins::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(1.0f), glm::vec3(0.25f,-0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));*/
 
 		// Triangle
+		m_Shader->SetMat4("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 		Steins::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Steins::Renderer::EndScene();

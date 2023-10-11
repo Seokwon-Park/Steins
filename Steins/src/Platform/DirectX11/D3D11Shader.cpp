@@ -11,6 +11,21 @@ namespace Steins
 	D3D11Shader::D3D11Shader(const std::string& filepath)
 		:m_CbufferIndex(0)
 	{
+		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+		//temp
+		D3D11_SAMPLER_DESC samplerDesc;
+		ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+		m_Context->GetD3DDevice()->CreateSamplerState(&samplerDesc, m_SamplerState.GetAddressOf());
+		///
+
 		ID3DBlob* vsBlob;
 
 		ID3DBlob* shaderCompileErrorsBlob;
@@ -27,7 +42,6 @@ namespace Steins
 			MessageBoxA(0, errorString, "Shader Compiler Error", MB_ICONERROR | MB_OK);
 			return;
 		}
-		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 		hResult = m_Context->GetD3DDevice()->
 			CreateVertexShader(
 				vsBlob->GetBufferPointer(),
@@ -70,6 +84,20 @@ namespace Steins
 	{
 		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 
+		//temp
+		D3D11_SAMPLER_DESC samplerDesc;
+		ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+		m_Context->GetD3DDevice()->CreateSamplerState(&samplerDesc, m_SamplerState.GetAddressOf());
+		///
+
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob;
 		HRESULT hr = D3DCompile(
 			vertexSrc.c_str(),
@@ -88,7 +116,8 @@ namespace Steins
 			nullptr,
 			&m_VertexShader);
 
-		m_Context->GetD3DDevice()->CreateInputLayout(m_Context->GetInputElements().data(), UINT(m_Context->GetInputElements().size()),
+		m_Context->GetD3DDevice()->CreateInputLayout(
+			m_Context->GetInputElements().data(), UINT(m_Context->GetInputElements().size()),
 			vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(),
 			&m_InputLayout);
 
@@ -115,6 +144,8 @@ namespace Steins
 	}
 	void D3D11Shader::Bind() const
 	{
+		m_Context->GetD3DContext()->OMSetDepthStencilState(m_Context->GetDSS().Get(), 0);
+		m_Context->GetD3DContext()->PSSetSamplers(0, 1, m_SamplerState.GetAddressOf());
 		m_Context->GetD3DContext()->IASetInputLayout(m_InputLayout.Get());
 		m_Context->GetD3DContext()->VSSetShader(m_VertexShader.Get(), nullptr, 0);
 		m_Context->GetD3DContext()->PSSetShader(m_PixelShader.Get(), nullptr, 0);
@@ -129,9 +160,8 @@ namespace Steins
 	}
 	void D3D11Shader::SetIntArray(const std::string& name, int* values, u32 count)
 	{
-		m_Context->GetD3DContext()->PSSetShaderResources(0, 0, nullptr);
 	}
-
+	 
 	void D3D11Shader::SetFloat(const std::string& name, float value)
 	{
 	}
@@ -143,6 +173,7 @@ namespace Steins
 	}
 	void D3D11Shader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		glm::mat4 inverse = glm::transpose(value);
 		//TODO:update constant buffer ex)..viewproj,
 		D3D11_BUFFER_DESC vertexConstantDesc;
 		ZeroMemory(&vertexConstantDesc, sizeof(vertexConstantDesc));
@@ -153,7 +184,7 @@ namespace Steins
 		vertexConstantDesc.StructureByteStride = sizeof(float);
 
 		D3D11_SUBRESOURCE_DATA initData;
-		initData.pSysMem = &value; // 초기 데이터의 포인터
+		initData.pSysMem = &inverse; // 초기 데이터의 포인터
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 
@@ -165,6 +196,7 @@ namespace Steins
 				&initData,
 				m_VertexConstant.GetAddressOf());
 
+		//TODO:
 		m_Context->GetD3DContext()->VSSetConstantBuffers(0, 1, m_VertexConstant.GetAddressOf());
 	}
 

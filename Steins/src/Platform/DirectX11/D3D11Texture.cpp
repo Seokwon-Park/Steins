@@ -22,8 +22,7 @@ Steins::D3D11Texture2D::D3D11Texture2D(u32 width, u32 height)
 	txtDesc.CPUAccessFlags= D3D11_CPU_ACCESS_WRITE;
 
 	m_Context->GetD3DDevice()->CreateTexture2D(&txtDesc, nullptr, m_Texture.GetAddressOf());
-	m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr,
-		m_TextureResourceView.GetAddressOf());
+	m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr, m_TextureResourceView.GetAddressOf());
 }
 
 Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
@@ -43,18 +42,6 @@ Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
 	m_Width = width;
 	m_Height = height;
 
-	int internalFormat = 0, dataFormat = 0;
-	if (channels == 4)
-	{
-		internalFormat = 4;
-		dataFormat = 4;
-	}
-	else if (channels == 3)
-	{
-		internalFormat = 3;
-		dataFormat = 3;
-	}
-
 	D3D11_TEXTURE2D_DESC txtDesc = {};
 	txtDesc.Width = m_Width;
 	txtDesc.Height = m_Height;
@@ -67,16 +54,33 @@ Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
 
 	// Fill in the subresource data.
 	D3D11_SUBRESOURCE_DATA InitData;
-	InitData.pSysMem = data;
-	InitData.SysMemPitch = txtDesc.Width * sizeof(uint8_t) * internalFormat;
-	// InitData.SysMemSlicePitch = 0;
+	//InitData.pSysMem = data;
+	InitData.SysMemPitch = txtDesc.Width * sizeof(uint8_t) * 4;
+	int internalFormat = 0, dataFormat = 0;
+	std::vector<uint8_t> newData;
+	if (channels == 4)
+	{
+		InitData.pSysMem = data;
+	}
+	else if (channels == 3)
+	{
+
+
+		newData.resize(width * height * 4);
+		for (size_t i = 0; i < width * height; i++) {
+			for (size_t c = 0; c < 3; c++) {
+				newData[4 * i + c] = data[i * channels + c];
+			}
+			newData[4 * i + 3] = 255;
+		}
+
+		InitData.pSysMem = newData.data();
+	}
 
 	m_Context->GetD3DDevice()->CreateTexture2D(&txtDesc, &InitData, m_Texture.GetAddressOf());
-	m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr,
-		m_TextureResourceView.GetAddressOf());
+	m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr, m_TextureResourceView.GetAddressOf());
+	//m_Context->GetD3DContext()->PSSetShaderResources(0, 1, m_TextureResourceView.GetAddressOf());
 
-	STS_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
-	
 	stbi_image_free(data);
 }
 
@@ -86,9 +90,6 @@ Steins::D3D11Texture2D::~D3D11Texture2D()
 
 void Steins::D3D11Texture2D::SetData(void* data, u32 size)
 {
-	//temp
-	int format = 4;
-
 	// 데이터 업데이트
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	m_Context->GetD3DContext()->Map(m_Texture.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -101,5 +102,7 @@ void Steins::D3D11Texture2D::SetData(void* data, u32 size)
 
 void Steins::D3D11Texture2D::Bind(u32 slot) const
 {
-	m_Context->GetD3DContext()->PSSetShaderResources(slot, 0, m_TextureResourceView.GetAddressOf());
-} 
+	m_Context->GetD3DContext()->PSSetShaderResources(slot, 1, m_TextureResourceView.GetAddressOf());
+}
+
+

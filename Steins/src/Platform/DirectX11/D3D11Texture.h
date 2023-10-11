@@ -23,6 +23,7 @@ namespace Steins
 		{
 			return false;
 		}
+	private:
 
 	private:
 		D3D11Context* m_Context;

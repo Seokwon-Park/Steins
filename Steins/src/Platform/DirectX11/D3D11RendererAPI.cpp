@@ -30,7 +30,7 @@ namespace Steins
 	}
 	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, u32 indexCount)
 	{
-		u32 count = indexCount ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);
 	}

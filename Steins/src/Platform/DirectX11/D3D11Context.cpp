@@ -191,6 +191,13 @@ namespace Steins
 		m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
 		backBuffer->Release();
 
+		D3D11_DEPTH_STENCIL_DESC dsd = {};
+		dsd.DepthEnable = TRUE;
+		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		dsd.DepthFunc = D3D11_COMPARISON_LESS;
+
+		m_D3DDevice->CreateDepthStencilState(&dsd, m_DepthStencilState.GetAddressOf());
+
 		D3D11_TEXTURE2D_DESC depthStencilDesc;
 		depthStencilDesc.Width = width;
 		depthStencilDesc.Height = height;
@@ -205,9 +212,9 @@ namespace Steins
 		depthStencilDesc.CPUAccessFlags = 0;
 		depthStencilDesc.MiscFlags = 0;
 
-		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, &m_DepthStencilBuffer);
-		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer, 0, &m_DepthStencilView);
-		SetRenderTargets(m_RenderTargetView.Get(), m_DepthStencilView);
+		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, m_DepthStencilBuffer.GetAddressOf());
+		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer.Get(), 0, m_DepthStencilView.GetAddressOf());
+		SetRenderTargets(m_RenderTargetView.Get(), m_DepthStencilView.Get());
 
 		m_ScreenViewport.TopLeftX = 0;
 		m_ScreenViewport.TopLeftY = 0;
@@ -237,9 +244,10 @@ namespace Steins
 
 
 
-	void D3D11Context::SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view)
+	void D3D11Context::SetRenderTargets(ComPtr<ID3D11RenderTargetView> target, ComPtr<ID3D11DepthStencilView> view)
 	{
-		m_D3DContext->OMSetRenderTargets(1, &target, view);
+		m_D3DContext->OMSetRenderTargets(1, target.GetAddressOf(), view.Get());
+		m_D3DContext->OMSetDepthStencilState(m_DepthStencilState.Get(), 0);
 	}
 
 	void D3D11Context::SetViewport(int width, int height)

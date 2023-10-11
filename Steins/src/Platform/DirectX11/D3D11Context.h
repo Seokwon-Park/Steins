@@ -25,7 +25,7 @@ namespace Steins
 		ComPtr<ID3D11DeviceContext> GetD3DContext() { return this->m_D3DContext; }
 		ComPtr<ID3D11RenderTargetView> GetRTV() { return this->m_RenderTargetView; }
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return this->m_DepthStencilView; }
-		
+		ComPtr<ID3D11DepthStencilState> GetDSS() { return this->m_DepthStencilState; }		
 
 		std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElements() { return m_InputElements; }
 		void SetInputElements(std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements) { m_InputElements = inputElements; }
@@ -40,7 +40,7 @@ namespace Steins
 		}
 
 	private:
-		void SetRenderTargets(ID3D11RenderTargetView* target, ID3D11DepthStencilView* view);
+		void SetRenderTargets(ComPtr<ID3D11RenderTargetView> target, ComPtr<ID3D11DepthStencilView> view);
 		void SetViewport(int width, int height);
 		void CreateRenderTargetView();
 	public:
@@ -59,9 +59,11 @@ namespace Steins
 		std::vector<D3D11_INPUT_ELEMENT_DESC> m_InputElements;
 
 		ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
-		ID3D11DepthStencilView* m_DepthStencilView;
+
+		ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
+		ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
+		ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
 		D3D11_VIEWPORT m_ScreenViewport;
-		ID3D11Texture2D* m_DepthStencilBuffer;
 
 		ID3D11Debug* m_DebugLayer;
 
