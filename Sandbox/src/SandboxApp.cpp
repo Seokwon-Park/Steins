@@ -8,13 +8,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//#include "Sandbox2D.h"
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Steins::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_CameraController(1280.f/720.f, true)
+		:Layer("Example"), m_CameraController(1280.f / 720.f, true)
 	{
 		m_VertexArray = Steins::VertexArray::Create();
 
@@ -28,69 +28,102 @@ public:
 		Steins::Ref<Steins::VertexBuffer>vertexBuffer;
 		vertexBuffer = Steins::VertexBuffer::Create(vertices, sizeof(vertices), 3);
 
-		//OpenGLStyle
-		/*Steins::BufferLayout layout = {
-			{ Steins::ShaderDataType::Float3, "a_Position", true},
-			{ Steins::ShaderDataType::Float4, "a_Color", true},
-		};*/
+		Steins::BufferLayout layout;
+		//temp
+		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
+			//OpenGLStyle
+		{
+			layout = {
+				{ Steins::ShaderDataType::Float3, "a_Position", true},
+				{ Steins::ShaderDataType::Float4, "a_Color", true},
+			};
+		}
+		else
+			//DX11Style
+		{
+			layout = {
+				{ Steins::ShaderDataType::Float3, "POSITION", true},
+				{ Steins::ShaderDataType::Float4, "COLOR", true},
+			};
+		}
 
-		//DX11Style
-		Steins::BufferLayout layout = {
-			{ Steins::ShaderDataType::Float3, "POSITION", true},
-			{ Steins::ShaderDataType::Float4, "COLOR", true},
-		};
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indices[3] = { 0,1,2 };
 		Steins::Ref<Steins::IndexBuffer> indexBuffer;
-		indexBuffer= Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32));
+		indexBuffer = Steins::IndexBuffer::Create(indices, sizeof(indices) / sizeof(u32));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-		//m_SquareVA = Steins::VertexArray::Create();
+		m_SquareVA = Steins::VertexArray::Create();
 
-		//float squareVertices[5 * 4] =
-		//{
-		//	-.5f, -.5f, 0.f, 0.0f,	0.0f,
-		//	 .5f, -.5f, 0.f, 1.0f,	0.0f,
-		//	 0.5f,  .5f, 0.f, 1.0f, 1.0f,
-		//	 -0.5f, .5f, 0.f, 0.0f,1.0f
-		//};
+		float squareVertices[5 * 4] =
+		{
+			-.5f, -.5f, 0.f, 0.0f,	0.0f,
+			 .5f, -.5f, 0.f, 1.0f,	0.0f,
+			 0.5f,  .5f, 0.f, 1.0f, 1.0f,
+			 -0.5f, .5f, 0.f, 0.0f,1.0f
+		};
 
-		//Steins::Ref<Steins::VertexBuffer> squareVB;
-		//squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
-		//Steins::BufferLayout squareVBLayout = {
-		//	{ Steins::ShaderDataType::Float3, "a_Position", true},
-		//	{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
-		//};
-		//squareVB->SetLayout(squareVBLayout);
-		//m_SquareVA->AddVertexBuffer(squareVB);
+		Steins::Ref<Steins::VertexBuffer> squareVB;
+		squareVB = Steins::VertexBuffer::Create(squareVertices, sizeof(squareVertices), 4);
+		Steins::BufferLayout squareVBLayout = {
+			{ Steins::ShaderDataType::Float3, "a_Position", true},
+			{ Steins::ShaderDataType::Float2, "a_TexCoord", true},
+		};
+		squareVB->SetLayout(squareVBLayout);
+		m_SquareVA->AddVertexBuffer(squareVB);
 
-		//unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
-		//Steins::Ref<Steins::IndexBuffer> squareIB;
-		//squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
-		//m_SquareVA->SetIndexBuffer(squareIB);
+		unsigned int squareIndices[6] = { 0,1,2, 2, 3, 0 };
+		Steins::Ref<Steins::IndexBuffer> squareIB;
+		squareIB = Steins::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(u32));
+		m_SquareVA->SetIndexBuffer(squareIB);
 
-//		std::string vertexSrc = R"(
-//#version 330 core
-//
-//layout(location = 0) in vec3 a_Position;
-//layout(location = 1) in vec4 a_Color;
-//
-//uniform mat4 u_ViewProjection;
-//uniform mat4 u_Transform;
-//
-//out vec3 v_Position;		
-//out vec4 v_Color;	
-//
-//void main()
-//{
-//	v_Position = a_Position;
-//	v_Color = a_Color;
-//	gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-//}
-//)";
-		std::string vertexShader = R"(
+
+		if (Steins::Renderer::GetAPI() == Steins::RendererAPI::API::OpenGL)
+			//OpenGLStyle
+		{
+			std::string vertexSrc = R"(
+				#version 330 core
+				
+				layout(location = 0) in vec3 a_Position;
+				layout(location = 1) in vec4 a_Color;
+				
+				uniform mat4 u_ViewProjection;
+				uniform mat4 u_Transform;
+				
+				out vec3 v_Position;		
+				out vec4 v_Color;	
+				
+				void main()
+				{
+					v_Position = a_Position;
+					v_Color = a_Color;
+					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+				}
+				)";
+
+			std::string fragmentSrc = R"(
+		#version 330 core
+		
+		layout(location = 0) out vec4 color;
+		
+		in vec3 v_Position;
+		in vec4 v_Color;
+		
+		void main()
+		{
+			color = vec4(v_Position*0.5+0.5, 1.0);
+			color = v_Color;
+		}
+		)";
+
+			m_Shader = Steins::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
+		}
+		else
+			//DX11Style
+		{
+			std::string vertexShader = R"(
 struct VS_Input
 {
     float3 pos : POSITION;
@@ -113,22 +146,9 @@ VS_Output vs_main(VS_Input input)
 }
 )";
 
-//		std::string fragmentSrc = R"(
-//#version 330 core
-//
-//layout(location = 0) out vec4 color;
-//
-//in vec3 v_Position;
-//in vec4 v_Color;
-//
-//void main()
-//{
-//	color = vec4(v_Position*0.5+0.5, 1.0);
-//	color = v_Color;
-//}
-//)";
 
-		std::string pixelShader = R"(
+
+			std::string pixelShader = R"(
 struct VS_Output
 {
     float4 position : SV_POSITION;
@@ -140,17 +160,22 @@ float4 ps_main(VS_Output input) : SV_TARGET
 	return input.color;
 }
 )";
-		m_Shader = Steins::Shader::Create("VertexPosColor", vertexShader, pixelShader);
+			m_Shader = Steins::Shader::Create("VertexPosColor", vertexShader, pixelShader);
+		}
 
-		/*std::string blueShaderVertexSrc = R"(
+
+
+
+
+		std::string blueShaderVertexSrc = R"(
 			#version 330 core
-			
+
 			layout(location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
 
-			out vec3 v_Position;		
+			out vec3 v_Position;
 
 			void main()
 			{
@@ -161,7 +186,7 @@ float4 ps_main(VS_Output input) : SV_TARGET
 
 		std::string blueShaderfragmentSrc = R"(
 			#version 330 core
-			
+
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
@@ -174,15 +199,15 @@ float4 ps_main(VS_Output input) : SV_TARGET
 			}
 		)";
 
-		m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);*/
+		m_BlueShader = Steins::Shader::Create("blueColor", blueShaderVertexSrc, blueShaderfragmentSrc);
 
-		//auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
+		auto textureShader = m_ShaderLibrary.Load("assets/GLshaders/Texture.glsl");
 
-		//m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
-		//m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
+		m_Texture = Steins::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_LogoTexture = Steins::Texture2D::Create("assets/textures/Logo.png");
 
-		//std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
-		//std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Steins::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 
@@ -266,8 +291,8 @@ class Sandbox : public Steins::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
-		//PushLayer(new Sandbox2D());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()

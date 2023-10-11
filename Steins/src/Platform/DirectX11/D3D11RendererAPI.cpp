@@ -28,9 +28,10 @@ namespace Steins
 		m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTV().Get(), m_ClearColor);
 		m_Context->GetD3DContext()->ClearDepthStencilView(m_Context->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	}
-	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, u32 indexCount)
 	{
+		u32 count = indexCount ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m_Context->GetD3DContext()->DrawIndexed(vertexArray->GetIndexBuffer()->GetCount(), 0, 0);
+		m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);
 	}
 }

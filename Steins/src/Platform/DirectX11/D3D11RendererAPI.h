@@ -13,7 +13,7 @@ namespace Steins
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
 
-		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
+		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, u32 indexCount = 0) override;
 	private:
 		float m_ClearColor[4];
 		D3D11Context* m_Context;

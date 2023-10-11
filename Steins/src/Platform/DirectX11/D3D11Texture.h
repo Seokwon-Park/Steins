@@ -1,5 +1,6 @@
 #pragma once
 
+#include "D3D11Context.h"
 #include "Steins/Renderer/Texture.h"
 
 namespace Steins
@@ -18,6 +19,7 @@ namespace Steins
 
 		virtual void Bind(u32 slot = 0) const override;
 	private:
+		ComPtr<ID3D11Texture2D> m_Texture;
 		std::string m_Path;
 		u32 m_Width, m_Height;
 		u32 m_RendererID;

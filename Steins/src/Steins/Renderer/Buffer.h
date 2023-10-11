@@ -124,9 +124,13 @@ namespace Steins
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
+		virtual void SetData(const void* data, u32 size) = 0;
+
+		static Ref<VertexBuffer> Create(u32 size);
 		static Ref<VertexBuffer> Create(float* vertices, u32 size, u32 count);
 	};
 
+	// Currently Steins only supports 32-bit index buffers
 	class IndexBuffer
 	{
 	public:
@@ -137,6 +141,6 @@ namespace Steins
 
 		virtual u32 GetCount() const = 0;
 
-		static Ref<IndexBuffer> Create(u32* vertices, u32 size);
+		static Ref<IndexBuffer> Create(u32* vertices, u32 count);
 	};
 }

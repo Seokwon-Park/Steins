@@ -13,7 +13,7 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		RenderCommand::Init(context);
-		//Renderer2D::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown()

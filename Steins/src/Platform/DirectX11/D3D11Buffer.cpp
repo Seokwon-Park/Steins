@@ -5,8 +5,11 @@
 
 namespace Steins
 {
+	D3D11VertexBuffer::D3D11VertexBuffer(u32 size)
+	{
+	}
 	D3D11VertexBuffer::D3D11VertexBuffer(float* vertices, u32 size, u32 count)
-		:m_Stride(size/(count))
+		:m_Stride(size/count)
     {
 		std::vector<float> vec_vertices{ vertices, vertices + (size / sizeof(float)) };
 
@@ -43,6 +46,9 @@ namespace Steins
 	void D3D11VertexBuffer::UnBind() const
 	{
 		m_Context->GetD3DContext()->IASetVertexBuffers(0, 1, nullptr, &m_Stride, &m_Offset);
+	}
+	void D3D11VertexBuffer::SetData(const void* data, u32 size)
+	{
 	}
 	D3D11IndexBuffer::D3D11IndexBuffer(u32* indices, u32 count)
 		:m_Count(count)

@@ -9,6 +9,23 @@
 
 namespace Steins
 {
+	Ref<Steins::VertexBuffer> VertexBuffer::Create(u32 size)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			STS_CORE_ASSERT(false, "RendererAPI::None is currently not supported");
+			return nullptr;
+		case RendererAPI::API::OpenGL:
+			return CreateRef<OpenGLVertexBuffer>(size);
+		case RendererAPI::API::Direct3D11:
+			return CreateRef<D3D11VertexBuffer>(size);
+		}
+
+		STS_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, u32 size, u32 count)
 	{
 		switch (Renderer::GetAPI())
@@ -25,7 +42,7 @@ namespace Steins
 		STS_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
-
+	
 	Ref<IndexBuffer> IndexBuffer::Create(u32* indices, u32 size)
 	{
 		switch (Renderer::GetAPI())
