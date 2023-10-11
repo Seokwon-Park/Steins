@@ -51,6 +51,7 @@ namespace Steins
 		ComPtr<ID3D11VertexShader> m_VertexShader;
 		ComPtr<ID3D11PixelShader> m_PixelShader;
 		ComPtr<ID3D11InputLayout> m_InputLayout;
+		ComPtr<ID3D11Buffer> m_VertexConstant;
 		u32 m_CbufferIndex;
 		u32 m_RendererID;
 		std::string m_Name;

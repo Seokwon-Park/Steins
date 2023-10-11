@@ -6,6 +6,24 @@
 
 Steins::D3D11Texture2D::D3D11Texture2D(u32 width, u32 height)
 {
+	m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+
+	m_Width = width;
+	m_Height = height;
+
+	D3D11_TEXTURE2D_DESC txtDesc = {};
+	txtDesc.Width = m_Width;
+	txtDesc.Height = m_Height;
+	txtDesc.MipLevels = txtDesc.ArraySize = 1;
+	txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	txtDesc.SampleDesc.Count = 1;
+	txtDesc.Usage = D3D11_USAGE_DYNAMIC;
+	txtDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	txtDesc.CPUAccessFlags= D3D11_CPU_ACCESS_WRITE;
+
+	m_Context->GetD3DDevice()->CreateTexture2D(&txtDesc, nullptr, m_Texture.GetAddressOf());
+	m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr,
+		m_TextureResourceView.GetAddressOf());
 }
 
 Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
@@ -37,11 +55,11 @@ Steins::D3D11Texture2D::D3D11Texture2D(const std::string& path)
 		dataFormat = 3;
 	}
 
-
 	D3D11_TEXTURE2D_DESC txtDesc = {};
 	txtDesc.Width = m_Width;
 	txtDesc.Height = m_Height;
-	txtDesc.MipLevels = txtDesc.ArraySize = 1;
+	txtDesc.MipLevels = 1;
+	txtDesc.ArraySize = 1;
 	txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	txtDesc.SampleDesc.Count = 1;
 	txtDesc.Usage = D3D11_USAGE_IMMUTABLE;
@@ -68,8 +86,20 @@ Steins::D3D11Texture2D::~D3D11Texture2D()
 
 void Steins::D3D11Texture2D::SetData(void* data, u32 size)
 {
+	//temp
+	int format = 4;
+
+	// 데이터 업데이트
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	m_Context->GetD3DContext()->Map(m_Texture.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	// 데이터 복사
+	memcpy(mappedResource.pData, data, size);
+	// 언맵 (ComPtr이라 필요 X)
+	m_Context->GetD3DContext()->Unmap(m_Texture.Get(), 0);
+
 }
 
 void Steins::D3D11Texture2D::Bind(u32 slot) const
 {
-}
+	m_Context->GetD3DContext()->PSSetShaderResources(slot, 0, m_TextureResourceView.GetAddressOf());
+} 

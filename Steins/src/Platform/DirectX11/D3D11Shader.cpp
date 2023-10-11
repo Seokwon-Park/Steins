@@ -64,7 +64,6 @@ namespace Steins
 				&m_PixelShader);
 		assert(SUCCEEDED(hResult));
 		psBlob->Release();
-
 	}
 	D3D11Shader::D3D11Shader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc)
 		:m_CbufferIndex(0)
@@ -130,7 +129,7 @@ namespace Steins
 	}
 	void D3D11Shader::SetIntArray(const std::string& name, int* values, u32 count)
 	{
-		throw std::logic_error("The method or operation is not implemented.");
+		m_Context->GetD3DContext()->PSSetShaderResources(0, 0, nullptr);
 	}
 
 	void D3D11Shader::SetFloat(const std::string& name, float value)
@@ -145,6 +144,28 @@ namespace Steins
 	void D3D11Shader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
 		//TODO:update constant buffer ex)..viewproj,
+		D3D11_BUFFER_DESC vertexConstantDesc;
+		ZeroMemory(&vertexConstantDesc, sizeof(vertexConstantDesc));
+		vertexConstantDesc.Usage = D3D11_USAGE_IMMUTABLE; // 초기화 후 변경X
+		vertexConstantDesc.ByteWidth = sizeof(glm::mat4);
+		vertexConstantDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		vertexConstantDesc.CPUAccessFlags = 0; // 0 if no CPU access is necessary.
+		vertexConstantDesc.StructureByteStride = sizeof(float);
+
+		D3D11_SUBRESOURCE_DATA initData;
+		initData.pSysMem = &value; // 초기 데이터의 포인터
+		initData.SysMemPitch = 0;
+		initData.SysMemSlicePitch = 0;
+
+		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+
+		m_Context->GetD3DDevice()->
+			CreateBuffer(
+				&vertexConstantDesc,
+				&initData,
+				m_VertexConstant.GetAddressOf());
+
+		m_Context->GetD3DContext()->VSSetConstantBuffers(0, 1, m_VertexConstant.GetAddressOf());
 	}
 
 	std::wstring D3D11Shader::GetFilepath(std::string filepath)

@@ -50,22 +50,23 @@ namespace Steins
 
 		//Ref<VertexBuffer> quadVB = VertexBuffer::Create(s_Data.MaxVertices* sizeof(QuadVertex));
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex), sizeof(QuadVertex));
-		//s_Data.QuadVertexBuffer->SetLayout(
-		//	{
-		//		{ ShaderDataType::Float3, "POSITION"},
-		//		{ ShaderDataType::Float4, "COLOR"},
-		//		{ ShaderDataType::Float2, "TEXCOORD"},
-		//		{ ShaderDataType::Float, "TEXINDEX"},
-		//	});
-
 		s_Data.QuadVertexBuffer->SetLayout(
 			{
-				{ ShaderDataType::Float3, "a_Position"},
-				{ ShaderDataType::Float4, "a_Color"},
-				{ ShaderDataType::Float2, "a_TexCoord"},
-				{ ShaderDataType::Float,  "a_TexIndex"},
-				{ ShaderDataType::Float,  "a_TilingFactor"}
+				{ ShaderDataType::Float3, "POSITION"},
+				{ ShaderDataType::Float4, "COLOR"},
+				{ ShaderDataType::Float2, "TEXCOORD"},
+				{ ShaderDataType::Float, "TEXCOORD"},
+				{ ShaderDataType::Float, "TEXCOORD"}
 			});
+
+		//s_Data.QuadVertexBuffer->SetLayout(
+		//	{
+		//		{ ShaderDataType::Float3, "a_Position"},
+		//		{ ShaderDataType::Float4, "a_Color"},
+		//		{ ShaderDataType::Float2, "a_TexCoord"},
+		//		{ ShaderDataType::Float,  "a_TexIndex"},
+		//		{ ShaderDataType::Float,  "a_TilingFactor"}
+		//	});
 
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 

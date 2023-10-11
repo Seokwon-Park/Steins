@@ -112,5 +112,7 @@ namespace Steins
 	}
 	void D3D11IndexBuffer::UnBind() const
 	{
+		m_Context->GetD3DContext()->IASetIndexBuffer(nullptr,
+			DXGI_FORMAT_R32_UINT, 0);
 	}
 }

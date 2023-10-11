@@ -3,6 +3,8 @@
 
 #include "Steins/Core/Application.h"
 
+#include <map>
+
 namespace Steins
 {
 	static DXGI_FORMAT GetDXGIFormat(ShaderDataType type)
@@ -51,6 +53,8 @@ namespace Steins
 		//glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
 
+		//for (key, value) -> (TEXCOORD, 0), (TEXCOORD, 1), (TEXCOORD, 2) ...
+		std::map<std::string, int> m;
 		//In DX11
 		//std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements = {
 		//{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -71,7 +75,15 @@ namespace Steins
 				layout.GetStride(),
 				(const void*)element.Offset);
 			index++;*/
-			D3D11_INPUT_ELEMENT_DESC DXLayout = {element.Name.c_str(), 0, GetDXGIFormat(element.Type), 0, element.Offset, D3D11_INPUT_PER_VERTEX_DATA, 0};
+			if (m.find(element.Name.c_str()) != m.end()) {
+				// key가 이미 존재하는 경우, 값을 1 증가시킴
+				m[element.Name.c_str()]++;
+			}
+			else {
+				// key가 없는 경우, 값을 1로 초기화
+				m[element.Name.c_str()] = 0;
+			}
+			D3D11_INPUT_ELEMENT_DESC DXLayout = {element.Name.c_str(), m[element.Name.c_str()], GetDXGIFormat(element.Type), 0, element.Offset, D3D11_INPUT_PER_VERTEX_DATA, 0};
 			inputElements.push_back(DXLayout);
 		}
 		m_Context->SetInputElements(inputElements);
