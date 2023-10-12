@@ -54,7 +54,7 @@ namespace Steins
 		vertexBuffer->Bind();
 
 		//for (key, value) -> (TEXCOORD, 0), (TEXCOORD, 1), (TEXCOORD, 2) ...
-		std::map<std::string, int> m;
+		std::map<std::string, UINT> m;
 		//In DX11
 		//std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements = {
 		//{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -67,14 +67,7 @@ namespace Steins
 		std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
 		for (const auto& element : layout)
 		{
-			/*glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset);
-			index++;*/
+			//For Semantic Index
 			if (m.find(element.Name.c_str()) != m.end()) {
 				// key가 이미 존재하는 경우, 값을 1 증가시킴
 				m[element.Name.c_str()]++;

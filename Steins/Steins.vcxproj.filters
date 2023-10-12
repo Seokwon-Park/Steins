@@ -105,7 +105,7 @@
     <ClInclude Include="src\Steins\Core\Application.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Core\Core.h">
+    <ClInclude Include="src\Steins\Core\Base.h">
       <Filter>src\Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\Timestep.h">

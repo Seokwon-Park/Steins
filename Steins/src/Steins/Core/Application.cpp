@@ -76,6 +76,11 @@ namespace Steins {
 		layer->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::Run()
 	{
 		STS_PROFILE_FUNCTION();
@@ -126,7 +131,6 @@ namespace Steins {
 			static_cast<D3D11Context*>(m_Window->GetContext())->
 				ResizeSwapChain(e.GetWidth(), e.GetHeight());
 		}
-
 		m_Minimized = false;
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		return true;

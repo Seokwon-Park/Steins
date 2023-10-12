@@ -46,6 +46,7 @@ namespace Steins
 	private:
 		//std::string ReadFile(const std::string& filepath);
 		std::wstring GetFilepath(std::string filepath);
+		void CreateSamplerState();
 	private:
 		D3D11Context* m_Context;
 		ComPtr<ID3D11VertexShader> m_VertexShader;

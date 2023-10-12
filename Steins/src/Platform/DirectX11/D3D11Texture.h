@@ -14,6 +14,8 @@ namespace Steins
 
 		virtual u32 GetWidth() const override { return m_Width; }
 		virtual u32 GetHeight() const override { return m_Height; }
+		virtual u32 GetRendererID() const override { return 0; }
+		virtual ID3D11ShaderResourceView* GetSRV() const override{ return m_TextureResourceView.Get(); }
 
 		virtual void SetData(void* data, u32 size) override;
 

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Steins/Core/Core.h"
+#include "Steins/Core/Base.h"
 
 namespace Steins
 {
@@ -13,6 +13,8 @@ namespace Steins
 
 		virtual u32 GetWidth() const = 0;
 		virtual u32 GetHeight() const = 0;
+		virtual u32 GetRendererID() const = 0;
+		virtual ID3D11ShaderResourceView* GetSRV() const = 0;
 
 		virtual void SetData(void* data, u32 size) = 0;
 

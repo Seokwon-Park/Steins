@@ -285,6 +285,27 @@ namespace Steins
 			m_D3DDevice->CreateRenderTargetView(backBuffer.Get(), nullptr,
 				m_RenderTargetView.GetAddressOf());
 		}
+
+		D3D11_TEXTURE2D_DESC bbDesc;
+		backBuffer->GetDesc(&bbDesc);
+
+		D3D11_TEXTURE2D_DESC depthStencilDesc;
+		depthStencilDesc.Width = bbDesc.Width;
+		depthStencilDesc.Height = bbDesc.Height;
+		depthStencilDesc.MipLevels = 1;
+		depthStencilDesc.ArraySize = 1;
+		depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+		depthStencilDesc.SampleDesc.Count = m_MSAAEnabled ? 4 : 1;
+		depthStencilDesc.SampleDesc.Quality = m_MSAAEnabled ? (m_MSAAQuality - 1) : 0;
+		depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+		depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		depthStencilDesc.CPUAccessFlags = 0;
+		depthStencilDesc.MiscFlags = 0;
+
+		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, m_DepthStencilBuffer.GetAddressOf());
+		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer.Get(), 0, m_DepthStencilView.GetAddressOf());
+
 	}
 
 	void D3D11Context::SwapBuffers(bool VSync)
