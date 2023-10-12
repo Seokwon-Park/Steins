@@ -161,7 +161,7 @@ void Sandbox2D::OnImGuiRender()
 {
 	STS_PROFILE_FUNCTION();
 
-	static bool dockingEnabled = false;
+	static bool dockingEnabled = true;
 	if (dockingEnabled)
 	{
 		static bool dockspaceOpen = true;
@@ -248,9 +248,9 @@ void Sandbox2D::OnImGuiRender()
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 		//auto textureID = m_CheckerboardTexture->GetSRV();
-		ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		//auto textureID = m_CheckerboardTexture->GetRendererID();
-		//ImGui::Image((void*)&textureID, ImVec2{ 256.0f, 256.0f });
+		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
+		u32 textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
 		ImGui::End();
 
 		ImGui::End();
@@ -269,9 +269,9 @@ void Sandbox2D::OnImGuiRender()
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 		//auto textureID = m_CheckerboardTexture->GetSRV();
-		ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		//auto textureID = m_CheckerboardTexture->GetRendererID();
-		//ImGui::Image((void*)&textureID, ImVec2{ 256.0f, 256.0f });
+		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
+		auto textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
 		ImGui::End();
 	}
 }
