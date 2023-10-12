@@ -23,6 +23,7 @@
 #include "Steins/Renderer/RenderCommand.h"
 
 #include "Steins/Renderer/Buffer.h"
+#include "Steins/Renderer/Framebuffer.h"
 #include "Steins/Renderer/Shader.h"
 #include "Steins/Renderer/SubTexture2D.h"
 #include "Steins/Renderer/VertexArray.h"

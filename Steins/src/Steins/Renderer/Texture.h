@@ -28,6 +28,5 @@ namespace Steins
 	public:
 		static Ref<Texture2D> Create(u32 width, u32 height);
 		static Ref<Texture2D> Create(const std::string& path);
-
 	};
 }

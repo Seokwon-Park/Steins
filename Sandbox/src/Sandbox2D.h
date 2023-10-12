@@ -22,6 +22,7 @@ private:
 	// Temp
 	Steins::Ref<Steins::VertexArray> m_SquareVA;
 	Steins::Ref<Steins::Shader> m_FlatColorShader;
+	Steins::Ref<Steins::Framebuffer> m_Framebuffer;
 
 	Steins::Ref<Steins::Texture2D> m_CheckerboardTexture;
 	Steins::Ref<Steins::Texture2D> m_SpriteSheet;

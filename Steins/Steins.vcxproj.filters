@@ -1441,6 +1441,9 @@
     <ClInclude Include="src\Steins\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Steins\Debug\Instrumentor.h" />
     <ClInclude Include="src\Steins\Renderer\SubTexture2D.h" />
+    <ClInclude Include="src\Steins\Renderer\Framebuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
+    <ClInclude Include="src\Platform\DirectX11\D3D11Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1539,5 +1542,8 @@
     <ClCompile Include="src\Steins\Renderer\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Steins\Renderer\SubTexture2D.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="src\Platform\DirectX11\D3D11Framebuffer.cpp" />
   </ItemGroup>
 </Project>
