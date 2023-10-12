@@ -190,6 +190,7 @@
     <ClInclude Include="src\Steins\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Steins\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Steins\Renderer\Shader.h" />
+    <ClInclude Include="src\Steins\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\Steins\Renderer\Texture.h" />
     <ClInclude Include="src\Steins\Renderer\VertexArray.h" />
     <ClInclude Include="src\Steins\Core\Window.h" />
@@ -642,6 +643,7 @@
     <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Steins\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Steins\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Steins\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Steins\Renderer\Texture.cpp" />
     <ClCompile Include="src\Steins\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\stspch.cpp">
