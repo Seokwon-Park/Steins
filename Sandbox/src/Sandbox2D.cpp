@@ -14,6 +14,7 @@ void Sandbox2D::OnAttach()
 	STS_PROFILE_FUNCTION();
 
 	m_CheckerboardTexture = Steins::Texture2D::Create("assets/textures/Checkerboard2.png");
+	m_SpriteSheet = Steins::Texture2D::Create("game/textures/RPGpack_sheet_2X.png");
 
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -46,6 +47,7 @@ void Sandbox2D::OnUpdate(Steins::Timestep dt)
 		Steins::RenderCommand::Clear();
 	}
 
+#if 0
 	{
 		static float rotation = 0.0f;
 		rotation += dt * 50.0f;
@@ -68,10 +70,10 @@ void Sandbox2D::OnUpdate(Steins::Timestep dt)
 				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y+5.0f)/10.0f, 0.7f};
 				Steins::Renderer2D::DrawQuad({ x, y , -.1f}, { 0.45f, 0.45f }, color);
 			}
-
 		}
 		Steins::Renderer2D::EndScene();
 	}
+#endif
 
 	if (Steins::Input::IsMouseButtonPressed(STS_MOUSE_BUTTON_LEFT))
 	{
@@ -84,12 +86,16 @@ void Sandbox2D::OnUpdate(Steins::Timestep dt)
 		x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
 		y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
 		m_Particle.Position = { x + pos.x, y + pos.y };
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 5; i++)
 			m_ParticleSystem.Emit(m_Particle);
 	}
 
 	m_ParticleSystem.OnUpdate(dt);
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
+
+	Steins::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Steins::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f,1.0f }, m_SpriteSheet);
+	Steins::Renderer2D::EndScene();	
 }
 
 void Sandbox2D::OnImGuiRender()

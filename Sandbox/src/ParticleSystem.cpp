@@ -66,7 +66,7 @@ void ParticleSystem::OnRender(Steins::OrthographicCamera& camera)
 		//color.a = color.a * life;
 
 		float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
-		glm::vec3 position = { particle.Position.x, particle.Position.y, 0.0f };
+		glm::vec3 position = { particle.Position.x, particle.Position.y, -0.05f };
 		Steins::Renderer2D::DrawRotatedQuad(position, { size, size }, particle.Rotation,color);
 	}
 	Steins::Renderer2D::EndScene();
