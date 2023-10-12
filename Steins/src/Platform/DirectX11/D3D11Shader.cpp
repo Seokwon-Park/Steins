@@ -172,7 +172,7 @@ namespace Steins
 	}
 	void D3D11Shader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
-		glm::mat4 inverse = glm::transpose(value);
+		glm::mat4 transpose = glm::transpose(value);
 		//TODO:update constant buffer ex)..viewproj,
 		D3D11_BUFFER_DESC vertexConstantDesc;
 		ZeroMemory(&vertexConstantDesc, sizeof(vertexConstantDesc));
@@ -183,7 +183,7 @@ namespace Steins
 		vertexConstantDesc.StructureByteStride = sizeof(float);
 
 		D3D11_SUBRESOURCE_DATA initData;
-		initData.pSysMem = &inverse; // 초기 데이터의 포인터
+		initData.pSysMem = &transpose; // 초기 데이터의 포인터
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 
@@ -196,7 +196,7 @@ namespace Steins
 				m_VertexConstant.GetAddressOf());
 
 		//TODO:
-		m_Context->GetD3DContext()->VSSetConstantBuffers(0, 1, m_VertexConstant.GetAddressOf());
+		m_Context->GetD3DContext()->VSSetConstantBuffers(stoi(name), 1, m_VertexConstant.GetAddressOf());
 	}
 
 	std::wstring D3D11Shader::GetFilepath(std::string filepath)

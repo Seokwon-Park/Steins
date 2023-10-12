@@ -20,8 +20,8 @@ namespace Steins
 		virtual void Bind(u32 slot = 0) const override;
 
 		bool operator==(const Texture& other) const override
-		{
-			return false;
+		{			
+			return m_Texture.GetAddressOf() == ((D3D11Texture2D&)other).m_Texture.GetAddressOf();
 		}
 	private:
 

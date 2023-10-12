@@ -14,7 +14,8 @@ Steins::D3D11Texture2D::D3D11Texture2D(u32 width, u32 height)
 	D3D11_TEXTURE2D_DESC txtDesc = {};
 	txtDesc.Width = m_Width;
 	txtDesc.Height = m_Height;
-	txtDesc.MipLevels = txtDesc.ArraySize = 1;
+	txtDesc.MipLevels = 1;
+	txtDesc.ArraySize = 1;
 	txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	txtDesc.SampleDesc.Count = 1;
 	txtDesc.Usage = D3D11_USAGE_DYNAMIC;
