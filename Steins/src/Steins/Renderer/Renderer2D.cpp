@@ -54,23 +54,30 @@ namespace Steins
 
 		//Ref<VertexBuffer> quadVB = VertexBuffer::Create(s_Data.MaxVertices* sizeof(QuadVertex));
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex), sizeof(QuadVertex));
-		s_Data.QuadVertexBuffer->SetLayout(
-			{
-				{ ShaderDataType::Float3, "POSITION"},
-				{ ShaderDataType::Float4, "COLOR"},
-				{ ShaderDataType::Float2, "TEXCOORD"},
-				{ ShaderDataType::Float, "TEXCOORD"},
-				{ ShaderDataType::Float, "TEXCOORD"}
-			});
+		
+		if (RendererAPI::GetAPI() == RendererAPI::API::OpenGL)
+		{
+			s_Data.QuadVertexBuffer->SetLayout(
+				{
+					{ ShaderDataType::Float3, "a_Position"},
+					{ ShaderDataType::Float4, "a_Color"},
+					{ ShaderDataType::Float2, "a_TexCoord"},
+					{ ShaderDataType::Float,  "a_TexIndex"},
+					{ ShaderDataType::Float,  "a_TilingFactor"}
+				});
+		}
+		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			s_Data.QuadVertexBuffer->SetLayout(
+				{
+					{ ShaderDataType::Float3, "POSITION"},
+					{ ShaderDataType::Float4, "COLOR"},
+					{ ShaderDataType::Float2, "TEXCOORD"},
+					{ ShaderDataType::Float, "TEXCOORD"},
+					{ ShaderDataType::Float, "TEXCOORD"}
+				});
+		}
 
-		//s_Data.QuadVertexBuffer->SetLayout(
-		//	{
-		//		{ ShaderDataType::Float3, "a_Position"},
-		//		{ ShaderDataType::Float4, "a_Color"},
-		//		{ ShaderDataType::Float2, "a_TexCoord"},
-		//		{ ShaderDataType::Float,  "a_TexIndex"},
-		//		{ ShaderDataType::Float,  "a_TilingFactor"}
-		//	});
 
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -110,7 +117,7 @@ namespace Steins
 		{
 			s_Data.TextureShader = Shader::Create("assets/GLshaders/Texture.glsl");
 		}
-		else
+		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
 		{
 			s_Data.TextureShader = Shader::Create("assets/HLSLshaders/Texture.hlsl");
 		}
@@ -135,7 +142,15 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("0", camera.GetViewProjectionMatrix());
+		if (RendererAPI::GetAPI() == RendererAPI::API::OpenGL)
+		{
+			s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		}
+		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			s_Data.TextureShader->SetMat4("0", camera.GetViewProjectionMatrix());
+		}
+
 
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
@@ -315,7 +330,7 @@ namespace Steins
 		const float tilingFactor = 1.0f; //White Texture
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
@@ -387,7 +402,7 @@ namespace Steins
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
