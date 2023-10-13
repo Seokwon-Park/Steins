@@ -1460,6 +1460,7 @@
     </ClInclude>
     <ClInclude Include="src\Steins\Scene\Scene.h" />
     <ClInclude Include="src\Steins\Scene\Components.h" />
+    <ClInclude Include="src\Steins\Scene\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1577,5 +1578,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Scene\Scene.cpp" />
+    <ClCompile Include="src\Steins\Scene\Entity.cpp" />
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@
 #include "Steins/ImGui/ImGuiLayer.h"
 
 #include "Steins/Scene/Scene.h"
+#include "Steins/Scene/Entity.h"
 #include "Steins/Scene/Components.h"
 
 
