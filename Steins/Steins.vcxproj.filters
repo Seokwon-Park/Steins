@@ -1523,6 +1523,9 @@
     <ClCompile Include="src\Steins\Core\Log.cpp">
       <Filter>src\Steins\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Core\Window.cpp">
+      <Filter>src\Steins\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\ImGui\ImGuiBuild.cpp">
       <Filter>src\Steins\ImGui</Filter>
     </ClCompile>
@@ -1574,6 +1577,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Core\Window.cpp" />
   </ItemGroup>
 </Project>

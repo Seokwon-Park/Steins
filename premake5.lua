@@ -27,7 +27,7 @@ end)
 
 workspace "Steins"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Gate"
 
 	configurations
 	{
@@ -174,8 +174,8 @@ project "Sandbox"
 		symbols "on"
 
 
-project "Steins-Editor"
-	location "Steins-Editor"
+project "SteinsGate"
+	location "SteinsGate"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
