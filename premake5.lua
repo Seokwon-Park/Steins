@@ -46,9 +46,11 @@ IncludeDir["ImGui"] = "Steins/vendor/imgui"
 IncludeDir["glm"] = "Steins/vendor/glm"
 IncludeDir["stb_image"] = "Steins/vendor/stb_image"
 
-include "Steins/vendor/GLFW"
-include "Steins/vendor/Glad"
-include "Steins/vendor/imgui"
+group "Dependencies"
+	include "Steins/vendor/GLFW"
+	include "Steins/vendor/Glad"
+	include "Steins/vendor/imgui"
+group ""
 
 project "Steins"
 	location "Steins"
@@ -121,6 +123,59 @@ project "Steins"
 
 project "Sandbox"
 	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Steins/vendor/spdlog/include",
+		"Steins/src",
+		"Steins/vendor",
+		"%{IncludeDir.glm}"
+	}
+
+	links
+	{
+		"Steins"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"STS_PLATFORM_WINDOWS",
+		}
+
+	filter "configurations:Debug"
+		defines "STS_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "STS_RELEASE"
+		runtime "Release"
+		symbols "on"
+	
+	filter "configurations:Dist"
+		defines "STS_DIST"
+		runtime "Release"
+		symbols "on"
+
+
+project "Steins-Editor"
+	location "Steins-Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

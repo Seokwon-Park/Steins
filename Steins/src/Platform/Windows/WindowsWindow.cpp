@@ -22,11 +22,6 @@ namespace Steins
 		}
 	}//anonymous namespace
 
-	Scope<Window> Window::Create(const WindowProps& props)
-	{
-		return CreateScope<WindowsWindow>(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		STS_PROFILE_FUNCTION();

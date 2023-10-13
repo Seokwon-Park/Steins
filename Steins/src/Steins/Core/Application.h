@@ -15,7 +15,7 @@ namespace Steins {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Steins App");
 		virtual ~Application();
 
 		void Run();

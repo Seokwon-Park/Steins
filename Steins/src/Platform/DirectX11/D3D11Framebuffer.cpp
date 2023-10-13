@@ -5,6 +5,7 @@ namespace Steins
 {
 	D3D11Framebuffer::D3D11Framebuffer(const FramebufferSpecification& spec)
 	{
+		Invalidate();
 	}
 	D3D11Framebuffer::~D3D11Framebuffer()
 	{

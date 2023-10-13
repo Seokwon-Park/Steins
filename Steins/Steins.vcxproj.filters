@@ -22,6 +22,9 @@
     <Filter Include="src\Steins\Core">
       <UniqueIdentifier>{CAE77514-3673-E3D8-3F84-66CDAB8E3FD9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Steins\Debug">
+      <UniqueIdentifier>{283C3FA3-1435-5EF5-3D67-437A29BF3D01}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Steins\Events">
       <UniqueIdentifier>{D613B10E-422A-AFA4-8BA1-3AC6F7F67F2C}</UniqueIdentifier>
     </Filter>
@@ -63,6 +66,9 @@
     <ClInclude Include="src\Platform\DirectX11\D3D11Context.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DirectX11\D3D11Framebuffer.h">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\DirectX11\D3D11RendererAPI.h">
       <Filter>src\Platform\DirectX11</Filter>
     </ClInclude>
@@ -79,6 +85,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
@@ -103,16 +112,43 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\Application.h">
-      <Filter>src\Steins</Filter>
+      <Filter>src\Steins\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\Base.h">
-      <Filter>src\Steins</Filter>
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\EntryPoint.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\Input.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\KeyCodes.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\Layer.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\LayerStack.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\Log.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\MathTypes.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Core\MouseButtonCodes.h">
+      <Filter>src\Steins\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\Timestep.h">
       <Filter>src\Steins\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Core\EntryPoint.h">
-      <Filter>src\Steins</Filter>
+    <ClInclude Include="src\Steins\Core\Window.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Debug\Instrumentor.h">
+      <Filter>src\Steins\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Events\ApplicationEvent.h">
       <Filter>src\Steins\Events</Filter>
@@ -129,31 +165,10 @@
     <ClInclude Include="src\Steins\ImGui\ImGuiLayer.h">
       <Filter>src\Steins\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Core\Input.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\KeyCodes.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\Layer.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\LayerStack.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\Log.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\MathTypes.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\MouseButtonCodes.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Renderer\OrthographicCameraController.h">
-      <Filter>src\Steins</Filter>
-    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Buffer.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\Framebuffer.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h">
@@ -162,10 +177,19 @@
     <ClInclude Include="src\Steins\Renderer\OrthographicCamera.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\OrthographicCameraController.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\PerspectiveCamera.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\RenderCommand.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Renderer.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\Renderer2D.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\RendererAPI.h">
@@ -174,14 +198,14 @@
     <ClInclude Include="src\Steins\Renderer\Shader.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\SubTexture2D.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Texture.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\VertexArray.h">
       <Filter>src\Steins\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Steins\Core\Window.h">
-      <Filter>src\Steins</Filter>
     </ClInclude>
     <ClInclude Include="src\stspch.h">
       <Filter>src</Filter>
@@ -1437,19 +1461,15 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Renderer\PerspectiveCamera.h" />
-    <ClInclude Include="src\Steins\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Steins\Debug\Instrumentor.h" />
-    <ClInclude Include="src\Steins\Renderer\SubTexture2D.h" />
-    <ClInclude Include="src\Steins\Renderer\Framebuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
-    <ClInclude Include="src\Platform\DirectX11\D3D11Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\D3D11Context.cpp">
+      <Filter>src\Platform\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\DirectX11\D3D11Framebuffer.cpp">
       <Filter>src\Platform\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\DirectX11\D3D11RendererAPI.cpp">
@@ -1468,6 +1488,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
@@ -1489,7 +1512,16 @@
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Core\Application.cpp">
-      <Filter>src\Steins</Filter>
+      <Filter>src\Steins\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Core\Layer.cpp">
+      <Filter>src\Steins\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Core\LayerStack.cpp">
+      <Filter>src\Steins\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Core\Log.cpp">
+      <Filter>src\Steins\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\ImGui\ImGuiBuild.cpp">
       <Filter>src\Steins\ImGui</Filter>
@@ -1497,22 +1529,19 @@
     <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp">
       <Filter>src\Steins\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Core\Layer.cpp">
-      <Filter>src\Steins</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Steins\Core\LayerStack.cpp">
-      <Filter>src\Steins</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Steins\Core\Log.cpp">
-      <Filter>src\Steins</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Steins\Renderer\OrthographicCameraController.cpp">
-      <Filter>src\Steins</Filter>
-    </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Buffer.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\Framebuffer.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\OrthographicCameraController.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\PerspectiveCamera.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\RenderCommand.cpp">
@@ -1521,10 +1550,16 @@
     <ClCompile Include="src\Steins\Renderer\Renderer.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\Renderer\RendererAPI.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Shader.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\SubTexture2D.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Texture.cpp">
@@ -1539,11 +1574,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Renderer\PerspectiveCamera.cpp" />
-    <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\Steins\Renderer\SubTexture2D.cpp" />
-    <ClCompile Include="src\Steins\Renderer\Framebuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
-    <ClCompile Include="src\Platform\DirectX11\D3D11Framebuffer.cpp" />
+    <ClCompile Include="src\Steins\Core\Window.cpp" />
   </ItemGroup>
 </Project>

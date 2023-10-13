@@ -16,7 +16,7 @@ namespace Steins
 		virtual void Unbind() override;
 
 		virtual u32 GetColorAttachmentRendererID() const override { return 0; }
-
+		//virtual u32 GetColorAttachmentRendererID() const override { return 0; }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
