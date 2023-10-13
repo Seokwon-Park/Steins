@@ -15,6 +15,9 @@
 
 #include "Steins/ImGui/ImGuiLayer.h"
 
+#include "Steins/Scene/Scene.h"
+#include "Steins/Scene/Components.h"
+
 
 // ---Renderer-------------------------------
 

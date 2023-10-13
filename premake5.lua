@@ -45,6 +45,7 @@ IncludeDir["Glad"] = "Steins/vendor/Glad/include"
 IncludeDir["ImGui"] = "Steins/vendor/imgui"
 IncludeDir["glm"] = "Steins/vendor/glm"
 IncludeDir["stb_image"] = "Steins/vendor/stb_image"
+IncludeDir["entt"] = "Steins/vendor/entt/include"
 
 group "Dependencies"
 	include "Steins/vendor/GLFW"
@@ -84,7 +85,8 @@ project "Steins"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -142,7 +144,8 @@ project "Sandbox"
 		"Steins/vendor/spdlog/include",
 		"Steins/src",
 		"Steins/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -195,7 +198,8 @@ project "SteinsGate"
 		"Steins/vendor/spdlog/include",
 		"Steins/src",
 		"Steins/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
