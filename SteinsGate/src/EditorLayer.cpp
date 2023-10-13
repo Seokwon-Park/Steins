@@ -181,7 +181,7 @@ namespace Steins
 		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
 		//auto textureID = m_CheckerboardTexture->GetSRV();
 		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		u32 textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		auto textureID = m_Framebuffer->GetSRV();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		ImGui::End();
 		ImGui::PopStyleVar();

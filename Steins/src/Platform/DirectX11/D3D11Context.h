@@ -41,7 +41,6 @@ namespace Steins
 		}
 
 	private:
-		void SetRenderTargets(ComPtr<ID3D11RenderTargetView> target, ComPtr<ID3D11DepthStencilView> view);
 		void SetViewport(int width, int height);
 		void CreateRenderTargetView();
 	public:

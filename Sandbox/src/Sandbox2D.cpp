@@ -37,6 +37,8 @@ void Sandbox2D::OnAttach()
 	m_TextureStairs = Steins::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 0,11 }, { 128,128 });
 	m_TextureTree = Steins::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2,1 }, { 128,128 }, { 1,2 });
 
+	//STS_TRACE("{0}", Steins::Texture2D::)
+
 	m_MapWidth = s_MapWidth;
 	m_MapHeight = (u32)(strlen(s_MapTiles) / s_MapWidth);
 
@@ -165,8 +167,8 @@ void Sandbox2D::OnImGuiRender()
 
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
-		//auto textureID = m_CheckerboardTexture->GetSRV();
-		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
+		auto textureID = m_CheckerboardTexture->GetSRV();
+		ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
 		ImGui::End();
 	}
 }

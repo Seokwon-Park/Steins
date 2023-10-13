@@ -139,11 +139,7 @@ namespace Steins
 		case RendererAPI::API::Direct3D11:
 		{
 			ImGui::Render();
-			ID3D11RenderTargetView* rtvs[] =
-			{
-				dynamic_cast<D3D11Context*>(m_Context)->GetRTV().Get()
-			};
-			dynamic_cast<D3D11Context*>(m_Context)->GetD3DContext()->OMSetRenderTargets(1, rtvs, nullptr);
+			static_cast<D3D11Context*>(m_Context)->GetD3DContext()->OMSetRenderTargets(1, static_cast<D3D11Context*>(m_Context)->GetRTV().GetAddressOf(), nullptr);
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 			break;
 		}

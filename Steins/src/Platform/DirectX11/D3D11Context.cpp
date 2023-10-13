@@ -214,7 +214,6 @@ namespace Steins
 
 		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, m_DepthStencilBuffer.GetAddressOf());
 		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer.Get(), 0, m_DepthStencilView.GetAddressOf());
-		SetRenderTargets(m_RenderTargetView.Get(), m_DepthStencilView.Get());
 
 		D3D11_BLEND_DESC blendDesc;
 		ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -253,15 +252,6 @@ namespace Steins
 		m_D3DContext->RSSetState(rs);
 		ReleaseCOM(rs);
 	}
-
-
-
-	void D3D11Context::SetRenderTargets(ComPtr<ID3D11RenderTargetView> target, ComPtr<ID3D11DepthStencilView> view)
-	{
-		m_D3DContext->OMSetRenderTargets(1, target.GetAddressOf(), view.Get());
-		m_D3DContext->OMSetDepthStencilState(m_DepthStencilState.Get(), 0);
-	}
-
 	void D3D11Context::SetViewport(int width, int height)
 	{
 		// Set the viewport
@@ -270,7 +260,6 @@ namespace Steins
 		m_ScreenViewport.TopLeftY = 0;
 		m_ScreenViewport.Width = (float)width;
 		m_ScreenViewport.Height = (float)height;
-		//m_screenViewport.Width = static_cast<float>(m_screenHeight);
 		m_ScreenViewport.MinDepth = 0.0f;
 		m_ScreenViewport.MaxDepth = 1.0f;
 

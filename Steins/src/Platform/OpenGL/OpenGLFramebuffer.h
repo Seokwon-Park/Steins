@@ -18,6 +18,7 @@ namespace Steins
 		virtual void Resize(u32 width, u32 height) override;
 
 		virtual u32 GetColorAttachmentRendererID() const override {	return m_ColorAttachment; }
+		virtual ID3D11ShaderResourceView* GetSRV() const override { return nullptr; }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 

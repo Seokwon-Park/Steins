@@ -22,6 +22,7 @@ namespace Steins
 		virtual void Resize(u32 width, u32 height) = 0;
 
 		virtual u32 GetColorAttachmentRendererID() const = 0;
+		virtual ID3D11ShaderResourceView* GetSRV() const = 0;
 
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
 		
