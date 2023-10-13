@@ -65,6 +65,12 @@ void Steins::OrthographicCameraController::CalculateView()
 	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 }
 
+void Steins::OrthographicCameraController::OnResize(float width, float height)
+{
+	m_AspectRatio = width / height;
+	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+}
+
 bool Steins::OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
 	STS_PROFILE_FUNCTION();
@@ -79,7 +85,7 @@ bool Steins::OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 {
 	STS_PROFILE_FUNCTION();
 
-	m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
+	OnResize((float)e.GetWidth(), (float)e.GetHeight());
 	CalculateView();
 	return false;
 }

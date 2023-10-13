@@ -133,7 +133,8 @@ namespace Steins {
 		}
 		m_Minimized = false;
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
-		return true;
+
+		return false;
 	}
 
 }
