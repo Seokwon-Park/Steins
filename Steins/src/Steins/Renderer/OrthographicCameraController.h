@@ -35,9 +35,10 @@ namespace Steins
 		}
 
 		const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
+		//temp location
+		void OnResize(float width, float height);
 	private:
 		void CalculateView();
-		void OnResize(float width, float height);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 	private:

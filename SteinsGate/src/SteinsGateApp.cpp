@@ -5,16 +5,16 @@
 
 namespace Steins
 {
-	class SteinsEditor : public Application
+	class SteinsGate : public Application
 	{
 	public:
-		SteinsEditor()
-			:Application("Steins Editor")
+		SteinsGate()
+			:Application("SteinsGate")
 		{
 			PushLayer(new EditorLayer());
 		}
 
-		~SteinsEditor()
+		~SteinsGate()
 		{
 
 		}
@@ -22,6 +22,6 @@ namespace Steins
 
 	Application* CreateApplication()
 	{
-		return new SteinsEditor();
+		return new SteinsGate();
 	}
 }

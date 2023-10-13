@@ -137,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\SteinsEditorApp.cpp" />
+    <ClCompile Include="src\SteinsGateApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />

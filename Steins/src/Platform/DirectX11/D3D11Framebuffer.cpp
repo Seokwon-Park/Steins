@@ -19,4 +19,9 @@ namespace Steins
 	void D3D11Framebuffer::Unbind()
 	{
 	}
+
+	void D3D11Framebuffer::Resize(u32 width, u32 height)
+	{
+	}
+
 }

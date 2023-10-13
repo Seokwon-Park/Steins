@@ -19,6 +19,8 @@ namespace Steins
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 
+		virtual void Resize(u32 width, u32 height) = 0;
+
 		virtual u32 GetColorAttachmentRendererID() const = 0;
 
 		virtual const FramebufferSpecification& GetSpecification() const = 0;

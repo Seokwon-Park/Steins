@@ -14,11 +14,14 @@ namespace Steins
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
+		virtual void Resize(u32 width, u32 height) override;
 
 		virtual u32 GetColorAttachmentRendererID() const override { return 0; }
 		//virtual u32 GetColorAttachmentRendererID() const override { return 0; }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
+
+
 	private:
 		u32 m_RendererID;
 		u32 m_RenderTexture, m_DepthAttachment;
