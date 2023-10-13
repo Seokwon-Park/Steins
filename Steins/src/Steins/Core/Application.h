@@ -11,6 +11,8 @@
 
 #include "Steins/ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Steins {
 	class Application
 	{
@@ -18,7 +20,6 @@ namespace Steins {
 		Application(const std::string& name = "Steins App");
 		virtual ~Application();
 
-		void Run();
 
 		void OnEvent(Event& e);
 
@@ -29,8 +30,11 @@ namespace Steins {
 
 		void Close();
 
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+
 		inline static Application& Get() { return *s_Instance; }
 	private:
+		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
@@ -44,6 +48,7 @@ namespace Steins {
 		float m_LastFrameTime = 0.0f;			
 	private:
 		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	// To be defined in client
