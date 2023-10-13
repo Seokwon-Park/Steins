@@ -171,7 +171,7 @@ namespace Steins
 		{
 			m_Framebuffer->Resize((u32)viewportPanelSize.x, (u32)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
+			
 			m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
 		}
 		STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);

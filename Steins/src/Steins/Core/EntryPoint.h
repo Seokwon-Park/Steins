@@ -11,10 +11,10 @@ int main(int argc, char** argv)
 	STS_PROFILE_BEGIN_SESSION("Startup", "SteinsProfile-Startup.json");
 	auto app = Steins::CreateApplication();
 	STS_PROFILE_END_SESSION();
-	STS_PROFILE_BEGIN_SESSION("Startup", "SteinsProfile-Runtime.json");
+	STS_PROFILE_BEGIN_SESSION("Runtime", "SteinsProfile-Runtime.json");
 	app->Run();
 	STS_PROFILE_END_SESSION();
-	STS_PROFILE_BEGIN_SESSION("Startup", "SteinsProfile-Shutdown.json");
+	STS_PROFILE_BEGIN_SESSION("Shutdown", "SteinsProfile-Shutdown.json");
 	delete app;
 	STS_PROFILE_END_SESSION();
 }
