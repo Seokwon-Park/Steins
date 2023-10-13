@@ -4,7 +4,7 @@
 
 namespace Steins
 {
-	class STEINS_API MouseMovedEvent : public Event
+	class  MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y)
@@ -27,7 +27,7 @@ namespace Steins
 		f32 m_MouseX, m_MouseY;
 	};
 
-	class STEINS_API MouseScrolledEvent : public Event
+	class  MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
@@ -50,7 +50,7 @@ namespace Steins
 		f32 m_XOffset, m_YOffset;
 	};
 
-	class STEINS_API MouseButtonEvent : public Event
+	class  MouseButtonEvent : public Event
 	{
 	public: 
 		inline s32 GetMouseButton() const { return m_Button; }
@@ -62,7 +62,7 @@ namespace Steins
 		int m_Button;
 	};
 
-	class STEINS_API MouseButtonPressedEvent : public MouseButtonEvent
+	class  MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button)
@@ -78,7 +78,7 @@ namespace Steins
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class STEINS_API MouseButtonReleasedEvent: public MouseButtonEvent
+	class  MouseButtonReleasedEvent: public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button)

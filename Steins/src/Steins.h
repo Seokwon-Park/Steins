@@ -10,7 +10,7 @@
 
 #include "Steins/Core/Input.h"
 #include "Steins/Core/KeyCodes.h"
-#include "Steins/Core/MouseButtonCodes.h"
+#include "Steins/Core/MouseCodes.h"
 #include "Steins/Renderer/OrthographicCameraController.h"
 
 #include "Steins/ImGui/ImGuiLayer.h"

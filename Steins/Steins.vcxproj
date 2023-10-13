@@ -173,7 +173,7 @@
     <ClInclude Include="src\Steins\Core\LayerStack.h" />
     <ClInclude Include="src\Steins\Core\Log.h" />
     <ClInclude Include="src\Steins\Core\MathTypes.h" />
-    <ClInclude Include="src\Steins\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\Steins\Core\MouseCodes.h" />
     <ClInclude Include="src\Steins\Core\Timestep.h" />
     <ClInclude Include="src\Steins\Core\Window.h" />
     <ClInclude Include="src\Steins\Debug\Instrumentor.h" />

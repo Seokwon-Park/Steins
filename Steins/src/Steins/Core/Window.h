@@ -25,7 +25,7 @@ namespace Steins
 	};
 
 	// Interface represending a desktop system based Window
-	class STEINS_API Window
+	class  Window
 	{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;

@@ -7,7 +7,7 @@
 
 namespace Steins
 {
-	class STEINS_API LayerStack
+	class  LayerStack
 	{
 	public:
 		LayerStack();

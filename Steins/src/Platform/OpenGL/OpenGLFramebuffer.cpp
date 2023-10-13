@@ -5,6 +5,8 @@
 
 namespace Steins
 {
+	static const u32 s_MaxFrameBufferSize = 8192;
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		:m_Specification(spec)
 	{
@@ -60,6 +62,12 @@ namespace Steins
 
 	void OpenGLFramebuffer::Resize(u32 width, u32 height)
 	{
+		if (width == 0 || height == 0 || width > s_MaxFrameBufferSize || height > s_MaxFrameBufferSize)
+		{
+			STS_CORE_WARN("Attempted to resize framebuffer to {0}, {1}", width, height);
+			return;
+		}
+
 		m_Specification.Width = width;
 		m_Specification.Height= height;
 		Invalidate();

@@ -135,7 +135,7 @@
     <ClInclude Include="src\Steins\Core\MathTypes.h">
       <Filter>src\Steins\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Core\MouseButtonCodes.h">
+    <ClInclude Include="src\Steins\Core\MouseCodes.h">
       <Filter>src\Steins\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\Timestep.h">

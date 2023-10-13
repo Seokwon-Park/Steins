@@ -8,7 +8,7 @@
 
 namespace Steins
 {
-	class STEINS_API Log
+	class  Log
 	{
 	public:
 		static void Init();

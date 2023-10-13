@@ -3,7 +3,7 @@
 #include "Event.h"
 
 namespace Steins {
-	class STEINS_API KeyEvent : public Event
+	class  KeyEvent : public Event
 	{
 	public:
 		inline s32 GetKeyCode() const { return m_KeyCode; }
@@ -16,7 +16,7 @@ namespace Steins {
 		int m_KeyCode;
 	};
 
-	class STEINS_API KeyPressedEvent : public KeyEvent
+	class  KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount)
@@ -36,7 +36,7 @@ namespace Steins {
 		s32 m_RepeatCount;
 	};
 
-	class STEINS_API KeyReleasedEvent : public KeyEvent
+	class  KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keycode)
@@ -52,7 +52,7 @@ namespace Steins {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class STEINS_API KeyTypedEvent : public KeyEvent
+	class  KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(int keycode)
