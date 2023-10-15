@@ -23,11 +23,9 @@ namespace Steins
 		virtual ID3D11ShaderResourceView* GetSRV() const override { return m_ColorSRV.Get(); }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
-
-
 	private:
 		D3D11Context* m_Context;
-		ComPtr<ID3D11Texture2D> m_RT;
+		ComPtr<ID3D11Texture2D> m_Texture;
 		ComPtr<ID3D11ShaderResourceView> m_ColorSRV;
 		u32 m_RendererID;
 		u32 m_RenderTexture, m_DepthAttachment;

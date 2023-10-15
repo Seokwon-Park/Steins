@@ -91,6 +91,9 @@ namespace Steins
 
 	D3D11Texture2D::~D3D11Texture2D()
 	{
+		m_Texture.Reset();
+		m_TextureResourceView.Reset();
+		m_Context->GetD3DContext()->Flush();
 	}
 
 	void D3D11Texture2D::SetData(void* data, u32 size)

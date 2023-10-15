@@ -126,8 +126,8 @@ namespace Steins {
 		}
 		if (Renderer::GetAPI() == RendererAPI::API::Direct3D11)
 		{
-			static_cast<D3D11Context*>(m_Window->GetContext())->
-				ResizeSwapChain(e.GetWidth(), e.GetHeight());
+			D3D11Context* m_Context = static_cast<D3D11Context*>(s_Instance->GetWindow().GetContext());
+			m_Context->ResizeSwapChain(e.GetWidth(), e.GetHeight());
 		}
 		m_Minimized = false;
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());

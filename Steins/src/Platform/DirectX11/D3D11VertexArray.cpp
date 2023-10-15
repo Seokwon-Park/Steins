@@ -36,7 +36,7 @@ namespace Steins
 	}
 	D3D11VertexArray::~D3D11VertexArray()
 	{
-		//glDeleteBuffers(1, &m_RendererID);
+		m_Context->GetD3DContext()->Flush();
 	}
 	void D3D11VertexArray::Bind() const
 	{

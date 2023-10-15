@@ -54,6 +54,8 @@ namespace Steins
     }
 	D3D11VertexBuffer::~D3D11VertexBuffer()
 	{
+		m_VertexBuffer.Reset();
+		m_Context->GetD3DContext()->Flush();
 	}
 	void D3D11VertexBuffer::Bind() const
 	{
@@ -72,7 +74,6 @@ namespace Steins
 		m_Context->GetD3DContext()->Map(m_VertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		// 데이터 복사
 		memcpy(mappedResource.pData, data, size);
-		// 언맵 (ComPtr이라 필요 X)
 		m_Context->GetD3DContext()->Unmap(m_VertexBuffer.Get(), 0);		
 	}
 

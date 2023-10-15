@@ -96,8 +96,7 @@ namespace Steins
 			m_Context->GetInputElements().data(), UINT(m_Context->GetInputElements().size()),
 			vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(),
 			&m_InputLayout);
-
-		Microsoft::WRL::ComPtr<ID3DBlob> blob;
+		ID3DBlob* blob;
 		hr = D3DCompile(
 			pixelSrc.c_str(),
 			pixelSrc.length(),

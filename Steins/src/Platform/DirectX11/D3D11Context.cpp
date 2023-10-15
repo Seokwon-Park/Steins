@@ -60,8 +60,10 @@ namespace Steins
 	// 6. m_depthStencilState
 	void D3D11Context::Init()
 	{
-		m_MSAAEnabled = true;
+		// MSAA->CopyResource 문제로 일단 사용안하기
+		m_MSAAEnabled = false;
 
+		// DRIVER_TYPE ARRAY
 		D3D_DRIVER_TYPE driverTypes[] =
 		{
 			D3D_DRIVER_TYPE_HARDWARE,
@@ -71,11 +73,12 @@ namespace Steins
 
 		u32 numDriverTypes = ARRAYSIZE(driverTypes);
 		D3D_DRIVER_TYPE driverType;
-
+		// DRIVERTYPE Test
+		// If Succeed -> Init End.
 		for (u32 driverTypeIndex = 0; driverTypeIndex < numDriverTypes; ++driverTypeIndex)
 		{
 			driverType = driverTypes[driverTypeIndex];
-
+			// 1. m_m_D3DDevice, m_m_D3DContext, 
 			HRESULT hr = D3D11CreateDevice(
 				NULL,
 				driverType,
@@ -103,10 +106,8 @@ namespace Steins
 			scd.BufferDesc.RefreshRate.Numerator = 60;
 			scd.BufferDesc.RefreshRate.Denominator = 1;
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
 			scd.SampleDesc.Count = m_MSAAEnabled ? 4 : 1;
 			scd.SampleDesc.Quality = m_MSAAEnabled ? (m_MSAAQuality - 1) : 0;
-
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			scd.BufferCount = 2;
 			scd.OutputWindow = m_WindowHandle;
@@ -122,20 +123,24 @@ namespace Steins
 			m_D3DDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 			dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 			dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
-			dxgiFactory->CreateSwapChain(m_D3DDevice.Get(), &scd, &m_SwapChain);
 
-			char videoCardDescription[128];
-			LARGE_INTEGER driverVersion;
-			
-			DXGI_ADAPTER_DESC adapterDescription;
+			dxgiFactory->CreateSwapChain(m_D3DDevice, &scd, &m_SwapChain);
+
+			//Here is For Get DX11 Version
+			DXGI_ADAPTER_DESC adapterDescription; // Vendor
 			SecureZeroMemory(&adapterDescription, sizeof(DXGI_ADAPTER_DESC));
+			char videoCardDescription[128]; // Renderer
+			LARGE_INTEGER driverVersion; // Version
 
+			// Vendor
 			dxgiAdapter->GetDesc(&adapterDescription);
 			dxgiAdapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &driverVersion);
+
+			// Renderer
 			wcstombs_s(NULL, videoCardDescription, 128, adapterDescription.Description, 128);
 
+			// Version
 			std::string major, minor, release, build;
-
 			major = std::to_string(HIWORD(driverVersion.HighPart));
 			minor = std::to_string(LOWORD(driverVersion.HighPart));
 			release = std::to_string(HIWORD(driverVersion.LowPart));
@@ -148,11 +153,12 @@ namespace Steins
 			dxgiAdapter->Release();
 			dxgiDevice->Release();
 
+
+			//Set DX11 DebugMode
 			if (m_DebugLayerEnabled)
 			{
 				m_D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_DebugLayer));
-				m_DebugLayer->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
-
+				m_DebugLayer->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 				ID3D11InfoQueue* infoQueue;
 				m_D3DDevice->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&infoQueue));
 				D3D11_MESSAGE_ID hide[] = { D3D11_MESSAGE_ID_DEVICE_DRAW_SAMPLER_NOT_SET };
@@ -179,16 +185,25 @@ namespace Steins
 		u32 width = m_WindowProps.Width;
 		u32 height = m_WindowProps.Height;
 
-		ReleaseCOM(m_RenderTargetView);
-		ReleaseCOM(m_DepthStencilView);
-		ReleaseCOM(m_DepthStencilBuffer);
-
 		m_SwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 
 		ID3D11Texture2D* backBuffer;
 		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
 		assert(backBuffer);
 		m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
+
+		m_Backbuffer = backBuffer;
+
+		D3D11_TEXTURE2D_DESC textureDesc;
+		backBuffer->GetDesc(&textureDesc);
+
+		// 텍스처의 너비와 높이 변경
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.SampleDesc.Quality = 0;
+		textureDesc.Usage= D3D11_USAGE_DEFAULT;   // 새로운 너비
+
+		m_D3DDevice->CreateTexture2D(&textureDesc, nullptr, &m_Backbuffer);
+
 		backBuffer->Release();
 
 		D3D11_DEPTH_STENCIL_DESC dsd = {};
@@ -269,15 +284,21 @@ namespace Steins
 	void D3D11Context::CreateRenderTargetView()
 	{
 		ComPtr<ID3D11Texture2D> backBuffer;
-		m_SwapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
+		m_SwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 		if (backBuffer) {
 			m_D3DDevice->CreateRenderTargetView(backBuffer.Get(), nullptr,
-				m_RenderTargetView.GetAddressOf());
+				&m_RenderTargetView);
 		}
 
 		D3D11_TEXTURE2D_DESC bbDesc;
 		backBuffer->GetDesc(&bbDesc);
 
+		// 텍스처의 너비와 높이 변경
+		bbDesc.SampleDesc.Count = 1;
+		bbDesc.SampleDesc.Quality = 0;
+		bbDesc.Usage = D3D11_USAGE_DEFAULT;
+		m_D3DDevice->CreateTexture2D(&bbDesc, nullptr, &m_Backbuffer);
+				
 		D3D11_TEXTURE2D_DESC depthStencilDesc;
 		depthStencilDesc.Width = bbDesc.Width;
 		depthStencilDesc.Height = bbDesc.Height;
