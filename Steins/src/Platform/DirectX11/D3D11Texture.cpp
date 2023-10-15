@@ -11,6 +11,8 @@ namespace Steins
 	D3D11Texture2D::D3D11Texture2D(u32 width, u32 height)
 	{
 		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+		m_TextureResourceView.Reset();
+		m_Texture.Reset();
 
 		m_Width = width;
 		m_Height = height;
@@ -35,6 +37,8 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+		m_TextureResourceView.Reset();
+		m_Texture.Reset();
 
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
@@ -93,7 +97,6 @@ namespace Steins
 	{
 		m_Texture.Reset();
 		m_TextureResourceView.Reset();
-		m_Context->GetD3DContext()->Flush();
 	}
 
 	void D3D11Texture2D::SetData(void* data, u32 size)
@@ -103,9 +106,7 @@ namespace Steins
 		m_Context->GetD3DContext()->Map(m_Texture.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		// 데이터 복사
 		memcpy(mappedResource.pData, data, size);
-		// 언맵 (ComPtr이라 필요 X)
 		m_Context->GetD3DContext()->Unmap(m_Texture.Get(), 0);
-
 	}
 
 	void D3D11Texture2D::Bind(u32 slot) const

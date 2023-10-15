@@ -87,9 +87,9 @@ namespace Steins
 				NULL,
 				NULL,
 				D3D11_SDK_VERSION,
-				&m_D3DDevice,
+				m_D3DDevice.GetAddressOf(),
 				&m_D3DFeatureLevel,
-				&m_D3DContext);
+				m_D3DContext.GetAddressOf());
 
 			if (FAILED(hr))
 			{
@@ -124,7 +124,7 @@ namespace Steins
 			dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
 			dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
 
-			dxgiFactory->CreateSwapChain(m_D3DDevice, &scd, &m_SwapChain);
+			dxgiFactory->CreateSwapChain(m_D3DDevice.Get(), &scd, m_SwapChain.GetAddressOf());
 
 			//Here is For Get DX11 Version
 			DXGI_ADAPTER_DESC adapterDescription; // Vendor
@@ -158,7 +158,7 @@ namespace Steins
 			if (m_DebugLayerEnabled)
 			{
 				m_D3DDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_DebugLayer));
-				m_DebugLayer->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+				m_DebugLayer->ReportLiveDeviceObjects(D3D11_RLDO_IGNORE_INTERNAL);
 				ID3D11InfoQueue* infoQueue;
 				m_D3DDevice->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&infoQueue));
 				D3D11_MESSAGE_ID hide[] = { D3D11_MESSAGE_ID_DEVICE_DRAW_SAMPLER_NOT_SET };
@@ -267,6 +267,17 @@ namespace Steins
 		m_D3DContext->RSSetState(rs);
 		ReleaseCOM(rs);
 	}
+
+	void D3D11Context::ReleaseCall()
+	{
+		m_SwapChain.Reset();
+		m_Backbuffer.Reset();
+		m_RenderTargetView.Reset();
+		m_DepthStencilBuffer.Reset();
+		m_DepthStencilView.Reset();
+		m_DepthStencilState.Reset();
+	}
+
 	void D3D11Context::SetViewport(int width, int height)
 	{
 		// Set the viewport
@@ -283,6 +294,11 @@ namespace Steins
 
 	void D3D11Context::CreateRenderTargetView()
 	{
+		m_Backbuffer.Reset();
+		m_RenderTargetView.Reset();
+		m_DepthStencilView.Reset();
+		m_DepthStencilBuffer.Reset();
+
 		ComPtr<ID3D11Texture2D> backBuffer;
 		m_SwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 		if (backBuffer) {
@@ -292,6 +308,7 @@ namespace Steins
 
 		D3D11_TEXTURE2D_DESC bbDesc;
 		backBuffer->GetDesc(&bbDesc);
+		backBuffer.Reset();
 
 		// 텍스처의 너비와 높이 변경
 		bbDesc.SampleDesc.Count = 1;

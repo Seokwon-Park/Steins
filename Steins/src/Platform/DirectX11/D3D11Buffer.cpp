@@ -8,6 +8,7 @@ namespace Steins
 	D3D11VertexBuffer::D3D11VertexBuffer(u32 size, u32 vertexSize)
 		:m_Stride(vertexSize)
 	{
+		m_VertexBuffer.Reset();
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 		vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC; // 초기화 후 변경X
@@ -27,6 +28,7 @@ namespace Steins
 	D3D11VertexBuffer::D3D11VertexBuffer(float* vertices, u32 size, u32 count)
 		:m_Stride(size/count)
     {
+		m_VertexBuffer.Reset();
 		std::vector<float> vec_vertices{ vertices, vertices + (size / sizeof(float)) };
 
 		D3D11_BUFFER_DESC vertexBufferDesc;
@@ -55,7 +57,7 @@ namespace Steins
 	D3D11VertexBuffer::~D3D11VertexBuffer()
 	{
 		m_VertexBuffer.Reset();
-		m_Context->GetD3DContext()->Flush();
+
 	}
 	void D3D11VertexBuffer::Bind() const
 	{
@@ -80,6 +82,7 @@ namespace Steins
 	D3D11IndexBuffer::D3D11IndexBuffer(u32* indices, u32 count)
 		:m_Count(count)
 	{
+		m_IndexBuffer.Reset();
 		D3D11_BUFFER_DESC bufferDesc = {};
 		bufferDesc.Usage = D3D11_USAGE_IMMUTABLE; // 초기화 후 변경X
 		bufferDesc.ByteWidth = UINT(sizeof(uint32_t) * count);
@@ -104,12 +107,12 @@ namespace Steins
 	}
 	D3D11IndexBuffer::~D3D11IndexBuffer()
 	{
+		m_IndexBuffer.Reset();
 	}
 	void D3D11IndexBuffer::Bind() const
 	{
-
 		m_Context->GetD3DContext()->IASetIndexBuffer(m_IndexBuffer.Get(),
-			DXGI_FORMAT_R32_UINT, 0);
+			DXGI_FORMAT_R32_UINT, 0);		
 	}
 	void D3D11IndexBuffer::UnBind() const
 	{

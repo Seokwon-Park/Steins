@@ -51,7 +51,6 @@ namespace Steins
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
-
 		// Update
 		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(dt);

@@ -164,6 +164,7 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Steins.h" />
+    <ClInclude Include="src\Steins\Camera.h" />
     <ClInclude Include="src\Steins\Core\Application.h" />
     <ClInclude Include="src\Steins\Core\Base.h" />
     <ClInclude Include="src\Steins\Core\EntryPoint.h" />

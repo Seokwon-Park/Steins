@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Steins/Renderer/OrthographicCamera.h>
+
 namespace Steins
 {
 	struct TagComponent
@@ -34,6 +36,11 @@ namespace Steins
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			:Color(color) {}
+	};
+
+	struct CameraComponent
+	{
+		OrthographicCamera Camera;
 	};
 
 }

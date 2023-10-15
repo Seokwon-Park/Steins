@@ -15,7 +15,6 @@ namespace Steins
 		CreateSamplerState();
 
 		ID3DBlob* vsBlob;
-
 		ID3DBlob* shaderCompileErrorsBlob;
 		HRESULT hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vsBlob, &shaderCompileErrorsBlob);
 		if (FAILED(hResult))
@@ -65,7 +64,9 @@ namespace Steins
 				nullptr,
 				&m_PixelShader);
 		assert(SUCCEEDED(hResult));
+		vsBlob->Release();
 		psBlob->Release();
+		shaderCompileErrorsBlob->Release();
 	}
 	D3D11Shader::D3D11Shader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc)
 		:m_CbufferIndex(0)
@@ -74,7 +75,7 @@ namespace Steins
 
 		CreateSamplerState();
 
-		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob;
+		ID3DBlob* vsBlob;
 		HRESULT hr = D3DCompile(
 			vertexSrc.c_str(),
 			vertexSrc.length(),
@@ -96,7 +97,7 @@ namespace Steins
 			m_Context->GetInputElements().data(), UINT(m_Context->GetInputElements().size()),
 			vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(),
 			&m_InputLayout);
-		ID3DBlob* blob;
+		ID3DBlob* psBlob;
 		hr = D3DCompile(
 			pixelSrc.c_str(),
 			pixelSrc.length(),
@@ -105,17 +106,29 @@ namespace Steins
 			nullptr,
 			"ps_main", "ps_5_0",
 			0, 0,
-			&blob,
+			&psBlob,
 			nullptr);
 
 		hr = m_Context->GetD3DDevice()->CreatePixelShader(
-			blob->GetBufferPointer(),
-			blob->GetBufferSize(),
+			psBlob->GetBufferPointer(),
+			psBlob->GetBufferSize(),
 			nullptr,
 			&m_PixelShader);
+
+		vsBlob->Release();
+		psBlob->Release();
 	}
 	D3D11Shader::~D3D11Shader()
 	{
+		m_VertexShader.Reset();
+		m_PixelShader.Reset();
+		m_InputLayout.Reset();
+		m_VertexConstant.Reset();
+		for (u32 i = 0; i < 32; i++)
+		{
+			m_Textures[i].Reset();
+		}
+		m_SamplerState.Reset();
 	}
 	void D3D11Shader::Bind() const
 	{
@@ -172,6 +185,7 @@ namespace Steins
 
 		//TODO:
 		m_Context->GetD3DContext()->VSSetConstantBuffers(stoi(name), 1, m_VertexConstant.GetAddressOf());
+		m_VertexConstant.Reset();
 	}
 
 	std::wstring D3D11Shader::GetFilepath(std::string filepath)

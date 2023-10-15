@@ -1461,6 +1461,7 @@
     <ClInclude Include="src\Steins\Scene\Scene.h" />
     <ClInclude Include="src\Steins\Scene\Components.h" />
     <ClInclude Include="src\Steins\Scene\Entity.h" />
+    <ClInclude Include="src\Steins\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">

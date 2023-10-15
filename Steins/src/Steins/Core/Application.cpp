@@ -37,6 +37,8 @@ namespace Steins {
 		STS_PROFILE_FUNCTION();
 
 		Renderer::Shutdown();
+		D3D11Context* m_Context = static_cast<D3D11Context*>(s_Instance->GetWindow().GetContext());
+		m_Context->ReleaseCall();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -112,7 +114,7 @@ namespace Steins {
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
-		return true;
+		return false;
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)

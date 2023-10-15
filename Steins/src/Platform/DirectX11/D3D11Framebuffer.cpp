@@ -15,10 +15,13 @@ namespace Steins
 	}
 	D3D11Framebuffer::~D3D11Framebuffer()
 	{
-		m_Context->GetD3DContext()->Flush();
+		m_Texture.Reset();
+		m_ColorSRV.Reset();
 	}
 	void D3D11Framebuffer::Invalidate()
 	{
+		m_ColorSRV.Reset();
+		m_Texture.Reset();
 		D3D11_TEXTURE2D_DESC txtDesc = {};
 		txtDesc.Width = m_Specification.Width;
 		txtDesc.Height = m_Specification.Height;
@@ -36,12 +39,10 @@ namespace Steins
 	}
 	void D3D11Framebuffer::Bind()
 	{
-
-
 	}
 	void D3D11Framebuffer::Unbind()
 	{
-		m_Context->GetD3DContext()->CopyResource(m_Texture.Get(), m_Context->GetBackbuffer());
+		m_Context->GetD3DContext()->CopyResource(m_Texture.Get(), m_Context->GetBackbuffer().Get());
 	}
 
 	void D3D11Framebuffer::Resize(u32 width, u32 height)
@@ -56,6 +57,7 @@ namespace Steins
 		m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
 		D3D11_TEXTURE2D_DESC bbDesc;
 		backBuffer->GetDesc(&bbDesc);
+		backBuffer.Reset();
 		m_Specification.Width = bbDesc.Width;
 		m_Specification.Height = bbDesc.Height;
 		Invalidate();

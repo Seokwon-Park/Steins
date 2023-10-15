@@ -36,7 +36,9 @@ namespace Steins
 	}
 	D3D11VertexArray::~D3D11VertexArray()
 	{
+		m_VertexBuffers = std::vector<Ref<VertexBuffer>>();
 		m_Context->GetD3DContext()->Flush();
+		
 	}
 	void D3D11VertexArray::Bind() const
 	{
