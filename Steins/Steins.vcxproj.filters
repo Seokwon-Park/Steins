@@ -1462,6 +1462,7 @@
     <ClInclude Include="src\Steins\Scene\Components.h" />
     <ClInclude Include="src\Steins\Scene\Entity.h" />
     <ClInclude Include="src\Steins\Renderer\Camera.h" />
+    <ClInclude Include="src\Steins\Scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1580,5 +1581,6 @@
     </ClCompile>
     <ClCompile Include="src\Steins\Scene\Scene.cpp" />
     <ClCompile Include="src\Steins\Scene\Entity.cpp" />
+    <ClCompile Include="src\Steins\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

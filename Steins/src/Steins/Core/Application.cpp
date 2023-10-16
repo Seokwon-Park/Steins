@@ -37,8 +37,11 @@ namespace Steins {
 		STS_PROFILE_FUNCTION();
 
 		Renderer::Shutdown();
-		D3D11Context* m_Context = static_cast<D3D11Context*>(s_Instance->GetWindow().GetContext());
-		m_Context->ReleaseCall();
+		if (Renderer::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			D3D11Context* m_Context = static_cast<D3D11Context*>(s_Instance->GetWindow().GetContext());
+			m_Context->ReleaseCall();
+		}
 	}
 
 	void Application::OnEvent(Event& e)

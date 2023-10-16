@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include <Steins/Renderer/Camera.h>
+#include "SceneCamera.h"
 
 
 namespace Steins
@@ -41,13 +41,12 @@ namespace Steins
 
 	struct CameraComponent
 	{
-		Camera Camera;
+		SceneCamera Camera;
 		bool Primary = true; // TODO: think about moving Scene
+		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection)
-			:Camera(projection) {}
 	};
 
 }
