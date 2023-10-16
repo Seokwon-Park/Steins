@@ -2,7 +2,8 @@
 
 #include <glm/glm.hpp>
 
-#include <Steins/Renderer/OrthographicCamera.h>
+#include <Steins/Renderer/Camera.h>
+
 
 namespace Steins
 {
@@ -40,7 +41,13 @@ namespace Steins
 
 	struct CameraComponent
 	{
-		OrthographicCamera Camera;
+		Camera Camera;
+		bool Primary = true; // TODO: think about moving Scene
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& projection)
+			:Camera(projection) {}
 	};
 
 }

@@ -137,6 +137,29 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 	}
 
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		STS_PROFILE_FUNCTION();
+
+		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
+
+		s_Data.TextureShader->Bind();
+		if (RendererAPI::GetAPI() == RendererAPI::API::OpenGL)
+		{
+			s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		}
+		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			s_Data.TextureShader->SetMat4("0", viewProj);
+		}
+
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		STS_PROFILE_FUNCTION();

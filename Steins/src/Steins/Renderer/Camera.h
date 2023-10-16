@@ -13,7 +13,6 @@ namespace Steins
 		const glm::mat4& GetProjection() const { return m_Projection; }
 
 		// TODO:
-		//void
 	private:
 		glm::mat4 m_Projection;
 	};
