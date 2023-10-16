@@ -37,7 +37,7 @@ namespace Steins
 
 		auto& transform = m_SquareEntity2.GetComponent<TransformComponent>().Transform;
 		transform[3][0] = 0.5f;
-		transform[3][2] = -0.1f;
+		transform[3][2] = -0.0f;
 		
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		m_CameraEntity.AddComponent<CameraComponent>();
@@ -256,8 +256,8 @@ namespace Steins
 		}
 		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
 		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		auto textureID = m_Framebuffer->GetSRV();
-		//auto textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		//auto textureID = m_Framebuffer->GetSRV();
+		auto textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		//auto textureID = m_CheckerboardTexture->GetSRV();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
 		ImGui::End();

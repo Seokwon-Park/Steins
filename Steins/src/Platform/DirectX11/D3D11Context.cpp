@@ -288,7 +288,7 @@ namespace Steins
 		m_ScreenViewport.TopLeftY = 0;
 		m_ScreenViewport.Width = (float)width;
 		m_ScreenViewport.Height = (float)height;
-		m_ScreenViewport.MinDepth = 0.0f;
+		m_ScreenViewport.MinDepth = -1.0f;
 		m_ScreenViewport.MaxDepth = 1.0f;
 
 		m_D3DContext->RSSetViewports(1, &m_ScreenViewport);
