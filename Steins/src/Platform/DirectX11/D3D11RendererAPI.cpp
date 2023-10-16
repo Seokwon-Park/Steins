@@ -23,6 +23,7 @@ namespace Steins
 		m_ClearColor[1] = color.g;
 		m_ClearColor[2] = color.b;
 		m_ClearColor[3] = color.a;
+		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
 	}
 	void D3D11RendererAPI::Clear()
 	{
@@ -32,7 +33,6 @@ namespace Steins
 	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, u32 indexCount)
 	{
 		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
-		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
 		m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);

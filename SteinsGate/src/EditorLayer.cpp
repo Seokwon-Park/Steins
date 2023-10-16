@@ -112,9 +112,9 @@ namespace Steins
 		RenderCommand::Clear();
 		// Update scene
 
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
-		Renderer2D::EndScene();
+		//Renderer2D::BeginScene(m_CameraController.GetCamera());
+		//Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
+		//Renderer2D::EndScene();
 
 		m_ActiveScene->OnUpdate(dt);
 
@@ -208,7 +208,6 @@ namespace Steins
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		ImGui::ColorEdit4("Square Color3", glm::value_ptr(m_SquareColor));
 		if (m_SquareEntity)
 		{
 			ImGui::Separator();
