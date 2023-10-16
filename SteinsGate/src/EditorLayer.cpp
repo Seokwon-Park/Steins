@@ -26,9 +26,18 @@ namespace Steins
 
 		// Entity
 		auto square = m_ActiveScene->CreateEntity("Green Square");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		// Entity
+		auto square2 = m_ActiveScene->CreateEntity("Red Square");
+		square2.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
 
 		m_SquareEntity = square;
+		m_SquareEntity2 = square2;
+
+		auto& transform = m_SquareEntity2.GetComponent<TransformComponent>().Transform;
+		transform[3][0] = 0.5f;
+		transform[3][2] = -0.1f;
 		
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		m_CameraEntity.AddComponent<CameraComponent>();
@@ -67,7 +76,8 @@ namespace Steins
 		};
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -102,10 +112,12 @@ namespace Steins
 		RenderCommand::Clear();
 		// Update scene
 
-		//Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
+		Renderer2D::EndScene();
+
 		m_ActiveScene->OnUpdate(dt);
 
-		Renderer2D::EndScene();
 		m_Framebuffer->Unbind();
 	}
 
@@ -185,6 +197,8 @@ namespace Steins
 			ImGui::EndMenuBar();
 		}
 
+		m_SceneHierarchyPanel.OnImGuiRender();
+
 		ImGui::Begin("Settings");
 
 		auto stats = Renderer2D::GetStats();
@@ -194,6 +208,7 @@ namespace Steins
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
+		ImGui::ColorEdit4("Square Color3", glm::value_ptr(m_SquareColor));
 		if (m_SquareEntity)
 		{
 			ImGui::Separator();
@@ -202,6 +217,9 @@ namespace Steins
 
 			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+
+			auto& squareColor2 = m_SquareEntity2.GetComponent<SpriteRendererComponent>().Color;
+			ImGui::ColorEdit4("Square Color2", glm::value_ptr(squareColor2));
 		}
 
 		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));

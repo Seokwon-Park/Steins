@@ -10,8 +10,6 @@ namespace Steins
 	{
 		//m_Context = static_cast<D3D11Context*>(context);
 		m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
-
-		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), nullptr, 0xFFFFFFFF);
 		m_Context->GetD3DContext()->OMSetDepthStencilState(m_Context->GetDSS().Get(), 0);
 	}
 
@@ -34,6 +32,7 @@ namespace Steins
 	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, u32 indexCount)
 	{
 		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
 		m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);

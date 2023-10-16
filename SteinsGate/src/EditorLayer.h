@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Steins.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Steins
 {
@@ -26,6 +27,7 @@ namespace Steins
 
 		Ref<Scene> m_ActiveScene;
 		Entity m_SquareEntity;
+		Entity m_SquareEntity2;
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
 
@@ -38,5 +40,9 @@ namespace Steins
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+		glm::vec4 m_SquareColor2 = { 0.2f, 0.3f, 0.8f, 1.0f };
+
+		// Panels
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 	};
 }

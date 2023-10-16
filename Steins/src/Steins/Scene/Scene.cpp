@@ -21,8 +21,7 @@ namespace Steins
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
-	{
-	
+	{	
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
@@ -82,7 +81,7 @@ namespace Steins
 		}
 	}
 
-	void Scene::OnViewportResize(u32 width, u32 height)
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
