@@ -1463,6 +1463,7 @@
     <ClInclude Include="src\Steins\Scene\Entity.h" />
     <ClInclude Include="src\Steins\Renderer\Camera.h" />
     <ClInclude Include="src\Steins\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Steins\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">

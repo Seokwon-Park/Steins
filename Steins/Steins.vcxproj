@@ -201,6 +201,7 @@
     <ClInclude Include="src\Steins\Scene\Entity.h" />
     <ClInclude Include="src\Steins\Scene\Scene.h" />
     <ClInclude Include="src\Steins\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Steins\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\stspch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
