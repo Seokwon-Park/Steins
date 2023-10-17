@@ -12,7 +12,6 @@ namespace Steins
 {
 	Scene::Scene()
 	{
-
 	}
 
 	Scene::~Scene()
@@ -27,6 +26,11 @@ namespace Steins
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 		return entity;
+	}
+
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity);
 	}
 
 	void Scene::OnUpdate(Timestep dt)
@@ -81,7 +85,7 @@ namespace Steins
 		}
 	}
 
-	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	void Scene::OnViewportResize(u32 width, u32 height)
 	{
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
@@ -97,4 +101,39 @@ namespace Steins
 		}
 	}
 
+	template<typename T>
+	void Scene::OnComponentAdded(Entity entity, T& component)
+	{
+		static_assert(false);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+	{
+		component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SpriteRendererComponent> (Entity entity, SpriteRendererComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+	{
+
+	}
 }

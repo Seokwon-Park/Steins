@@ -17,7 +17,9 @@ namespace Steins
 		T& AddComponent(Args&&... args)
 		{
 			STS_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
-			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			T& component = m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(*this, component);
+			return component;
 		}
 
 		template <typename T>
@@ -36,11 +38,12 @@ namespace Steins
 		template <typename T>
 		void RemoveComponent()
 		{
-			STS_CORE_ASSERT(!HasComponent<T>(), "Entity does not have component!");
+			STS_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
 			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		}
 
 		operator bool() const { return m_EntityHandle != entt::null; }
+		operator entt::entity() const { return m_EntityHandle; }
 		operator u32() const { return (u32)m_EntityHandle; }
 
 		bool operator ==(const Entity& other) const { return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene; }

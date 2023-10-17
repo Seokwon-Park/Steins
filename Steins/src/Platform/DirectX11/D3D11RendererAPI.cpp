@@ -36,11 +36,15 @@ namespace Steins
 		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
 		m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);
+		if (indexCount != 0)
+		{
+			m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);
+		}
 		ComPtr<ID3D11Texture2D> backBuffer;
 		m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
 		m_Context->GetD3DContext()->CopyResource(m_Context->GetBackbuffer().Get(), backBuffer.Get());
 		backBuffer.Reset();
-		
+
+
 	}
 }

@@ -70,7 +70,6 @@ namespace Steins
 	void D3D11VertexBuffer::SetData(const void* data, u32 size)
 	{
 		//const void* data = nullptr; // 데이터를 nullptr로 초기화하고 나중에 업데이트
-
 		// 데이터 업데이트
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		m_Context->GetD3DContext()->Map(m_VertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);

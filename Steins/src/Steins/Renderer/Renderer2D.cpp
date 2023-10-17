@@ -153,7 +153,6 @@ namespace Steins
 			s_Data.TextureShader->SetMat4("0", viewProj);
 		}
 
-
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
@@ -173,7 +172,6 @@ namespace Steins
 		{
 			s_Data.TextureShader->SetMat4("0", camera.GetViewProjectionMatrix());
 		}
-
 
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
