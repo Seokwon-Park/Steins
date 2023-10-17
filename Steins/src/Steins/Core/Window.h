@@ -16,8 +16,8 @@ namespace Steins
 		u32 Height;
 
 		WindowProps(const std::string& title = "Steins; Engine",
-			u32 width = 1280,
-			u32 height = 720)
+			u32 width = 1600,
+			u32 height = 900)
 			:Title(title), Width(width), Height(height)
 		{
 
