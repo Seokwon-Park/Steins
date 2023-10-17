@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Steins/Core/PlatformDetection.h"
+
 #include <memory>
 
 // 이 파일이 위치한 엔진 DLL에서는 BUILD_DLL이 정의되어 있기 때문에 export를 통해 내보내고

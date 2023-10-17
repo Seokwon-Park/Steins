@@ -10,3 +10,6 @@
 [submodule "Steins/vendor/GLFW"]
 	path = Steins/vendor/GLFW
 	url = https://github.com/Seokwon-Park/glfw
+[submodule "Steins/vendor/yaml-cpp"]
+	path = Steins/vendor/yaml-cpp
+	url = https://github.com/Seokwon-Park/yaml-cpp

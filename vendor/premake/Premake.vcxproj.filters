@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{61705900-4DFC-870B-B6AA-880BA255880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Sandbox">
+      <UniqueIdentifier>{3F7B6B1D-2B33-AD6A-943A-86C68011485B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Steins">
+      <UniqueIdentifier>{E6B64640-5221-FBB6-9B5F-AC5C0709D90B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Steins\vendor">
+      <UniqueIdentifier>{83CE96C2-6FC7-B514-98F9-9A9984519520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Steins\vendor\GLFW">
+      <UniqueIdentifier>{A213168C-0E80-D186-D773-69E4439FF3EE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Steins\vendor\Glad">
+      <UniqueIdentifier>{4A9F168C-B60B-D286-7FFF-69E4EB2AF4EE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Steins\vendor\imgui">
+      <UniqueIdentifier>{2D725211-196C-7B63-02D9-1174EE71E1CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Steins\vendor\yaml-cpp">
+      <UniqueIdentifier>{95384DDC-01FB-8066-4AAB-0FF3B6AC5944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\SteinsGate">
+      <UniqueIdentifier>{C7541CE1-3315-9817-FC4F-E19468CFDCF3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Sandbox\premake5.lua">
+      <Filter>..\Sandbox</Filter>
+    </None>
+    <None Include="..\..\Steins\premake5.lua">
+      <Filter>..\Steins</Filter>
+    </None>
+    <None Include="..\..\Steins\vendor\GLFW\premake5.lua">
+      <Filter>..\Steins\vendor\GLFW</Filter>
+    </None>
+    <None Include="..\..\Steins\vendor\Glad\premake5.lua">
+      <Filter>..\Steins\vendor\Glad</Filter>
+    </None>
+    <None Include="..\..\Steins\vendor\imgui\premake5.lua">
+      <Filter>..\Steins\vendor\imgui</Filter>
+    </None>
+    <None Include="..\..\Steins\vendor\yaml-cpp\premake5.lua">
+      <Filter>..\Steins\vendor\yaml-cpp</Filter>
+    </None>
+    <None Include="..\..\SteinsGate\premake5.lua">
+      <Filter>..\SteinsGate</Filter>
+    </None>
+    <None Include="..\..\premake5.lua">
+      <Filter>..</Filter>
+    </None>
+    <None Include="premake5.lua" />
+  </ItemGroup>
+</Project>
