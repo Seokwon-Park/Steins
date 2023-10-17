@@ -35,13 +35,9 @@ namespace Steins
 		m_SquareEntity = square;
 		m_SquareEntity2 = square2;
 
-		auto& transform = m_SquareEntity2.GetComponent<TransformComponent>().Transform;
-		transform[3][0] = 0.5f;
-		transform[3][2] = -0.1f;
-		
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
 		m_CameraEntity.AddComponent<CameraComponent>();
-				
+
 		m_SecondCamera = m_ActiveScene->CreateEntity("Camera B");
 		auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
 		cc.Primary = false;
@@ -49,10 +45,10 @@ namespace Steins
 		class CameraController : public ScriptableEntity
 		{
 		public:
-			void OnCreate() 
+			void OnCreate()
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
-				transform[3][0] = rand() % 10 - 5.0f;
+				auto& translation = GetComponent<TransformComponent>().Translation;
+				translation.x = rand() % 10 - 5.0f;
 			}
 
 			void OnDestroy()
@@ -61,17 +57,17 @@ namespace Steins
 
 			void OnUpdate(Timestep dt)
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& translation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
 				if (Input::IsKeyPressed(KeyCode::A))
-					transform[3][0] -= speed * dt;
+					translation.x -= speed * dt;
 				if (Input::IsKeyPressed(KeyCode::D))
-					transform[3][0] += speed * dt;
+					translation.x += speed * dt;
 				if (Input::IsKeyPressed(KeyCode::W))
-					transform[3][1] += speed * dt; 
+					translation.y += speed * dt;
 				if (Input::IsKeyPressed(KeyCode::S))
-					transform[3][1] -= speed * dt;
+					translation.y -= speed * dt;
 			}
 		};
 
@@ -105,7 +101,7 @@ namespace Steins
 			m_CameraController.OnUpdate(dt);
 
 		// Render
-		Renderer2D::ResetStats();		
+		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
 
 		RenderCommand::SetClearColor({ .1f, .1f, .1f, 1 });
@@ -219,7 +215,7 @@ namespace Steins
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
-		
+
 		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
 		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
 		auto textureID = m_Framebuffer->GetSRV();

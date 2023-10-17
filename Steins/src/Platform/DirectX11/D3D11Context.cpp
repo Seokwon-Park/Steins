@@ -334,7 +334,6 @@ namespace Steins
 
 		m_D3DDevice->CreateTexture2D(&depthStencilDesc, 0, m_DepthStencilBuffer.GetAddressOf());
 		m_D3DDevice->CreateDepthStencilView(m_DepthStencilBuffer.Get(), 0, m_DepthStencilView.GetAddressOf());
-
 	}
 
 	void D3D11Context::SwapBuffers(bool VSync)

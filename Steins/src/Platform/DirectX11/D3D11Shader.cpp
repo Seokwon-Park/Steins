@@ -14,9 +14,11 @@ namespace Steins
 
 		CreateSamplerState();
 
+		UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+
 		ID3DBlob* vsBlob;
 		ID3DBlob* shaderCompileErrorsBlob;
-		HRESULT hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vsBlob, &shaderCompileErrorsBlob);
+		HRESULT hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "vs_main", "vs_5_0", compileFlags, 0, &vsBlob, &shaderCompileErrorsBlob);
 		if (FAILED(hResult))
 		{
 			const char* errorString = NULL;
@@ -43,7 +45,7 @@ namespace Steins
 
 		// Create Pixel Shader
 		ID3DBlob* psBlob;
-		hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &psBlob, &shaderCompileErrorsBlob);
+		hResult = D3DCompileFromFile(GetFilepath(filepath).c_str(), nullptr, nullptr, "ps_main", "ps_5_0", compileFlags, 0, &psBlob, &shaderCompileErrorsBlob);
 		if (FAILED(hResult))
 		{
 			const char* errorString = NULL;
