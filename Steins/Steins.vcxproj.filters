@@ -225,6 +225,9 @@
     <ClInclude Include="src\Steins\Scene\SceneCamera.h">
       <Filter>src\Steins\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Scene\SceneSerializer.h">
+      <Filter>src\Steins\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Scene\ScriptableEntity.h">
       <Filter>src\Steins\Scene</Filter>
     </ClInclude>
@@ -1482,6 +1485,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Core\Assert.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1599,6 +1603,9 @@
       <Filter>src\Steins\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Scene\SceneCamera.cpp">
+      <Filter>src\Steins\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Scene\SceneSerializer.cpp">
       <Filter>src\Steins\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\stspch.cpp">

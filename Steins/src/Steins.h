@@ -5,6 +5,7 @@
 #include "Steins/Core/Application.h"
 #include "Steins/Core/Layer.h"
 #include "Steins/Core/Log.h"
+#include "Steins/Core/Assert.h"
 
 #include "Steins/Core/Timestep.h"
 

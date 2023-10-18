@@ -22,13 +22,8 @@
 #define STS_DEBUGBREAK()
 #endif
 
-#ifdef STS_ENABLE_ASSERTS
-	#define STS_ASSERT(x, ...) {if(!(x)) {STS_ERROR("Assertion Failed: {0}", __VA_ARGS); STS_DEBUGBREAK(); } }
-	#define STS_CORE_ASSERT(x, ...) { if(!(x)) {STS_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); STS_DEBUGBREAK(); } }
-#else
-	#define STS_ASSERT(x, ...)
-	#define STS_CORE_ASSERT(x, ...)
-#endif
+#define STS_EXPAND_MACRO(x) x
+#define STS_STRINGIFY_MACRO(x) #x
 
 #define BIT(x) (1 << x)
 	
@@ -52,3 +47,6 @@ namespace Steins
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
+
+#include "Steins/Core/Log.h"
+#include "Steins/Core/Assert.h"

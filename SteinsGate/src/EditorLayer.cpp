@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Steins/Scene/SceneSerializer.h"
+
 namespace Steins
 {
 	EditorLayer::EditorLayer()
@@ -24,6 +26,7 @@ namespace Steins
 
 		m_ActiveScene = CreateRef<Scene>();
 
+#if 0
 		// Entity
 		auto square = m_ActiveScene->CreateEntity("Green Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
@@ -72,8 +75,10 @@ namespace Steins
 		};
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
+		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -182,9 +187,17 @@ namespace Steins
 			{
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
-				ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-				ImGui::MenuItem("Padding", NULL, &opt_padding);
-				ImGui::Separator();
+				if (ImGui::MenuItem("Serialize"))
+				{
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Serialize("assets/scenes/Example.steins");
+				}
+
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Deserialize("assets/scenes/Example.steins");
+				}
 
 				if (ImGui::MenuItem("Exit"))
 				{

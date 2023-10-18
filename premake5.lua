@@ -31,7 +31,7 @@ IncludeDir["ImGui"] = "%{wks.location}/Steins/vendor/imgui"
 IncludeDir["glm"] = "%{wks.location}/Steins/vendor/glm"
 IncludeDir["stb_image"] = "%{wks.location}/Steins/vendor/stb_image"
 IncludeDir["entt"] = "%{wks.location}/Steins/vendor/entt/include"
-IncludeDir["yaml_cpp"] = "%{wks.location}/Steins/vendor/yaml_cpp/include"
+IncludeDir["yaml_cpp"] = "%{wks.location}/Steins/vendor/yaml-cpp/include"
 
 group "Dependencies"
 	include "vendor/premake"
