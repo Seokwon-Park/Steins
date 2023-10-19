@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Steins/Scene/SceneSerializer.h"
+#include "Steins/Utils/PlatformUtils.h"
 
 namespace Steins
 {
@@ -187,16 +188,34 @@ namespace Steins
 			{
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
-				if (ImGui::MenuItem("Serialize"))
+				if (ImGui::MenuItem("New", "Ctrl+N"))
 				{
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.Serialize("assets/scenes/Example.steins");
+					m_ActiveScene = CreateRef<Scene>();
+					m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+					m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 				}
 
-				if (ImGui::MenuItem("Deserialize"))
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.Deserialize("assets/scenes/Example.steins");
+					std::string filepath = FileDialogs::OpenFile("Steins Scene (*.steins)\0*.steins\0");
+					if (!filepath.empty())
+					{
+						m_ActiveScene = CreateRef<Scene>();
+						m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+						m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+						SceneSerializer serializer(m_ActiveScene);
+						serializer.Deserialize(filepath);
+					}
+				}
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				{
+					std::string filepath = FileDialogs::SaveFile("Steins Scene (*.steins)\0*.steins\0");
+					if (!filepath.empty())
+					{
+						SceneSerializer serializer(m_ActiveScene);
+						serializer.Serialize(filepath);
+					}
 				}
 
 				if (ImGui::MenuItem("Exit"))
