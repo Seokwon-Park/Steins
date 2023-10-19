@@ -109,7 +109,7 @@ void Sandbox2D::OnUpdate(Steins::Timestep dt)
 	}
 #endif
 
-	if (Steins::Input::IsMouseButtonPressed(STS_MOUSE_BUTTON_LEFT))
+	if (Steins::Input::IsMouseButtonPressed(Steins::Mouse::ButtonLeft))
 	{
 		auto [x, y] = Steins::Input::GetMousePosition();
 		auto width = Steins::Application::Get().GetWindow().GetWidth();

@@ -64,13 +64,13 @@ namespace Steins
 				auto& translation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
-				if (Input::IsKeyPressed(KeyCode::A))
+				if (Input::IsKeyPressed(Key::A))
 					translation.x -= speed * dt;
-				if (Input::IsKeyPressed(KeyCode::D))
+				if (Input::IsKeyPressed(Key::D))
 					translation.x += speed * dt;
-				if (Input::IsKeyPressed(KeyCode::W))
+				if (Input::IsKeyPressed(Key::W))
 					translation.y += speed * dt;
-				if (Input::IsKeyPressed(KeyCode::S))
+				if (Input::IsKeyPressed(Key::S))
 					translation.y -= speed * dt;
 			}
 		};
@@ -190,39 +190,23 @@ namespace Steins
 				// which we can't undo at the moment without finer window depth/z control.
 				if (ImGui::MenuItem("New", "Ctrl+N"))
 				{
-					m_ActiveScene = CreateRef<Scene>();
-					m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
-					m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+					NewScene();
 				}
 
 				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
-					std::string filepath = FileDialogs::OpenFile("Steins Scene (*.steins)\0*.steins\0");
-					if (!filepath.empty())
-					{
-						m_ActiveScene = CreateRef<Scene>();
-						m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
-						m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-						SceneSerializer serializer(m_ActiveScene);
-						serializer.Deserialize(filepath);
-					}
+					OpenScene();
 				}
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 				{
-					std::string filepath = FileDialogs::SaveFile("Steins Scene (*.steins)\0*.steins\0");
-					if (!filepath.empty())
-					{
-						SceneSerializer serializer(m_ActiveScene);
-						serializer.Serialize(filepath);
-					}
+					SaveSceneAs();
 				}
 
+				ImGui::Separator();
 				if (ImGui::MenuItem("Exit"))
 				{
 					Application::Get().Close();
 				}
-				//ImGui::Separator();
 
 				ImGui::EndMenu();
 			}
@@ -267,5 +251,68 @@ namespace Steins
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(STS_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+	}
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		STS_INFO("{0}", e);
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
+		switch (e.GetKeyCode())
+		{
+			case Key::N:
+			{
+				if (control)
+					NewScene();
+				break;
+			}
+			case Key::O:
+			{
+				if (control)
+					OpenScene();
+				break;
+			}
+			case Key::S:
+			{
+				if (control && shift)
+					SaveSceneAs();
+				break;
+			}
+		}
+
+	}
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Steins Scene (*.steins)\0*.steins\0");
+		if (!filepath.empty())
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Steins Scene (*.steins)\0*.steins\0");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+		}
 	}
 }

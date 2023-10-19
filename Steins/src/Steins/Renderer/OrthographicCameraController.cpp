@@ -16,30 +16,30 @@ void Steins::OrthographicCameraController::OnUpdate(Timestep dt)
 {
 	STS_PROFILE_FUNCTION();
 
-	if (Input::IsKeyPressed(STS_KEY_W))
+	if (Input::IsKeyPressed(Key::W))
 	{
 		m_CameraPosition.y += m_CameraTranslationSpeed * dt;
 	}
-	else if (Input::IsKeyPressed(STS_KEY_S))
+	else if (Input::IsKeyPressed(Key::S))
 	{
 		m_CameraPosition.y -= m_CameraTranslationSpeed * dt;
 	}
-	if (Input::IsKeyPressed(STS_KEY_A))
+	if (Input::IsKeyPressed(Key::A))
 	{
 		m_CameraPosition.x -= m_CameraTranslationSpeed * dt;
 	}
-	else if (Input::IsKeyPressed(STS_KEY_D))
+	else if (Input::IsKeyPressed(Key::D))
 	{
 		m_CameraPosition.x += m_CameraTranslationSpeed * dt;
 	}
 
 	if (m_Rotation)
 	{
-		if (Steins::Input::IsKeyPressed(STS_KEY_Q))
+		if (Steins::Input::IsKeyPressed(Key::Q))
 		{
 			m_CameraRotation += m_CameraRotationSpeed * dt;
 		}
-		else if (Steins::Input::IsKeyPressed(STS_KEY_E))
+		else if (Steins::Input::IsKeyPressed(Key::E))
 		{
 			m_CameraRotation -= m_CameraRotationSpeed * dt;
 		}
