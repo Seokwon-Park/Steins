@@ -16,6 +16,7 @@ using s8 = int8_t;
 
 using f32 = float;
 
+#if 0
 namespace Steins
 {
 	constexpr f32 pi{ DirectX::XM_PI };
@@ -41,3 +42,4 @@ namespace Steins
 	using m4x4a = DirectX::XMFLOAT4X4A;
 #endif
 }
+#endif

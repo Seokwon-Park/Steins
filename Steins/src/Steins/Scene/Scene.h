@@ -19,6 +19,8 @@ namespace Steins
 
 		void OnUpdate(Timestep dt);
 		void OnViewportResize(u32 width, u32 height);
+
+		Entity GetPrimaryCameraEntity();
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);

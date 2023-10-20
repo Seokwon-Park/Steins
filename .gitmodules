@@ -13,3 +13,6 @@
 [submodule "Steins/vendor/yaml-cpp"]
 	path = Steins/vendor/yaml-cpp
 	url = https://github.com/Seokwon-Park/yaml-cpp
+[submodule "Steins/vendor/ImGuizmo"]
+	path = Steins/vendor/ImGuizmo
+	url = https://github.com/Seokwon-Park/ImGuizmo

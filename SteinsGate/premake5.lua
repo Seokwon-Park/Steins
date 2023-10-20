@@ -19,7 +19,8 @@ project "SteinsGate"
 		"%{wks.location}/Steins/src",
 		"%{wks.location}/Steins/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

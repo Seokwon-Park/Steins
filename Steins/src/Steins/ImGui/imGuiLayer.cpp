@@ -1,19 +1,21 @@
 #include "stspch.h"
 #include "ImGuiLayer.h"
 
-#include "imgui.h"
+#include <imgui.h>
 
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_dx11.h"
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_dx11.h>
 
 #include "Steins/Core/Application.h"
 #include "Steins/Renderer/Renderer.h"
 #include "Steins/Renderer/GraphicsContext.h"
 #include "Platform/DirectX11/D3D11Context.h"
 
-#include "GLFW/glfw3.h"
-#include "glad/glad.h"
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+
+#include "ImGuizmo.h"
 
 namespace Steins
 {
@@ -131,6 +133,7 @@ namespace Steins
 		}
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()

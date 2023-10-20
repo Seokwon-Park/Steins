@@ -7,6 +7,10 @@
 #include "Steins/Scene/SceneSerializer.h"
 #include "Steins/Utils/PlatformUtils.h"
 
+#include "ImGuizmo.h"
+
+#include "Steins/Math/Math.h"
+
 namespace Steins
 {
 	EditorLayer::EditorLayer()
@@ -231,7 +235,7 @@ namespace Steins
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
@@ -242,6 +246,53 @@ namespace Steins
 		//auto textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		//auto textureID = m_CheckerboardTexture->GetSRV();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
+
+		// Gizmos
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity && m_GizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight= (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+			// Camera
+			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Entity transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+			
+			// Snapping
+			bool snap = Input::IsKeyPressed(Key::LeftControl);
+			float snapValue = 0.5f; // snap to 0.5m for translation/scale
+			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				nullptr, snap ? snapValues: nullptr);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+
+				glm::vec3 deltaRotation = rotation - tc.Rotation;
+				tc.Translation = translation;
+				tc.Rotation += deltaRotation;
+				tc.Scale = scale;
+			}
+		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -257,7 +308,6 @@ namespace Steins
 	}
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		STS_INFO("{0}", e);
 		if (e.GetRepeatCount() > 0)
 			return false;
 
@@ -282,6 +332,27 @@ namespace Steins
 			{
 				if (control && shift)
 					SaveSceneAs();
+				break;
+			}
+
+			case Key::Q:
+			{
+				m_GizmoType = -1;
+				break;
+			}
+			case Key::W:
+			{
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			}
+			case Key::E:
+			{
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			}
+			case Key::R:
+			{
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 				break;
 			}
 		}
