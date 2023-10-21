@@ -5,6 +5,7 @@
 
 #include "Texture.h"
 #include "SubTexture2D.h"
+#include "EditorCamera.h"
 
 namespace Steins
 {
@@ -16,8 +17,10 @@ namespace Steins
 		static void Shutdown();
 
 		static void BeginScene(const Camera& camera, const glm::mat4 & transform);
+		static void BeginScene(const EditorCamera& camera); // TODO: Remove
 		static void BeginScene(const OrthographicCamera& camera); // TODO: Remove
 		static void EndScene();
+
 		static void Flush();
 		
 		// Primitives
@@ -51,5 +54,7 @@ namespace Steins
 		static Statistics GetStats();
 	private:
 		static void FlushAndReset();
+		static void StartBatch();
+		static void NextBatch();
 	};
 }

@@ -191,6 +191,7 @@
     <ClInclude Include="src\Steins\Math\Math.h" />
     <ClInclude Include="src\Steins\Renderer\Buffer.h" />
     <ClInclude Include="src\Steins\Renderer\Camera.h" />
+    <ClInclude Include="src\Steins\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Steins\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Steins\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Steins\Renderer\OrthographicCamera.h" />
@@ -658,6 +659,7 @@
     <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp" />
     <ClCompile Include="src\Steins\Math\Math.cpp" />
     <ClCompile Include="src\Steins\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Steins\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Steins\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Steins\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Steins\Renderer\OrthographicCameraController.cpp" />

@@ -1501,6 +1501,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Math\Math.h" />
+    <ClInclude Include="src\Steins\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1636,5 +1637,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Math\Math.cpp" />
+    <ClCompile Include="src\Steins\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

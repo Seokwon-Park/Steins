@@ -33,7 +33,22 @@ namespace Steins
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(Timestep dt)
+	void Scene::OnUpdateEditor(Timestep dt, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+
+			//Renderer::Submit(mesh, transform);
+		}
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnUpdateRuntime(Timestep dt)
 	{
 		// Update scripts
 		{

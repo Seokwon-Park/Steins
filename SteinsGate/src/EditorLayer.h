@@ -3,6 +3,8 @@
 #include "Steins.h"
 #include "Panels/SceneHierarchyPanel.h"
 
+#include "Steins/Renderer/EditorCamera.h"
+
 namespace Steins
 {
 	class EditorLayer : public Steins::Layer
@@ -38,6 +40,8 @@ namespace Steins
 		Entity m_SecondCamera;
 
 		bool m_PrimaryCamera = true;
+
+		EditorCamera m_EditorCamera;
 
 		Ref<Texture2D> m_CheckerboardTexture;
 

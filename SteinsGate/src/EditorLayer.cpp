@@ -31,6 +31,8 @@ namespace Steins
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
 #if 0
 		// Entity
 		auto square = m_ActiveScene->CreateEntity("Green Square");
@@ -108,7 +110,10 @@ namespace Steins
 
 		// Update
 		if (m_ViewportFocused)
+		{
 			m_CameraController.OnUpdate(dt);
+			m_EditorCamera.OnUpdate(dt);
+		}
 
 		// Render
 		Renderer2D::ResetStats();
@@ -122,7 +127,7 @@ namespace Steins
 		//Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
 		//Renderer2D::EndScene();
 
-		m_ActiveScene->OnUpdate(dt);
+		m_ActiveScene->OnUpdateRuntime(dt);
 
 		m_Framebuffer->Unbind();
 	}

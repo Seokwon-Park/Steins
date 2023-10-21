@@ -153,10 +153,26 @@ namespace Steins
 			s_Data.TextureShader->SetMat4("0", viewProj);
 		}
 
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		StartBatch();
+	}
 
-		s_Data.TextureSlotIndex = 1;
+	void Renderer2D::BeginScene(const EditorCamera& camera)
+	{
+		STS_PROFILE_FUNCTION();
+
+		glm::mat4 viewProj = camera.GetViewProjection();
+
+		s_Data.TextureShader->Bind();
+		if (RendererAPI::GetAPI() == RendererAPI::API::OpenGL)
+		{
+			s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		}
+		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			s_Data.TextureShader->SetMat4("0", viewProj);
+		}
+
+		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -173,17 +189,11 @@ namespace Steins
 			s_Data.TextureShader->SetMat4("0", camera.GetViewProjectionMatrix());
 		}
 
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-		s_Data.TextureSlotIndex = 1;
+		StartBatch();
 	}
 	void Renderer2D::EndScene()
 	{
 		STS_PROFILE_FUNCTION();
-
-		u32 dataSize = (u32)((u8*)s_Data.QuadVertexBufferPtr - (u8*)s_Data.QuadVertexBufferBase);
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
 		Flush();
 	}
@@ -191,6 +201,12 @@ namespace Steins
 	void Renderer2D::Flush()
 	{
 		// Bind textures
+		if (s_Data.QuadIndexCount == 0)
+			return;
+
+		u32 dataSize = (u32)((u8*)s_Data.QuadVertexBufferPtr - (u8*)s_Data.QuadVertexBufferBase);
+		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+
 		for (u32 i = 0; i < s_Data.TextureSlotIndex; i++)
 		{
 			s_Data.TextureSlots[i]->Bind(i);
@@ -203,10 +219,21 @@ namespace Steins
 	{
 		EndScene();
 		
+
+	}
+
+	void Renderer2D::StartBatch()
+	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
 		s_Data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::NextBatch()
+	{
+		Flush();
+		StartBatch();
 	}
 
 	// Primitives

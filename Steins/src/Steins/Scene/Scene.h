@@ -3,6 +3,7 @@
 #include "entt.hpp"
 
 #include "Steins/Core/Timestep.h"
+#include "Steins/Renderer/EditorCamera.h"
 
 namespace Steins
 {
@@ -17,7 +18,8 @@ namespace Steins
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(Timestep dt);
+		void OnUpdateEditor(Timestep dt, EditorCamera& camera);
+		void OnUpdateRuntime(Timestep dt);
 		void OnViewportResize(u32 width, u32 height);
 
 		Entity GetPrimaryCameraEntity();
