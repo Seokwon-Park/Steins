@@ -55,7 +55,7 @@ namespace Steins
 	}
 	glm::quat EditorCamera::GetOrientation() const
 	{
-		return glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.90f));
+		return glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.0f));
 	}
 	void EditorCamera::UpdateProjection()
 	{
@@ -83,7 +83,7 @@ namespace Steins
 		m_FocalPoint += -GetRightDirection() * delta.x * xSpeed * m_Distance;
 		m_FocalPoint += GetUpDirection() * delta.y * ySpeed * m_Distance;
 	}
-	void EditorCamera::MouseRotate(const glm::vec2 delta)
+	void EditorCamera::MouseRotate(const glm::vec2& delta)
 	{
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_Yaw += yawSign * delta.x * RotationSpeed();
@@ -106,7 +106,10 @@ namespace Steins
 	{
 		float x = std::min(m_ViewportWidth / 1000.0f, 2.4f);
 		float xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
-		return std::pair<float, float>();
+
+		float y = std::min(m_ViewportHeight / 1000.0f, 2.4f);
+		float yFactor = 0.0366f * (y * y) - 0.1778f * y + 0.3021f;
+		return { xFactor, yFactor };
 	}
 	float EditorCamera::RotationSpeed() const
 	{
