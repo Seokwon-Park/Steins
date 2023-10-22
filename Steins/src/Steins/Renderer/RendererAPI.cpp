@@ -3,6 +3,9 @@
 
 namespace Steins
 {
-	//RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
+#if APITYPE == 0
+	RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
+#elif APITYPE == 1
 	RendererAPI::API RendererAPI::s_API = RendererAPI::API::Direct3D11;
+#endif
 }

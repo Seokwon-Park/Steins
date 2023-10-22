@@ -6,8 +6,12 @@
 
 namespace Steins
 {
-	//RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
+#if APITYPE	== 0
+	RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
+#elif APITYPE == 1
 	RendererAPI* RenderCommand::s_RendererAPI = new D3D11RendererAPI;
+#endif
+
 	//void RenderCommand::SetAPI()
 	//{
 	//	switch (RendererAPI::GetAPI())

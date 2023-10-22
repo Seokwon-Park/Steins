@@ -25,8 +25,9 @@ namespace Steins
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard2.png");
 
 		FramebufferSpecification fbSpec;
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8,  FramebufferTextureFormat::Depth };
+		fbSpec.Width = 1600;
+		fbSpec.Height = 900;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
@@ -247,10 +248,14 @@ namespace Steins
 
 		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
 		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		auto textureID = m_Framebuffer->GetSRV();
-		//auto textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		//auto textureID = m_CheckerboardTexture->GetSRV();
+#if APITYPE	== 0
+		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(1);
+		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{1,0});
+#elif APITYPE == 1
+		auto textureID = m_Framebuffer->GetSRV();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
+#endif
 
 		// Gizmos
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();

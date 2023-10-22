@@ -191,6 +191,7 @@ namespace Steins
 		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
 		assert(backBuffer);
 		m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
+		m_RenderTargetViews.emplace_back(m_RenderTargetView.Get());
 
 		m_Backbuffer = backBuffer;
 
@@ -300,6 +301,7 @@ namespace Steins
 		m_RenderTargetView.Reset();
 		m_DepthStencilView.Reset();
 		m_DepthStencilBuffer.Reset();
+		m_RenderTargetViews.clear();
 
 		ComPtr<ID3D11Texture2D> backBuffer;
 		m_SwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
@@ -307,6 +309,8 @@ namespace Steins
 			m_D3DDevice->CreateRenderTargetView(backBuffer.Get(), nullptr,
 				&m_RenderTargetView);
 		}
+
+		m_RenderTargetViews.emplace_back(m_RenderTargetView.Get());
 
 		D3D11_TEXTURE2D_DESC bbDesc;
 		backBuffer->GetDesc(&bbDesc);

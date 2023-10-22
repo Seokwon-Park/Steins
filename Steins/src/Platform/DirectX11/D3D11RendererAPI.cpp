@@ -34,7 +34,8 @@ namespace Steins
 	{
 		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
-		m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
+		//m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
+		m_Context->GetD3DContext()->OMSetRenderTargets(m_Context->GetRTVs().size(), m_Context->GetRTVs().data(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		if (indexCount != 0)
 		{

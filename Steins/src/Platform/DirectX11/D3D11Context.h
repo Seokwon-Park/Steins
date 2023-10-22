@@ -16,7 +16,6 @@ namespace Steins
 	{
 	public:
 		D3D11Context(GLFWwindow* windowHandle, WindowProps windowProps);
-		~D3D11Context();
 
 		virtual void Init() override;
 		virtual void SwapBuffers(bool VSync) override;
@@ -25,6 +24,8 @@ namespace Steins
 		ComPtr<ID3D11Device> GetD3DDevice() { return this->m_D3DDevice; }
 		ComPtr<ID3D11DeviceContext> GetD3DContext() { return this->m_D3DContext; }
 		ComPtr<ID3D11RenderTargetView> GetRTV() { return this->m_RenderTargetView; }
+		std::vector<ID3D11RenderTargetView*>& GetRTVs() { return this->m_RenderTargetViews; }
+		std::vector<ID3D11Texture2D*>& GetRTTs() { return this->m_RenderTargetTextures; }
 		
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return this->m_DepthStencilView.Get(); }
 		ComPtr<ID3D11DepthStencilState> GetDSS() { return this->m_DepthStencilState.Get(); }		
@@ -58,10 +59,14 @@ namespace Steins
 		ComPtr<ID3D11Device> m_D3DDevice;
 		ComPtr<ID3D11DeviceContext> m_D3DContext;
 		ComPtr<ID3D11Texture2D> m_Backbuffer;
+		std::vector<ID3D11Texture2D*> m_RenderTargetTextures;
+
 
 		std::vector<D3D11_INPUT_ELEMENT_DESC> m_InputElements;
 
 		ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
+		std::vector<ID3D11RenderTargetView*> m_RenderTargetViews;
+
 		
 
 		ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;

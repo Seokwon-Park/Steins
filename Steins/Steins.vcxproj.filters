@@ -31,6 +31,9 @@
     <Filter Include="src\Steins\ImGui">
       <UniqueIdentifier>{DCA69DA3-C89F-BCF5-F1D1-A17ADD299C01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Steins\Math">
+      <UniqueIdentifier>{4B287B14-B7B3-E8D8-C0C4-6BCD2CCF44D9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Steins\Renderer">
       <UniqueIdentifier>{18704076-84D1-1D84-0D3F-6436799F5443}</UniqueIdentifier>
     </Filter>
@@ -177,10 +180,16 @@
     <ClInclude Include="src\Steins\ImGui\ImGuiLayer.h">
       <Filter>src\Steins\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Math\Math.h">
+      <Filter>src\Steins\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Buffer.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Camera.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\EditorCamera.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Framebuffer.h">
@@ -1500,8 +1509,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Math\Math.h" />
-    <ClInclude Include="src\Steins\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1576,7 +1583,13 @@
     <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp">
       <Filter>src\Steins\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Math\Math.cpp">
+      <Filter>src\Steins\Math</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Buffer.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\EditorCamera.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Renderer\Framebuffer.cpp">
@@ -1636,7 +1649,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Math\Math.cpp" />
-    <ClCompile Include="src\Steins\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

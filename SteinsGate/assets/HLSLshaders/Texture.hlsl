@@ -45,7 +45,13 @@ Texture2D g_texture[2] : register(t0);
 
 SamplerState g_sampler : register(s0);
 
-float4 ps_main(VS_Output input) : SV_TARGET
+struct PS_Output
+{
+    float4 color : SV_TARGET0;
+    float4 color2 : SV_TARGET1;
+};
+
+PS_Output ps_main(VS_Output input) 
 {    
     float4 color;
     if(input.texIdx == 0)
@@ -53,6 +59,9 @@ float4 ps_main(VS_Output input) : SV_TARGET
     else if(input.texIdx == 1)
         color = g_texture[1].Sample(g_sampler, input.uv * input.tileFactor)*input.color;
         
-    return color;
+    PS_Output output;
+    output.color = color;
+    output.color = float4(0.9f, 0.3f, 0.3f, 1.0f);
+    return output;
     //return input.color;
 }
