@@ -37,9 +37,14 @@ namespace Steins
 			D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 			for (u32 i = 0; i < count; i++)
 			{
+				ComPtr<ID3D11Texture2D> backBuffer;
+				m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
+				D3D11_TEXTURE2D_DESC bbDesc;
+				backBuffer->GetDesc(&bbDesc);
+				
 				D3D11_TEXTURE2D_DESC textureDesc = {};
-				textureDesc.Width = Application::Get().GetWindow().GetWidth();
-				textureDesc.Height = Application::Get().GetWindow().GetHeight();
+				textureDesc.Width = bbDesc.Width;
+				textureDesc.Height = bbDesc.Height;
 				textureDesc.MipLevels = 1;
 				textureDesc.ArraySize = 1;
 				textureDesc.Format = ConvertToDXGIFormat(format);
@@ -47,6 +52,7 @@ namespace Steins
 				textureDesc.SampleDesc.Quality = 0;
 				textureDesc.Usage = D3D11_USAGE_DEFAULT;
 				textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // You can add more flags as needed
+				backBuffer.Reset();
 
 				HRESULT hr = m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, outID[i].GetAddressOf());
 			} 
@@ -60,8 +66,8 @@ namespace Steins
 			// You generally bind textures as shader resource views in DirectX 11
 			// Bind 'id' as a shader resource view here using g_pd3dDeviceContext
 			// Example: g_pd3dDeviceContext->PSSetShaderResources(slot, 1, &id);
-			//D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
-			//m_Context->GetD3DDevice()->CreateShaderResourceView(m_Context->GetRTTs()[index].Get(), nullptr, &srv);
+			D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+			m_Context->GetD3DDevice()->CreateShaderResourceView(m_Context->GetRTTs()[index].Get(), nullptr, srv.GetAddressOf());
 		}
 
 		// Function to attach a color texture
@@ -139,7 +145,7 @@ namespace Steins
 			Utils::CreateTextures(multisample, m_Context->GetRTTs(), m_ColorSRVs.size(), FramebufferTextureFormat::RGBA8);
 			//std::vector<ID3D11Texture2D*> tmp = m_Context->GetRTTs();
 
-			for (u64 i = 1; i < m_ColorSRVs.size(); i++)
+			for (u64 i = 0; i < m_ColorSRVs.size(); i++)
 			{
 				Utils::BindTexture(multisample, m_ColorSRVs[i], i);
 				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
@@ -151,30 +157,30 @@ namespace Steins
 			}
 		}
 
-		ComPtr<ID3D11Texture2D> backBuffer;
-		m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
-		D3D11_TEXTURE2D_DESC bbDesc;
-		backBuffer->GetDesc(&bbDesc);
-		D3D11_TEXTURE2D_DESC txtDesc = {};
-		txtDesc.Width = bbDesc.Width;
-		txtDesc.Height = bbDesc.Height;
-		txtDesc.MipLevels = 1;
-		txtDesc.ArraySize = 1;
-		txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		txtDesc.SampleDesc.Count = 1;
-		txtDesc.SampleDesc.Quality = 0;
-		txtDesc.Usage = D3D11_USAGE_DEFAULT;
-		txtDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+		//ComPtr<ID3D11Texture2D> backBuffer;
+		//m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
+		//D3D11_TEXTURE2D_DESC bbDesc;
+		//backBuffer->GetDesc(&bbDesc);
+		//D3D11_TEXTURE2D_DESC txtDesc = {};
+		//txtDesc.Width = bbDesc.Width;
+		//txtDesc.Height = bbDesc.Height;
+		//txtDesc.MipLevels = 1;
+		//txtDesc.ArraySize = 1;
+		//txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		//txtDesc.SampleDesc.Count = 1;
+		//txtDesc.SampleDesc.Quality = 0;
+		//txtDesc.Usage = D3D11_USAGE_DEFAULT;
+		//txtDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 
-		m_Context->GetD3DDevice()->CreateTexture2D(&txtDesc, nullptr, m_Texture.GetAddressOf());
-		m_Context->GetD3DDevice()->CreateShaderResourceView(m_Context->GetRTTs()[0].Get(), nullptr, m_ColorSRVs[0].GetAddressOf());
-		m_Context->GetD3DDevice()->CreateShaderResourceView(m_Texture.Get(), nullptr, m_ColorSRVs[1].GetAddressOf());
+		//m_Context->GetD3DDevice()->CreateTexture2D(&txtDesc, nullptr, m_Texture.GetAddressOf());
+		//m_Context->GetD3DDevice()->CreateShaderResourceView(m_Context->GetRTTs()[0].Get(), nullptr, m_ColorSRVs[0].GetAddressOf());
+		//m_Context->GetD3DDevice()->CreateShaderResourceView(m_Context->GetRTTs()[1].Get(), nullptr, m_ColorSRVs[1].GetAddressOf());
 
 	}
 	void D3D11Framebuffer::Bind()
 	{
 		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[0].Get(), m_Context->GetBackbuffer().Get());
-		m_Context->GetD3DContext()->CopyResource(m_Texture.Get(), m_Context->GetTest().Get());
+		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[1].Get(), m_Context->GetTest().Get());
 
 	}
 	void D3D11Framebuffer::Unbind()
