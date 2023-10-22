@@ -24,13 +24,14 @@ namespace Steins
 		ComPtr<ID3D11Device> GetD3DDevice() { return this->m_D3DDevice; }
 		ComPtr<ID3D11DeviceContext> GetD3DContext() { return this->m_D3DContext; }
 		ComPtr<ID3D11RenderTargetView> GetRTV() { return this->m_RenderTargetView; }
-		std::vector<ID3D11RenderTargetView*>& GetRTVs() { return this->m_RenderTargetViews; }
-		std::vector<ID3D11Texture2D*>& GetRTTs() { return this->m_RenderTargetTextures; }
+		std::vector<ComPtr<ID3D11RenderTargetView>>& GetRTVs() { return this->m_RenderTargetViews; }
+		std::vector<ComPtr<ID3D11Texture2D>>& GetRTTs() { return this->m_RenderTargetTextures; }
 		
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return this->m_DepthStencilView.Get(); }
 		ComPtr<ID3D11DepthStencilState> GetDSS() { return this->m_DepthStencilState.Get(); }		
 		ComPtr<ID3D11BlendState> GetBS() { return this->m_BlendState.Get(); }		
 		ComPtr<ID3D11Texture2D> GetBackbuffer() { return this->m_Backbuffer; }
+		ComPtr<ID3D11Texture2D> GetTest() { return this->m_Testbuffer; }
 
 		std::vector<D3D11_INPUT_ELEMENT_DESC> GetInputElements() { return m_InputElements; }
 		void SetInputElements(std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements) { m_InputElements = inputElements; }
@@ -59,16 +60,14 @@ namespace Steins
 		ComPtr<ID3D11Device> m_D3DDevice;
 		ComPtr<ID3D11DeviceContext> m_D3DContext;
 		ComPtr<ID3D11Texture2D> m_Backbuffer;
-		std::vector<ID3D11Texture2D*> m_RenderTargetTextures;
-
+		ComPtr<ID3D11Texture2D> m_Testbuffer;
+		std::vector<ComPtr<ID3D11Texture2D>> m_RenderTargetTextures;
+		std::vector<ComPtr<ID3D11RenderTargetView>> m_RenderTargetViews;
 
 		std::vector<D3D11_INPUT_ELEMENT_DESC> m_InputElements;
 
 		ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
-		std::vector<ID3D11RenderTargetView*> m_RenderTargetViews;
-
 		
-
 		ComPtr<ID3D11Texture2D> m_DepthStencilBuffer;
 		ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
 		ComPtr<ID3D11DepthStencilState> m_DepthStencilState;

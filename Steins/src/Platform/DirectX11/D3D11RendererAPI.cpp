@@ -27,7 +27,10 @@ namespace Steins
 	}
 	void D3D11RendererAPI::Clear()
 	{
-		m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTV().Get(), m_ClearColor);
+		for(auto rtv : m_Context->GetRTVs())
+		{
+			m_Context->GetD3DContext()->ClearRenderTargetView(rtv.Get(), m_ClearColor);
+		}
 		m_Context->GetD3DContext()->ClearDepthStencilView(m_Context->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	}
 	void D3D11RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, u32 indexCount)
@@ -35,7 +38,7 @@ namespace Steins
 		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
 		//m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
-		m_Context->GetD3DContext()->OMSetRenderTargets(m_Context->GetRTVs().size(), m_Context->GetRTVs().data(), m_Context->GetDSV().Get());
+		m_Context->GetD3DContext()->OMSetRenderTargets(m_Context->GetRTVs().size(), m_Context->GetRTVs().data()->GetAddressOf(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		if (indexCount != 0)
 		{
@@ -44,6 +47,7 @@ namespace Steins
 		ComPtr<ID3D11Texture2D> backBuffer;
 		m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
 		m_Context->GetD3DContext()->CopyResource(m_Context->GetBackbuffer().Get(), backBuffer.Get());
+		m_Context->GetD3DContext()->CopyResource(m_Context->GetTest().Get(), m_Context->GetRTTs()[1].Get());
 		backBuffer.Reset();
 
 

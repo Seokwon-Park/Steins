@@ -182,6 +182,8 @@ namespace Steins
 
 	void D3D11Context::Resize()
 	{
+		m_RenderTargetViews.clear();
+
 		u32 width = m_WindowProps.Width;
 		u32 height = m_WindowProps.Height;
 
@@ -191,7 +193,7 @@ namespace Steins
 		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
 		assert(backBuffer);
 		m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
-		m_RenderTargetViews.emplace_back(m_RenderTargetView.Get());
+		m_RenderTargetViews.push_back(m_RenderTargetView.Get());
 
 		m_Backbuffer = backBuffer;
 
@@ -204,6 +206,7 @@ namespace Steins
 		textureDesc.Usage= D3D11_USAGE_DEFAULT;   // 새로운 너비
 
 		m_D3DDevice->CreateTexture2D(&textureDesc, nullptr, &m_Backbuffer);
+		m_D3DDevice->CreateTexture2D(&textureDesc, nullptr, &m_Testbuffer);
 
 		backBuffer->Release();
 
@@ -289,7 +292,7 @@ namespace Steins
 		m_ScreenViewport.TopLeftY = 0;
 		m_ScreenViewport.Width = (float)width;
 		m_ScreenViewport.Height = (float)height;
-		m_ScreenViewport.MinDepth = -1.0f;
+		m_ScreenViewport.MinDepth = 0.0f;
 		m_ScreenViewport.MaxDepth = 1.0f;
 
 		m_D3DContext->RSSetViewports(1, &m_ScreenViewport);
@@ -301,6 +304,11 @@ namespace Steins
 		m_RenderTargetView.Reset();
 		m_DepthStencilView.Reset();
 		m_DepthStencilBuffer.Reset();
+		//for (auto rtv : m_RenderTargetViews)
+		//{
+		//	if(rtv)
+		//	rtv->Release();
+		//}
 		m_RenderTargetViews.clear();
 
 		ComPtr<ID3D11Texture2D> backBuffer;
@@ -309,8 +317,7 @@ namespace Steins
 			m_D3DDevice->CreateRenderTargetView(backBuffer.Get(), nullptr,
 				&m_RenderTargetView);
 		}
-
-		m_RenderTargetViews.emplace_back(m_RenderTargetView.Get());
+		m_RenderTargetViews.push_back(m_RenderTargetView.Get());
 
 		D3D11_TEXTURE2D_DESC bbDesc;
 		backBuffer->GetDesc(&bbDesc);

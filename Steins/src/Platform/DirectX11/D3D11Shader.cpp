@@ -68,7 +68,6 @@ namespace Steins
 		assert(SUCCEEDED(hResult));
 		vsBlob->Release();
 		psBlob->Release();
-		shaderCompileErrorsBlob->Release();
 	}
 	D3D11Shader::D3D11Shader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc)
 		:m_CbufferIndex(0)
@@ -206,7 +205,7 @@ namespace Steins
 			found = newFilepath.find(L"\\");
 		}
 
-		newFilepath += std::wstring(L"Steins/Sandbox/") + wFilepath;
+		newFilepath += std::wstring(L"Steins/SteinsGate/") + wFilepath;
 		return newFilepath;
 	}
 
