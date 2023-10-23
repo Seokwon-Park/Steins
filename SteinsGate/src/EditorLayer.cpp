@@ -25,7 +25,7 @@ namespace Steins
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard2.png");
 
 		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1600;
 		fbSpec.Height = 900;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
@@ -280,7 +280,7 @@ namespace Steins
 		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 #elif APITYPE == 1
-		auto textureID = m_Framebuffer->GetSRV(1);
+		auto textureID = m_Framebuffer->GetSRV(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
 #endif
 

@@ -19,7 +19,7 @@
 #include "Steins/Debug/Instrumentor.h"
 
 //platforms
-#define APITYPE 0
+#define APITYPE 1
 
 #ifdef STS_PLATFORM_WINDOWS
 	#ifndef NOMINMAX
