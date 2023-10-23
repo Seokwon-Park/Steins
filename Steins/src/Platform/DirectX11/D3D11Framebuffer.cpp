@@ -13,16 +13,19 @@ namespace Steins
 		//{
 		//	return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 		//}
-		
+
 
 		static DXGI_FORMAT ConvertToDXGIFormat(FramebufferTextureFormat format) {
 			switch (format) {
 			case FramebufferTextureFormat::RGBA8:
 				return DXGI_FORMAT_R8G8B8A8_UNORM;
+			case FramebufferTextureFormat::RED_INTEGER:
+				return DXGI_FORMAT_R32_SINT;
 			case FramebufferTextureFormat::DEPTH24STENCIL8:
 				return DXGI_FORMAT_D24_UNORM_S8_UINT;
 				// Handle other formats as needed
 			}
+			return DXGI_FORMAT_UNKNOWN;
 		}
 
 		//// Function to create textures
@@ -41,7 +44,7 @@ namespace Steins
 				m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
 				D3D11_TEXTURE2D_DESC bbDesc;
 				backBuffer->GetDesc(&bbDesc);
-				
+
 				D3D11_TEXTURE2D_DESC textureDesc = {};
 				textureDesc.Width = bbDesc.Width;
 				textureDesc.Height = bbDesc.Height;
@@ -55,7 +58,7 @@ namespace Steins
 				backBuffer.Reset();
 
 				HRESULT hr = m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, outID[i].GetAddressOf());
-			} 
+			}
 
 			// Handle HRESULT error checking
 		}
@@ -141,7 +144,7 @@ namespace Steins
 			m_ColorSRVs.resize(m_ColorAttachmentSpecifications.size());
 			m_Context->GetRTTs().resize(m_ColorAttachmentSpecifications.size());
 			m_Context->GetRTVs().resize(m_ColorAttachmentSpecifications.size());
-			
+
 			Utils::CreateTextures(multisample, m_Context->GetRTTs(), m_ColorSRVs.size(), FramebufferTextureFormat::RGBA8);
 			//std::vector<ID3D11Texture2D*> tmp = m_Context->GetRTTs();
 
@@ -180,12 +183,11 @@ namespace Steins
 	void D3D11Framebuffer::Bind()
 	{
 		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[0].Get(), m_Context->GetBackbuffer().Get());
-		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[1].Get(), m_Context->GetTest().Get());
 
 	}
 	void D3D11Framebuffer::Unbind()
 	{
-		
+
 	}
 
 	void D3D11Framebuffer::Resize(u32 width, u32 height)
@@ -206,6 +208,46 @@ namespace Steins
 		m_Specification.Height = height;
 		backBuffer.Reset();
 		Invalidate();
+	}
+
+	int D3D11Framebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
+	{
+		//1x1 pixel box
+		D3D11_BOX box;
+
+		box.left = std::clamp(x, 0, (int)m_Specification.Width);
+		box.right = std::clamp(x + 1, 0, (int)m_Specification.Width);
+		box.top = std::clamp(y, 0, (int)m_Specification.Height);
+		box.bottom = std::clamp(y + 1, 0, (int)m_Specification.Height);
+
+		// if 3D Texture
+		box.front = 0;
+		box.back = 1;
+
+		D3D11_TEXTURE2D_DESC textureDesc = {};
+		textureDesc.Width = 1;
+		textureDesc.Height = 1;
+		textureDesc.MipLevels = 1;
+		textureDesc.ArraySize = 1;
+		textureDesc.Format = DXGI_FORMAT_R32_SINT;
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.SampleDesc.Quality = 0;
+		textureDesc.Usage = D3D11_USAGE_STAGING;
+		textureDesc.BindFlags = 0; // You can add more flags as needed
+
+		ComPtr<ID3D11Texture2D> tempTexture;
+
+		m_Context->GetD3DContext()->CopySubresourceRegion(tempTexture.Get(), 0, 0, 0, 0,
+			m_Context->GetRTTs()[1].Get(), 0, &box);
+
+		int test;
+
+		D3D11_MAPPED_SUBRESOURCE ms;
+		m_Context->GetD3DContext()->Map(tempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
+			&ms); // D3D11_MAP_READ ÁÖÀÇ
+		memcpy(&test, ms.pData, sizeof(uint8_t) * 4);
+		m_Context->GetD3DContext()->Unmap(tempTexture.Get(), NULL);
+		return test;
 	}
 
 }

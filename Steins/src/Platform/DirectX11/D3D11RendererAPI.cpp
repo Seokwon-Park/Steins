@@ -47,7 +47,6 @@ namespace Steins
 		ComPtr<ID3D11Texture2D> backBuffer;
 		m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
 		m_Context->GetD3DContext()->CopyResource(m_Context->GetBackbuffer().Get(), backBuffer.Get());
-		m_Context->GetD3DContext()->CopyResource(m_Context->GetTest().Get(), m_Context->GetRTTs()[1].Get());
 		backBuffer.Reset();
 
 
