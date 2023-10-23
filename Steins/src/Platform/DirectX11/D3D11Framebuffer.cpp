@@ -145,7 +145,7 @@ namespace Steins
 			Utils::CreateTextures(multisample, m_Context->GetRTTs(), m_ColorSRVs.size(), FramebufferTextureFormat::RGBA8);
 			//std::vector<ID3D11Texture2D*> tmp = m_Context->GetRTTs();
 
-			for (u64 i = 0; i < m_ColorSRVs.size(); i++)
+			for (u64 i = 1; i < m_ColorSRVs.size(); i++)
 			{
 				Utils::BindTexture(multisample, m_ColorSRVs[i], i);
 				switch (m_ColorAttachmentSpecifications[i].TextureFormat)

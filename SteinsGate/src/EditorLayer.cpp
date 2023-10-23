@@ -265,7 +265,7 @@ namespace Steins
 		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(1);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{1,0});
 #elif APITYPE == 1
-		auto textureID = m_Framebuffer->GetSRV(0);
+		auto textureID = m_Framebuffer->GetSRV(1);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
 #endif
 
