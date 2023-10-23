@@ -70,6 +70,8 @@ namespace Steins
 			// Bind 'id' as a shader resource view here using g_pd3dDeviceContext
 			// Example: g_pd3dDeviceContext->PSSetShaderResources(slot, 1, &id);
 			D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+			D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+			srvDesc.Format = ConvertToDXGIFormat(format[index].TextureFormat);
 			m_Context->GetD3DDevice()->CreateShaderResourceView(m_Context->GetRTTs()[index].Get(), nullptr, srv.GetAddressOf());
 		}
 
