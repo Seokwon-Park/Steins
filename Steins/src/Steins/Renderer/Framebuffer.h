@@ -10,6 +10,7 @@ namespace Steins
 		
 		//Color
 		RGBA8,
+		RED_INTEGER,
 
 		//Depth/stencil
 		DEPTH24STENCIL8,
@@ -55,6 +56,7 @@ namespace Steins
 		virtual void Unbind() = 0;
 
 		virtual void Resize(u32 width, u32 height) = 0;
+		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
 
 		virtual u32 GetColorAttachmentRendererID(u32 index = 0) const = 0;
 		virtual ID3D11ShaderResourceView* GetSRV(u32 index = 0) const = 0;
