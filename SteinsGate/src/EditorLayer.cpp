@@ -167,7 +167,7 @@ namespace Steins
 #endif
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
-			int pixelData = m_Framebuffer->ReadPixel(0, mouseX, mouseY);
+			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
 			//STS_CORE_WARN("Mouse Coord = {0}, {1}", mouseX, mouseY);
 			STS_CORE_WARN("Pixel Data = {0}", pixelData);
 		}
@@ -216,7 +216,7 @@ namespace Steins
 		if (!opt_padding)
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
-		m_DockSpacePos = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
+		//m_DockSpacePos = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
 		//STS_CORE_WARN("Dock Space Coord = {0}, {1}", m_DockSpacePos.x, m_DockSpacePos.y);
 
 		if (!opt_padding)
@@ -241,6 +241,7 @@ namespace Steins
 		{
 			if (ImGui::BeginMenu("File"))
 			{
+				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
 				if (ImGui::MenuItem("New", "Ctrl+N"))

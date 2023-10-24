@@ -9,12 +9,6 @@ namespace Steins
 
 	namespace Utils
 	{
-		//static GLenum TextureTarget(bool multisampled)
-		//{
-		//	return multisampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
-		//}
-
-
 		static DXGI_FORMAT ConvertToDXGIFormat(FramebufferTextureFormat format) {
 			switch (format) {
 			case FramebufferTextureFormat::RGBA8:
@@ -29,14 +23,8 @@ namespace Steins
 		}
 
 		//// Function to create textures
-		static void CreateTextures(bool multisampled, std::vector<ComPtr<ID3D11Texture2D>>& outID, u32 count, 
+		static void CreateTextures(bool multisampled, std::vector<ComPtr<ID3D11Texture2D>>& outID, u32 count,
 			std::vector<FramebufferTextureSpecification> format, FramebufferSpecification spec) {
-			// Create a texture
-			//for (auto id : outID)
-			//{
-			//	if(id)
-			//	id->Release();
-			//}
 
 			D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
 			for (u32 i = 0; i < count; i++)
@@ -53,12 +41,28 @@ namespace Steins
 				textureDesc.ArraySize = 1;
 				textureDesc.Format = ConvertToDXGIFormat(format[i].TextureFormat);
 				textureDesc.SampleDesc.Count = multisampled ? 4 : 1;
-				textureDesc.SampleDesc.Quality = 0;
+				textureDesc.SampleDesc.Quality = multisampled ? 1 : 0;
 				textureDesc.Usage = D3D11_USAGE_DEFAULT;
-				textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // You can add more flags as needed
+				switch (format[i].TextureFormat)
+				{
+				case FramebufferTextureFormat::RGBA8:
+				{
+					textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // You can add more flags as needed
+					break;
+				}
+				case FramebufferTextureFormat::RED_INTEGER:
+					textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // You can add more flags as needed
+					break;
+				case FramebufferTextureFormat::DEPTH24STENCIL8:
+					textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+					m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, m_Context->GetDSB().GetAddressOf());
+					return;
+				}
+
 				backBuffer.Reset();
 
 				HRESULT hr = m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, outID[i].GetAddressOf());
+
 			}
 
 			// Handle HRESULT error checking
@@ -86,14 +90,15 @@ namespace Steins
 			// Example: g_pd3dDeviceContext->OMSetRenderTargets(1, &rtv, nullptr);
 		}
 
-		// Function to attach a depth texture
-		static void AttachDepthTexture(u32 id, int samples, FramebufferTextureFormat format, u32 width, u32 height) {
+		//// Function to attach a depth texture
+		static void AttachDepthTexture(int samples, FramebufferTextureFormat format, u32 width, u32 height) {
 			D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+			m_Context->GetDSV().Reset();
 			// Create a depth-stencil view for the texture
 			D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 			dsvDesc.Format = ConvertToDXGIFormat(format);
 			dsvDesc.ViewDimension = false ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
-			HRESULT hr = m_Context->GetD3DDevice()->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &dsvDesc, m_Context->GetDSV().GetAddressOf());
+			HRESULT hr = m_Context->GetD3DDevice()->CreateDepthStencilView(m_Context->GetDSB().Get(), &dsvDesc, m_Context->GetDSV().GetAddressOf());
 
 			// Bind the depth-stencil view as needed
 			// Example: g_pd3dDeviceContext->OMSetRenderTargets(1, nullptr, dsv);
@@ -128,6 +133,7 @@ namespace Steins
 	}
 	D3D11Framebuffer::~D3D11Framebuffer()
 	{
+		m_Context->GetDSB().Reset();
 		m_Texture.Reset();
 		m_ColorSRV.Reset();
 		m_ColorSRVs.clear();
@@ -137,6 +143,8 @@ namespace Steins
 		m_ColorSRVs.clear();
 		m_ColorSRV.Reset();
 		m_Texture.Reset();
+		m_Context->GetDSB() = nullptr;
+
 
 		bool multisample = m_Specification.Samples > 1;
 
@@ -167,21 +175,16 @@ namespace Steins
 
 		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None)
 		{
-			Utils::CreateTextures(multisample,{m_Context->GetDSB()}, 1, { m_DepthAttachmentSpecification }, m_Specification);
+			std::vector<ComPtr<ID3D11Texture2D>> tmp;
+			tmp.push_back(m_Context->GetDSB().Get());
+			Utils::CreateTextures(multisample, tmp, 1, { m_DepthAttachmentSpecification }, m_Specification);
 			//std::vector<ID3D11Texture2D*> tmp = m_Context->GetRTTs();
 
-			for (u64 i = 0; i < m_ColorSRVs.size(); i++)
+			switch (m_DepthAttachmentSpecification.TextureFormat)
 			{
-				Utils::BindTexture(multisample, m_ColorSRVs[i], i);
-				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
-				{
-				case FramebufferTextureFormat::RGBA8:
-					Utils::AttachColorTexture(m_Specification.Samples, FramebufferTextureFormat::RGBA8, m_Specification.Width, m_Specification.Height, i);
-					break;
-				case FramebufferTextureFormat::RED_INTEGER:
-					Utils::AttachColorTexture(m_Specification.Samples, FramebufferTextureFormat::RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
-					break;
-				}
+			case FramebufferTextureFormat::DEPTH24STENCIL8:
+				Utils::AttachDepthTexture(m_Specification.Samples, FramebufferTextureFormat::DEPTH24STENCIL8, m_Specification.Width, m_Specification.Height);
+				break;
 			}
 		}
 
@@ -230,12 +233,14 @@ namespace Steins
 		//m_Specification.Height = bbDesc.Height;
 		m_Specification.Width = width;
 		m_Specification.Height = height;
+
+		m_Context->SetViewport(width, height);
 		backBuffer.Reset();
 		Invalidate();
 	}
 
 	int D3D11Framebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
-	{		
+	{
 		D3D11_TEXTURE2D_DESC textureDesc = {};
 		m_Context->GetRTTs()[attachmentIndex]->GetDesc(&textureDesc);
 		textureDesc.Width = 1;
@@ -284,7 +289,7 @@ namespace Steins
 		D3D11_MAPPED_SUBRESOURCE ms;
 		m_Context->GetD3DContext()->Map(m_indexTempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
 			&ms); // D3D11_MAP_READ ÁÖÀÇ
-		memcpy(test, ms.pData, sizeof(uint8_t)*4);
+		memcpy(test, ms.pData, sizeof(uint8_t) * 4);
 		m_Context->GetD3DContext()->Unmap(m_indexTempTexture.Get(), NULL);
 
 		m_indexTempTexture.Reset();

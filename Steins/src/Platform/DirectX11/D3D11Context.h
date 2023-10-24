@@ -27,9 +27,9 @@ namespace Steins
 		std::vector<ComPtr<ID3D11RenderTargetView>>& GetRTVs() { return this->m_RenderTargetViews; }
 		std::vector<ComPtr<ID3D11Texture2D>>& GetRTTs() { return this->m_RenderTargetTextures; }
 		
-		ComPtr<ID3D11DepthStencilView> GetDSV() { return this->m_DepthStencilView.Get(); }
+		ComPtr<ID3D11Texture2D>& GetDSB() { return this->m_DepthStencilBuffer; }		
+		ComPtr<ID3D11DepthStencilView>& GetDSV() { return this->m_DepthStencilView; }
 		ComPtr<ID3D11DepthStencilState> GetDSS() { return this->m_DepthStencilState.Get(); }		
-		ComPtr<ID3D11Texture2D> GetDSB() { return this->m_DepthStencilBuffer.Get(); }		
 		ComPtr<ID3D11BlendState> GetBS() { return this->m_BlendState.Get(); }		
 		ComPtr<ID3D11Texture2D> GetBackbuffer() { return this->m_Backbuffer; }
 		ComPtr<ID3D11Texture2D> GetTest() { return this->m_Testbuffer; }
@@ -48,11 +48,11 @@ namespace Steins
 		}
 
 		void ReleaseCall();
-	private:
 		void SetViewport(int width, int height);
+	private:
 		void CreateRenderTargetView();
 	public:
-
+	private:
 		D3D_FEATURE_LEVEL m_D3DFeatureLevel;
 		u32 m_MSAAQuality = 0;
 		bool m_MSAAEnabled;
