@@ -31,6 +31,7 @@ namespace Steins
 		D3D11Context* m_Context;
 		ComPtr<ID3D11Texture2D> m_Texture;
 		ComPtr<ID3D11Texture2D> m_Texture2;
+		ComPtr<ID3D11Texture2D> m_indexTempTexture;
 		ComPtr<ID3D11ShaderResourceView> m_ColorSRV;
 		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
 		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;

@@ -80,7 +80,7 @@ namespace Steins
 			D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 			rtvDesc.Format = ConvertToDXGIFormat(format);
 			rtvDesc.ViewDimension = false ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
-			HRESULT hr = m_Context->GetD3DDevice()->CreateRenderTargetView(m_Context->GetRTTs()[index].Get(), &rtvDesc, &m_Context->GetRTVs()[index]);
+			HRESULT hr = m_Context->GetD3DDevice()->CreateRenderTargetView(m_Context->GetRTTs()[index].Get(), &rtvDesc, m_Context->GetRTVs()[index].GetAddressOf());
 			// Bind the render target view as needed
 			// Example: g_pd3dDeviceContext->OMSetRenderTargets(1, &rtv, nullptr);
 		}
@@ -185,7 +185,7 @@ namespace Steins
 	}
 	void D3D11Framebuffer::Bind()
 	{
-		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[0].Get(), m_Context->GetBackbuffer().Get());
+		//m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[0].Get(), m_Context->GetBackbuffer().Get());
 	}
 	void D3D11Framebuffer::Unbind()
 	{
@@ -213,7 +213,20 @@ namespace Steins
 	}
 
 	int D3D11Framebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
-	{
+	{		
+		D3D11_TEXTURE2D_DESC textureDesc = {};
+		m_Context->GetRTTs()[1]->GetDesc(&textureDesc);
+		textureDesc.Width = 1;
+		textureDesc.Height = 1;
+		textureDesc.MipLevels = 1;
+		textureDesc.ArraySize = 1;
+		textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		textureDesc.Usage = D3D11_USAGE_STAGING;
+		textureDesc.BindFlags = 0; // You can add more flags as needed
+		textureDesc.MiscFlags = 0; // You can add more flags as needed
+
+		m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, m_indexTempTexture.GetAddressOf());
+
 		//1x1 pixel box
 		D3D11_BOX box;
 
@@ -226,33 +239,22 @@ namespace Steins
 		box.front = 0;
 		box.back = 1;
 
-		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = 1;
-		textureDesc.Height = 1;
-		textureDesc.MipLevels = 1;
-		textureDesc.ArraySize = 1;
-		textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		textureDesc.SampleDesc.Count = 1;
-		textureDesc.SampleDesc.Quality = 0;
-		textureDesc.Usage = D3D11_USAGE_STAGING;
-		textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-		textureDesc.BindFlags = 0; // You can add more flags as needed
-		textureDesc.MiscFlags = 0; // You can add more flags as needed
+		//D3D11_TEXTURE2D_DESC desc = {};
+		//m_Context->GetRTTs()[0].Get()->GetDesc(&desc);
+		////STS_CORE_TRACE("{0}, {1}", desc.Width, desc.Height);
 
-		ComPtr<ID3D11Texture2D> tempTexture;
+		m_Context->GetD3DContext()->CopySubresourceRegion(m_indexTempTexture.Get(), 0, 0, 0, 0,
+			m_Context->GetRTTs()[1].Get(), 0, &box);
+		//m_Context->GetD3DContext()->CopySubresourceRegion(tempTexture.Get(), 0, 0, 0, 0,
+		//	tempTextureforCopy.Get(), 0, &box);
 
-		m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, tempTexture.GetAddressOf());
-
-		m_Context->GetD3DContext()->CopySubresourceRegion(tempTexture.Get(), 0, 0, 0, 0,
-			m_Context->GetRTTs()[attachmentIndex].Get(), 0, &box);
-
-		float test[4];
+		uint8_t test[1];
 
 		D3D11_MAPPED_SUBRESOURCE ms;
-		m_Context->GetD3DContext()->Map(tempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
+		m_Context->GetD3DContext()->Map(m_indexTempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
 			&ms); // D3D11_MAP_READ ÁÖÀÇ
-		memcpy(test, ms.pData, sizeof(uint8_t)*4);
-		m_Context->GetD3DContext()->Unmap(tempTexture.Get(), NULL);
+		memcpy(test, ms.pData, sizeof(uint8_t));
+		m_Context->GetD3DContext()->Unmap(m_indexTempTexture.Get(), NULL);
 		return (int)test[0];
 	}
 

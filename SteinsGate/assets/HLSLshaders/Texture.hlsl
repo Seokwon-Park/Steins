@@ -47,8 +47,9 @@ SamplerState g_sampler : register(s0);
 
 struct PS_Output
 {
-    float4 color : SV_TARGET0;
-    float4 color2 : SV_TARGET1;
+    float4 color : SV_Target0;
+    //float4 color2 : SV_Target1;
+    int color2 : SV_Target1;
 };
 
 PS_Output ps_main(VS_Output input) 
@@ -56,13 +57,18 @@ PS_Output ps_main(VS_Output input)
     float4 color;
 
     PS_Output output;
+    // switch(input.texIdx)
+    // {
+    // case 0:
+    // }
     if(input.texIdx == 0)
         color = g_texture[0].Sample(g_sampler, input.uv * input.tileFactor)*input.color;
     else if(input.texIdx == 1)
         color = g_texture[1].Sample(g_sampler, input.uv * input.tileFactor)*input.color;
         
     output.color = color;
-    output.color2 = float4(0.3f, 0.3f, 1.0f, 1.0f);
+    //output.color2 = float4(0.3f, 0.5f, 0.8f, 1.0f);
+    output.color2 = 50;
     return output;
     //return input.color;
 }
