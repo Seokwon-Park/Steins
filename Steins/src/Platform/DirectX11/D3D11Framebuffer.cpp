@@ -215,7 +215,7 @@ namespace Steins
 	int D3D11Framebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	{		
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		m_Context->GetRTTs()[1]->GetDesc(&textureDesc);
+		m_Context->GetRTTs()[attachmentIndex]->GetDesc(&textureDesc);
 		textureDesc.Width = 1;
 		textureDesc.Height = 1;
 		textureDesc.MipLevels = 1;
@@ -244,17 +244,28 @@ namespace Steins
 		////STS_CORE_TRACE("{0}, {1}", desc.Width, desc.Height);
 
 		m_Context->GetD3DContext()->CopySubresourceRegion(m_indexTempTexture.Get(), 0, 0, 0, 0,
-			m_Context->GetRTTs()[1].Get(), 0, &box);
+			m_Context->GetRTTs()[attachmentIndex].Get(), 0, &box);
 		//m_Context->GetD3DContext()->CopySubresourceRegion(tempTexture.Get(), 0, 0, 0, 0,
 		//	tempTextureforCopy.Get(), 0, &box);
 
-		uint8_t test[1];
+		//uint8_t test[1];
+
+		//D3D11_MAPPED_SUBRESOURCE ms;
+		//m_Context->GetD3DContext()->Map(m_indexTempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
+		//	&ms); // D3D11_MAP_READ 주의
+		//memcpy(test, ms.pData, sizeof(uint8_t));
+		//m_Context->GetD3DContext()->Unmap(m_indexTempTexture.Get(), NULL);
+		//return (int)test[0];
+
+		uint8_t test[4];
 
 		D3D11_MAPPED_SUBRESOURCE ms;
 		m_Context->GetD3DContext()->Map(m_indexTempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
 			&ms); // D3D11_MAP_READ 주의
-		memcpy(test, ms.pData, sizeof(uint8_t));
+		memcpy(test, ms.pData, sizeof(uint8_t)*4);
 		m_Context->GetD3DContext()->Unmap(m_indexTempTexture.Get(), NULL);
+
+		m_indexTempTexture.Reset();
 		return (int)test[0];
 	}
 
