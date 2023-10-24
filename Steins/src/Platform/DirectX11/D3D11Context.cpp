@@ -193,7 +193,7 @@ namespace Steins
 		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
 		assert(backBuffer);
 		m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_RenderTargetView);
-		m_RenderTargetViews.push_back(m_RenderTargetView.Get());
+		//m_RenderTargetViews.push_back(m_RenderTargetView.Get());
 
 		m_Backbuffer = backBuffer;
 
@@ -319,7 +319,7 @@ namespace Steins
 			m_D3DDevice->CreateRenderTargetView(backBuffer.Get(), nullptr,
 				&m_RenderTargetView);
 		}
-		m_RenderTargetViews.push_back(m_RenderTargetView.Get());
+		//m_RenderTargetViews.push_back(m_RenderTargetView.Get());
 
 		D3D11_TEXTURE2D_DESC bbDesc;
 		backBuffer->GetDesc(&bbDesc);

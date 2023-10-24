@@ -29,6 +29,7 @@ namespace Steins
 		
 		ComPtr<ID3D11DepthStencilView> GetDSV() { return this->m_DepthStencilView.Get(); }
 		ComPtr<ID3D11DepthStencilState> GetDSS() { return this->m_DepthStencilState.Get(); }		
+		ComPtr<ID3D11Texture2D> GetDSB() { return this->m_DepthStencilBuffer.Get(); }		
 		ComPtr<ID3D11BlendState> GetBS() { return this->m_BlendState.Get(); }		
 		ComPtr<ID3D11Texture2D> GetBackbuffer() { return this->m_Backbuffer; }
 		ComPtr<ID3D11Texture2D> GetTest() { return this->m_Testbuffer; }

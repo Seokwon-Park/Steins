@@ -29,7 +29,8 @@ namespace Steins
 		}
 
 		//// Function to create textures
-		static void CreateTextures(bool multisampled, std::vector<ComPtr<ID3D11Texture2D>>& outID, u32 count, std::vector<FramebufferTextureSpecification> format) {
+		static void CreateTextures(bool multisampled, std::vector<ComPtr<ID3D11Texture2D>>& outID, u32 count, 
+			std::vector<FramebufferTextureSpecification> format, FramebufferSpecification spec) {
 			// Create a texture
 			//for (auto id : outID)
 			//{
@@ -46,8 +47,8 @@ namespace Steins
 				backBuffer->GetDesc(&bbDesc);
 
 				D3D11_TEXTURE2D_DESC textureDesc = {};
-				textureDesc.Width = bbDesc.Width;
-				textureDesc.Height = bbDesc.Height;
+				textureDesc.Width = spec.Width;
+				textureDesc.Height = spec.Height;
 				textureDesc.MipLevels = 1;
 				textureDesc.ArraySize = 1;
 				textureDesc.Format = ConvertToDXGIFormat(format[i].TextureFormat);
@@ -85,17 +86,18 @@ namespace Steins
 			// Example: g_pd3dDeviceContext->OMSetRenderTargets(1, &rtv, nullptr);
 		}
 
-		//// Function to attach a depth texture
-		////static void AttachDepthTexture(u32 id, int samples, FramebufferTextureFormat format, FramebufferTextureFormat attachmentType, u32 width, u32 height) {
-		////	// Create a depth-stencil view for the texture
-		////	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-		////	dsvDesc.Format = ConvertToDXGIFormat(format);
-		////	dsvDesc.ViewDimension = false ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
-		////	HRESULT hr = g_pd3dDevice->CreateDepthStencilView(id, &dsvDesc, nullptr);
+		// Function to attach a depth texture
+		static void AttachDepthTexture(u32 id, int samples, FramebufferTextureFormat format, u32 width, u32 height) {
+			D3D11Context* m_Context = static_cast<D3D11Context*>(Application::Get().GetWindow().GetContext());
+			// Create a depth-stencil view for the texture
+			D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+			dsvDesc.Format = ConvertToDXGIFormat(format);
+			dsvDesc.ViewDimension = false ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
+			HRESULT hr = m_Context->GetD3DDevice()->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &dsvDesc, m_Context->GetDSV().GetAddressOf());
 
-		////	// Bind the depth-stencil view as needed
-		////	// Example: g_pd3dDeviceContext->OMSetRenderTargets(1, nullptr, dsv);
-		////}
+			// Bind the depth-stencil view as needed
+			// Example: g_pd3dDeviceContext->OMSetRenderTargets(1, nullptr, dsv);
+		}
 
 		//// Function to check if the format is a depth format
 		static bool IsDepthFormat(FramebufferTextureFormat format) {
@@ -145,7 +147,27 @@ namespace Steins
 			m_Context->GetRTTs().resize(m_ColorAttachmentSpecifications.size());
 			m_Context->GetRTVs().resize(m_ColorAttachmentSpecifications.size());
 
-			Utils::CreateTextures(multisample, m_Context->GetRTTs(), m_ColorSRVs.size(), m_ColorAttachmentSpecifications);
+			Utils::CreateTextures(multisample, m_Context->GetRTTs(), m_ColorSRVs.size(), m_ColorAttachmentSpecifications, m_Specification);
+			//std::vector<ID3D11Texture2D*> tmp = m_Context->GetRTTs();
+
+			for (u64 i = 0; i < m_ColorSRVs.size(); i++)
+			{
+				Utils::BindTexture(multisample, m_ColorSRVs[i], i);
+				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
+				{
+				case FramebufferTextureFormat::RGBA8:
+					Utils::AttachColorTexture(m_Specification.Samples, FramebufferTextureFormat::RGBA8, m_Specification.Width, m_Specification.Height, i);
+					break;
+				case FramebufferTextureFormat::RED_INTEGER:
+					Utils::AttachColorTexture(m_Specification.Samples, FramebufferTextureFormat::RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
+					break;
+				}
+			}
+		}
+
+		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None)
+		{
+			Utils::CreateTextures(multisample,{m_Context->GetDSB()}, 1, { m_DepthAttachmentSpecification }, m_Specification);
 			//std::vector<ID3D11Texture2D*> tmp = m_Context->GetRTTs();
 
 			for (u64 i = 0; i < m_ColorSRVs.size(); i++)

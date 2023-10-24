@@ -37,7 +37,7 @@ namespace Steins
 		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;
 
 		std::vector<ComPtr<ID3D11ShaderResourceView>> m_ColorSRVs;
-		u32 m_DepthAttachment = 0;
+		ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
 		FramebufferSpecification m_Specification;
 
 
