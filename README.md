@@ -27,5 +27,5 @@ Then update the submodule with
 
 If changes are made, or if you want to regenerate project files, rerun the [Win-GenProjects.bat](https://github.com/Seokwon-Park/Steins/blob/master/scripts/Win-GenProjects.bat) script file found in `scripts` folder.
 
-If you want to change the renderer API, use #define APITYPE in stspch.h to change it. (OpenGL = 0, DirectX11 = 1)
+If you want to change the renderer API, use #define APITYPE in stspch.h to change it. (OpenGL = 0, DirectX11 = 1)   
 렌더러 API를 변경하려면 stspch.h에서 #define APITYPE를 사용하여 변경합니다. (OpenGL = 0, DirectX11 = 1)
