@@ -295,4 +295,33 @@ namespace Steins
 		return (int)test[0];
 	}
 
+	void D3D11Framebuffer::ClearAttachment(u32 attachmentIndex, int value)
+	{
+		int val = value;
+		if (val < 0) val = 0;
+		std::vector<INT> textureData(m_Specification.Width * m_Specification.Height, val); // 모든 픽셀을 -1로 설정
+
+		// 텍스쳐를 생성하고 데이터를 설정합니다.
+		ComPtr<ID3D11Texture2D> pTexture;
+		D3D11_TEXTURE2D_DESC textureDesc = {};
+		textureDesc.Width = m_Specification.Width;
+		textureDesc.Height = m_Specification.Height;
+		textureDesc.MipLevels = 1;
+		textureDesc.ArraySize = 1;
+		textureDesc.Format = DXGI_FORMAT_R32_SINT;
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.Usage = D3D11_USAGE_DEFAULT;
+		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+		D3D11_SUBRESOURCE_DATA initData = {};
+		initData.pSysMem = textureData.data();
+		initData.SysMemPitch = m_Specification.Width * sizeof(INT);
+
+		HRESULT hr = m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, &initData, pTexture.GetAddressOf());
+		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[attachmentIndex].Get(), pTexture.Get());
+		pTexture.Reset();
+
+		//float val[4] = {-1.f, 0.0f, 0.0f, 0.0f};
+		//m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTVs()[attachmentIndex].Get(), val);
+	}
 }
