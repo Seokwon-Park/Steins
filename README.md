@@ -26,3 +26,6 @@ Then update the submodule with
 (프로젝트를 다운로드하고 압축을 풀어 Win-GenProjects.bat 스크립트 파일을 실행해주세요. 사용자가 사용할 수 있는 Visual Studio 솔루션 파일을 생성합니다.)
 
 If changes are made, or if you want to regenerate project files, rerun the [Win-GenProjects.bat](https://github.com/Seokwon-Park/Steins/blob/master/scripts/Win-GenProjects.bat) script file found in `scripts` folder.
+
+If you want to change the renderer API, use #define APITYPE in stspch.h to change it. (OpenGL = 0, DirectX11 = 1)
+렌더러 API를 변경하려면 stspch.h에서 #define APITYPE를 사용하여 변경합니다. (OpenGL = 0, DirectX11 = 1)
