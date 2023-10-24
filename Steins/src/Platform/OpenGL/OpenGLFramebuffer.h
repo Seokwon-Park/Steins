@@ -18,6 +18,8 @@ namespace Steins
 		virtual void Resize(u32 width, u32 height) override;
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
 
+		virtual void ClearAttachment(u32 attachmentIndex, int value) override;
+
 		virtual u32 GetColorAttachmentRendererID(u32 index = 0) const override { 
 			STS_CORE_ASSERT(index < m_ColorAttachments.size());
 			return m_ColorAttachments[index]; }

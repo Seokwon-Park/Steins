@@ -58,6 +58,8 @@ namespace Steins
 		virtual void Resize(u32 width, u32 height) = 0;
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
 
+		virtual void ClearAttachment(u32 attachmentIndex, int value) = 0;
+
 		virtual u32 GetColorAttachmentRendererID(u32 index = 0) const = 0;
 		virtual ID3D11ShaderResourceView* GetSRV(u32 index = 0) const = 0;
 

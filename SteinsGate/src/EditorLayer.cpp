@@ -134,12 +134,14 @@ namespace Steins
 
 		RenderCommand::SetClearColor({ .1f, .1f, .1f, 1 });
 		RenderCommand::Clear();
-		// Update scene
 
+		// Clear our entity ID attachment to -1
+		m_Framebuffer->ClearAttachment(1, -1);
 		//Renderer2D::BeginScene(m_CameraController.GetCamera());
 		//Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
 		//Renderer2D::EndScene();
 
+		// Update scene
 		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 
 #if APITYPE == 0

@@ -62,7 +62,6 @@ namespace Steins
 				backBuffer.Reset();
 
 				HRESULT hr = m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, nullptr, outID[i].GetAddressOf());
-
 			}
 
 			// Handle HRESULT error checking
