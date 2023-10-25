@@ -7,10 +7,10 @@
 namespace Steins
 {
 	// Once we have projects, change this
-	static const std::filesystem::path s_AssetPath= "assets";
+	extern const std::filesystem::path g_AssetPath= "assets";
 
 	ContentBrowserPanel::ContentBrowserPanel()
-		:m_CurrentDirectory(s_AssetPath)
+		:m_CurrentDirectory(g_AssetPath)
 	{
 		m_DirectoryIcon = Texture2D::Create("Resources/Icons/ContentBrowser/DirectoryIcon.png");
 		m_FileIcon= Texture2D::Create("Resources/Icons/ContentBrowser/FileIcon.png");
@@ -20,9 +20,7 @@ namespace Steins
 	{
 		ImGui::Begin("Content Browser");
 
-
-
-		if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
+		if (m_CurrentDirectory != std::filesystem::path(g_AssetPath))
 		{
 			if (ImGui::Button("..."))
 			{
@@ -50,13 +48,25 @@ namespace Steins
 			//bool opened = ImGui::TreeNodeEx((void*)(u64)(u32)entity, flags, tag.c_str());
 
 			const auto& path = directoryEntry.path();
-			auto relativePath = std::filesystem::relative(path, s_AssetPath);
+			auto relativePath = std::filesystem::relative(path, g_AssetPath);
 			std::string filenameString = relativePath.filename().string();
 
+			ImGui::PushID(filenameString.c_str());
 			Ref<Texture2D> icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
-
-			//ImGui::ImageButton((ImTextureID)m_DirectoryIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0,1 }, { 1,0 });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+#if APITYPE == 0
+			ImGui::ImageButtonEx((ImTextureID)m_DirectoryIcon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0,1 }, { 1,0 });
+#else
 			ImGui::ImageButton((ImTextureID)icon->GetSRV(), { thumbnailSize, thumbnailSize }, { 0,1 }, { 1,0 });
+#endif
+			ImGui::PopStyleColor();
+
+			if (ImGui::BeginDragDropSource())
+			{
+				const wchar_t* itemPath = relativePath.c_str();
+				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath)+1)*sizeof(wchar_t));
+				ImGui::EndDragDropSource();
+			}
 			
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
@@ -69,6 +79,8 @@ namespace Steins
 			ImGui::TextWrapped(filenameString.c_str());
 
 			ImGui::NextColumn();
+
+			ImGui::PopID();
 		}
 		ImGui::Columns(1);
 

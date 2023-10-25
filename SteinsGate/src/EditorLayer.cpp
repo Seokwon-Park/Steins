@@ -13,6 +13,8 @@
 
 namespace Steins
 {
+	extern const std::filesystem::path g_AssetPath;
+
 	EditorLayer::EditorLayer()
 		:Layer("Snadbox2D"), m_CameraController(16.f / 9.f)
 	{
@@ -312,6 +314,16 @@ namespace Steins
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
 #endif
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(std::filesystem::path(g_AssetPath)/ path);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		// Gizmos
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity && m_GizmoType != -1)
@@ -363,25 +375,25 @@ namespace Steins
 		}
 
 		ImGui::End();
-//		ImGui::Begin("test");
-//		m_ViewportFocused = ImGui::IsWindowFocused();
-//		m_ViewportHovered = ImGui::IsWindowHovered();
-//		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
-//
-//		ImVec2 viewportPanelSize2 = ImGui::GetContentRegionAvail();
-//		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
-//
-//		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
-//		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-//		//auto textureID = m_CheckerboardTexture->GetSRV();
-//#if APITYPE	== 0
-//		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
-//		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-//#elif APITYPE == 1
-//		auto textureID2 = m_Framebuffer->GetSRV(1);
-//		ImGui::Image((void*)textureID2, ImVec2{ viewportPanelSize2.x ,viewportPanelSize2.y });
-//#endif
-//		ImGui::End();
+		//		ImGui::Begin("test");
+		//		m_ViewportFocused = ImGui::IsWindowFocused();
+		//		m_ViewportHovered = ImGui::IsWindowHovered();
+		//		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+		//
+		//		ImVec2 viewportPanelSize2 = ImGui::GetContentRegionAvail();
+		//		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
+		//
+		//		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
+		//		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
+		//		//auto textureID = m_CheckerboardTexture->GetSRV();
+		//#if APITYPE	== 0
+		//		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
+		//		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		//#elif APITYPE == 1
+		//		auto textureID2 = m_Framebuffer->GetSRV(1);
+		//		ImGui::Image((void*)textureID2, ImVec2{ viewportPanelSize2.x ,viewportPanelSize2.y });
+		//#endif
+		//		ImGui::End();
 
 		ImGui::PopStyleVar();
 
@@ -453,7 +465,7 @@ namespace Steins
 	{
 		if (e.GetMouseButton() == Mouse::ButtonLeft)
 		{
-			if(m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+			if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
 				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 		}
 		return false;
@@ -469,13 +481,17 @@ namespace Steins
 		std::string filepath = FileDialogs::OpenFile("Steins Scene (*.steins)\0*.steins\0");
 		if (!filepath.empty())
 		{
-			m_ActiveScene = CreateRef<Scene>();
-			m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(filepath);
+			OpenScene(filepath);
 		}
+	}
+	void EditorLayer::OpenScene(const std::filesystem::path& path)
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		SceneSerializer serializer(m_ActiveScene);
+		serializer.Deserialize(path.string());
 	}
 	void EditorLayer::SaveSceneAs()
 	{
