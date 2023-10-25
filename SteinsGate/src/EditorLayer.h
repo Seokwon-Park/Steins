@@ -2,6 +2,7 @@
 
 #include "Steins.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 
 #include "Steins/Renderer/EditorCamera.h"
 
@@ -61,5 +62,6 @@ namespace Steins
 
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ContentBrowserPanel m_ContentBrowserPanel;
 	};
 }

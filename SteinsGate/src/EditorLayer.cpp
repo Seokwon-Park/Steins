@@ -86,7 +86,6 @@ namespace Steins
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -271,6 +270,7 @@ namespace Steins
 		}
 
 		m_SceneHierarchyPanel.OnImGuiRender();
+		m_ContentBrowserPanel.OnImGuiRender();
 
 		ImGui::Begin("Stats");
 
