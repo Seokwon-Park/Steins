@@ -283,22 +283,22 @@ namespace Steins
 		//m_Context->GetD3DContext()->Unmap(m_indexTempTexture.Get(), NULL);
 		//return (int)test[0];
 
-		uint8_t test[4];
+		int32_t test;
 
 		D3D11_MAPPED_SUBRESOURCE ms;
 		m_Context->GetD3DContext()->Map(m_indexTempTexture.Get(), NULL, D3D11_MAP_READ, NULL,
 			&ms); // D3D11_MAP_READ 주의
-		memcpy(test, ms.pData, sizeof(uint8_t) * 4);
+		memcpy(&test, ms.pData, sizeof(int32_t));
 		m_Context->GetD3DContext()->Unmap(m_indexTempTexture.Get(), NULL);
 
 		m_indexTempTexture.Reset();
-		return (int)test[0];
+		return test;
 	}
 
 	void D3D11Framebuffer::ClearAttachment(u32 attachmentIndex, int value)
 	{
+		//TODO: 뭐쓸지 잘 모르겠음 Texture Clear 개념에서는 이게 맞는듯?
 		int val = value;
-		if (val < 0) val = 0;
 		std::vector<INT> textureData(m_Specification.Width * m_Specification.Height, val); // 모든 픽셀을 -1로 설정
 
 		// 텍스쳐를 생성하고 데이터를 설정합니다.
@@ -318,10 +318,11 @@ namespace Steins
 		initData.SysMemPitch = m_Specification.Width * sizeof(INT);
 
 		HRESULT hr = m_Context->GetD3DDevice()->CreateTexture2D(&textureDesc, &initData, pTexture.GetAddressOf());
+		//TODO: UpdateSubresource or Map..
 		m_Context->GetD3DContext()->CopyResource(m_Context->GetRTTs()[attachmentIndex].Get(), pTexture.Get());
 		pTexture.Reset();
 
-		//float val[4] = {-1.f, 0.0f, 0.0f, 0.0f};
+		//float val[4] = { INT_MAX-1, 0.0f, 0.0f, 0.0f};
 		//m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTVs()[attachmentIndex].Get(), val);
 	}
 }

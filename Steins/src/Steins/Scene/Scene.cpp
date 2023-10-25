@@ -41,8 +41,7 @@ namespace Steins
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
-
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			//Renderer::Submit(mesh, transform);
 		}
 		Renderer2D::EndScene();
@@ -92,9 +91,8 @@ namespace Steins
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
-
-				//Renderer::Submit(mesh, transform);
+				//Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
 			Renderer2D::EndScene();
 		}

@@ -40,6 +40,7 @@ VS_Output vs_main(VS_Input input)
     return output;
 }
 
+//TODO: expand to 32size
 Texture2D g_texture[2] : register(t0);
 //Texture2D g_texture1 : register(t1);
 
@@ -48,7 +49,6 @@ SamplerState g_sampler : register(s0);
 struct PS_Output
 {
     float4 color : SV_Target0;
-    //float4 color2 : SV_Target1;
     int color2 : SV_Target1;
 };
 
@@ -57,6 +57,7 @@ PS_Output ps_main(VS_Output input)
     float4 color;
 
     PS_Output output;
+    // TODO:
     // switch(input.texIdx)
     // {
     // case 0:
@@ -67,8 +68,6 @@ PS_Output ps_main(VS_Output input)
         color = g_texture[1].Sample(g_sampler, input.uv * input.tileFactor)*input.color;
         
     output.color = color;
-    //output.color2 = float4(0.3f, 0.5f, 0.8f, 1.0f);
     output.color2 = 50;
     return output;
-    //return input.color;
 }

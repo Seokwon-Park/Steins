@@ -17,6 +17,9 @@ namespace Steins
 		glm::vec2 TexCoord;
 		float TexIndex;
 		float TilingFactor;
+
+		// Editor - only
+		int EntityID;
 	};
 
 	struct Renderer2DData
@@ -59,11 +62,12 @@ namespace Steins
 		{
 			s_Data.QuadVertexBuffer->SetLayout(
 				{
-					{ ShaderDataType::Float3, "a_Position"},
-					{ ShaderDataType::Float4, "a_Color"},
-					{ ShaderDataType::Float2, "a_TexCoord"},
-					{ ShaderDataType::Float,  "a_TexIndex"},
-					{ ShaderDataType::Float,  "a_TilingFactor"}
+					{ ShaderDataType::Float3, "a_Position"		},
+					{ ShaderDataType::Float4, "a_Color"			},
+					{ ShaderDataType::Float2, "a_TexCoord"		},
+					{ ShaderDataType::Float,  "a_TexIndex"		},
+					{ ShaderDataType::Float,  "a_TilingFactor"	},
+					{ ShaderDataType::Int,	  "a_EntityID"		}
 				});
 		}
 		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
@@ -74,7 +78,8 @@ namespace Steins
 					{ ShaderDataType::Float4, "COLOR"},
 					{ ShaderDataType::Float2, "TEXCOORD"},
 					{ ShaderDataType::Float, "TEXCOORD"},
-					{ ShaderDataType::Float, "TEXCOORD"}
+					{ ShaderDataType::Float, "TEXCOORD"},
+					{ ShaderDataType::Int, "TEXCOORD"}
 				});
 		}
 
@@ -323,7 +328,7 @@ namespace Steins
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
 		STS_PROFILE_FUNCTION();
 
@@ -344,6 +349,7 @@ namespace Steins
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 		s_Data.QuadIndexCount += 6;
@@ -352,7 +358,7 @@ namespace Steins
 
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor )
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		STS_PROFILE_FUNCTION();
 
@@ -390,6 +396,7 @@ namespace Steins
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -549,6 +556,11 @@ namespace Steins
 
 		s_Data.Stats.QuadCount++;
 
+	}
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
+	{
+		DrawQuad(transform, src.Color, entityID);
 	}
 
 	void Renderer2D::ResetStats()
