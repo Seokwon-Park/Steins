@@ -170,8 +170,6 @@ namespace Steins
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
 			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
-			//STS_CORE_WARN("Mouse Coord = {0}, {1}", mouseX, mouseY);
-			STS_CORE_WARN("Pixel Data = {0}", pixelData);
 			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
 		}
 
@@ -292,37 +290,27 @@ namespace Steins
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 		ImGui::Begin("Viewport");
-		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar(height 21)
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos(); // Includes tab bar(height 21)
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 		//STS_CORE_WARN("Mouse Coord = {0}, {1}", viewportOffset.x, viewportOffset.y);
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
 
-		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
-		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		//auto textureID = m_CheckerboardTexture->GetSRV();
 #if APITYPE	== 0
 		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
-		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 #elif APITYPE == 1
 		auto textureID = m_Framebuffer->GetSRV(0);
-		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
 #endif
-
-		auto windowSize = ImGui::GetWindowSize();
-		ImVec2 minBound = ImGui::GetWindowPos();
-		//STS_CORE_WARN("Viewport Coord = {0}, {1}", minBound.x, minBound.y);
-
-		minBound.x += viewportOffset.x;
-		minBound.y += viewportOffset.y;
-
-		ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
-		m_ViewportBounds[0] = { minBound.x, minBound.y };
-		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 		// Gizmos
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
@@ -407,6 +395,7 @@ namespace Steins
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(STS_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(STS_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
@@ -459,6 +448,15 @@ namespace Steins
 		}
 		}
 
+	}
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft)
+		{
+			if(m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+		}
+		return false;
 	}
 	void EditorLayer::NewScene()
 	{
