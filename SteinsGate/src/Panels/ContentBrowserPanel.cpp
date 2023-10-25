@@ -28,8 +28,8 @@ namespace Steins
 			}
 		}
 
-		static float padding = 16.0f;
-		static float thumbnailSize = 128.0f;
+		static float padding = 8.0f;
+		static float thumbnailSize = 64.0f;
 		float cellSize = thumbnailSize + padding;
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
