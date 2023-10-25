@@ -25,6 +25,8 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard2.png");
+		m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
+		m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
 
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -121,14 +123,6 @@ namespace Steins
 			m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
 		}
 
-
-		// Update
-		if (m_ViewportFocused)
-		{
-			m_CameraController.OnUpdate(dt);
-		}
-		m_EditorCamera.OnUpdate(dt);
-
 		// Render
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
@@ -141,9 +135,28 @@ namespace Steins
 		//Renderer2D::BeginScene(m_CameraController.GetCamera());
 		//Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
 		//Renderer2D::EndScene();
-
+		
+		// Update
 		// Update scene
-		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+		switch (m_SceneState)
+		{
+		case SceneState::Edit:
+		{
+			if (m_ViewportFocused)
+			{
+				m_CameraController.OnUpdate(dt);
+			}
+			m_EditorCamera.OnUpdate(dt);
+
+			m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+			break;
+		}
+		case SceneState::Play:
+		{
+			m_ActiveScene->OnUpdateRuntime(dt);
+			break;
+		}
+		}
 
 #if APITYPE == 0
 		auto [mx, my] = ImGui::GetMousePos();
@@ -319,7 +332,7 @@ namespace Steins
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
-				OpenScene(std::filesystem::path(g_AssetPath)/ path);
+				OpenScene(std::filesystem::path(g_AssetPath) / path);
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -375,27 +388,9 @@ namespace Steins
 		}
 
 		ImGui::End();
-		//		ImGui::Begin("test");
-		//		m_ViewportFocused = ImGui::IsWindowFocused();
-		//		m_ViewportHovered = ImGui::IsWindowHovered();
-		//		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
-		//
-		//		ImVec2 viewportPanelSize2 = ImGui::GetContentRegionAvail();
-		//		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
-		//
-		//		//STS_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
-		//		//ImGui::Image((void*)m_CheckerboardTexture->GetSRV(), ImVec2{ 256.0f, 256.0f });
-		//		//auto textureID = m_CheckerboardTexture->GetSRV();
-		//#if APITYPE	== 0
-		//		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
-		//		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-		//#elif APITYPE == 1
-		//		auto textureID2 = m_Framebuffer->GetSRV(1);
-		//		ImGui::Image((void*)textureID2, ImVec2{ viewportPanelSize2.x ,viewportPanelSize2.y });
-		//#endif
-		//		ImGui::End();
-
 		ImGui::PopStyleVar();
+
+		UI_Toolbar();
 
 		ImGui::End();
 	}
@@ -501,5 +496,40 @@ namespace Steins
 			SceneSerializer serializer(m_ActiveScene);
 			serializer.Serialize(filepath);
 		}
+	}
+	void EditorLayer::OnScenePlay()
+	{
+		m_SceneState = SceneState::Play;
+	}
+	void EditorLayer::OnSceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+	}
+	void EditorLayer::UI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiViewportFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+		if (ImGui::ImageButton((ImTextureID)icon->GetSRV(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		{
+			if (m_SceneState == SceneState::Edit)
+				OnScenePlay();
+			else if (m_SceneState == SceneState::Play)
+				OnSceneStop();
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		ImGui::End();
 	}
 }
