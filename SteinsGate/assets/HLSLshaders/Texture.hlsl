@@ -12,6 +12,7 @@ struct VS_Input
     float2 uv : TEXCOORD0;
     float texIdx : TEXCOORD1;
     float tileFactor: TEXCOORD2;
+    int entityID : TEXCOORD3;
 };
 
 cbuffer VS_Cbuffer : register(b0)
@@ -26,6 +27,7 @@ struct VS_Output
     float2 uv : TEXCOORD0;
     float texIdx : TEXCOORD1;
     float tileFactor : TEXCOORD2;
+    int entityID : TEXCOORD3;
 };
 
 VS_Output vs_main(VS_Input input)
@@ -36,6 +38,7 @@ VS_Output vs_main(VS_Input input)
     output.uv = input.uv;
     output.texIdx = input.texIdx;
     output.tileFactor = input.tileFactor;
+    output.entityID = input.entityID;
 
     return output;
 }
@@ -68,6 +71,6 @@ PS_Output ps_main(VS_Output input)
         color = g_texture[1].Sample(g_sampler, input.uv * input.tileFactor)*input.color;
         
     output.color = color;
-    output.color2 = 50;
+    output.color2 = input.entityID;
     return output;
 }
