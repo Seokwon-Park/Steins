@@ -84,6 +84,7 @@
   <ItemGroup>
     <None Include="..\..\Sandbox\premake5.lua" />
     <None Include="..\..\Steins\premake5.lua" />
+    <None Include="..\..\Steins\vendor\Box2D\premake5.lua" />
     <None Include="..\..\Steins\vendor\GLFW\premake5.lua" />
     <None Include="..\..\Steins\vendor\Glad\premake5.lua" />
     <None Include="..\..\Steins\vendor\imgui\premake5.lua" />

@@ -25,6 +25,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
+IncludeDir["Box2D"] = "%{wks.location}/Steins/vendor/Box2D/include"
 IncludeDir["GLFW"] = "%{wks.location}/Steins/vendor/GLFW/include"
 IncludeDir["Glad"] = "%{wks.location}/Steins/vendor/Glad/include"
 IncludeDir["ImGui"] = "%{wks.location}/Steins/vendor/imgui"
@@ -36,6 +37,7 @@ IncludeDir["ImGuizmo"] = "%{wks.location}/Steins/vendor/ImGuizmo"
 
 group "Dependencies"
 	include "vendor/premake"
+	include "Steins/vendor/Box2D"
 	include "Steins/vendor/GLFW"
 	include "Steins/vendor/Glad"
 	include "Steins/vendor/imgui"

@@ -13,6 +13,9 @@
     <Filter Include="..\Steins\vendor">
       <UniqueIdentifier>{83CE96C2-6FC7-B514-98F9-9A9984519520}</UniqueIdentifier>
     </Filter>
+    <Filter Include="..\Steins\vendor\Box2D">
+      <UniqueIdentifier>{D10E920E-BD08-BB60-A675-5171920E21CD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="..\Steins\vendor\GLFW">
       <UniqueIdentifier>{A213168C-0E80-D186-D773-69E4439FF3EE}</UniqueIdentifier>
     </Filter>
@@ -35,6 +38,9 @@
     </None>
     <None Include="..\..\Steins\premake5.lua">
       <Filter>..\Steins</Filter>
+    </None>
+    <None Include="..\..\Steins\vendor\Box2D\premake5.lua">
+      <Filter>..\Steins\vendor\Box2D</Filter>
     </None>
     <None Include="..\..\Steins\vendor\GLFW\premake5.lua">
       <Filter>..\Steins\vendor\GLFW</Filter>

@@ -56,7 +56,10 @@ namespace Steins
 			s_GLFWInitialized = true;
 		}
 
-		//glfwWindowHint(GLFW_DECORATED, false);
+		//glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_TITLEBAR, false);
+		//glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+
 
 		{
 			STS_PROFILE_SCOPE("glfwCreateWindow");

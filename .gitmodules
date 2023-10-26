@@ -16,3 +16,6 @@
 [submodule "Steins/vendor/ImGuizmo"]
 	path = Steins/vendor/ImGuizmo
 	url = https://github.com/Seokwon-Park/ImGuizmo
+[submodule "Steins/vendor/Box2D"]
+	path = Steins/vendor/Box2D
+	url = https://github.com/Seokwon-Park/box2d

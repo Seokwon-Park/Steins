@@ -288,7 +288,7 @@ namespace Steins
 		m_ContentBrowserPanel.OnImGuiRender();
 
 		ImGui::Begin("Stats");
-
+		ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		std::string name = "None";
 		if (m_HoveredEntity)
 			name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
@@ -500,10 +500,12 @@ namespace Steins
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
+		m_ActiveScene->OnRuntimeStart();
 	}
 	void EditorLayer::OnSceneStop()
 	{
 		m_SceneState = SceneState::Edit;
+		m_ActiveScene->OnRuntimeStop();
 	}
 	void EditorLayer::UI_Toolbar()
 	{
@@ -521,7 +523,11 @@ namespace Steins
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+#if APITYPE == 0
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+#elif APITYPE == 1
 		if (ImGui::ImageButton((ImTextureID)icon->GetSRV(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+#endif
 		{
 			if (m_SceneState == SceneState::Edit)
 				OnScenePlay();

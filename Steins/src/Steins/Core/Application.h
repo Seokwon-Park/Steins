@@ -38,6 +38,8 @@ namespace Steins {
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
+		void UI_DrawTitlebar(float& outTitlebarHeight);
+
 		GraphicsContext* m_Context;
 		
 		std::unique_ptr<Window> m_Window;
