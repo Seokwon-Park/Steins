@@ -179,7 +179,6 @@ namespace Steins
 		//my = viewportSize.y - my;
 		int mouseX = (int)mx;
 		int mouseY = (int)my;
-
 #endif
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
@@ -240,6 +239,10 @@ namespace Steins
 		if (opt_fullscreen)
 			ImGui::PopStyleVar(2);
 
+		float titleBarHeight;
+		Application::Get().UI_DrawTitlebar(titleBarHeight);
+		ImGui::SetCursorPosY(titleBarHeight);
+		
 		// Submit the DockSpace
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();

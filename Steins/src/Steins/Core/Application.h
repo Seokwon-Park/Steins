@@ -33,12 +33,13 @@ namespace Steins {
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline static Application& Get() { return *s_Instance; }
+		void UI_DrawTitlebar(float& outTitlebarHeight);
+		bool IsMaximized() const;
 	private:
 		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
-		void UI_DrawTitlebar(float& outTitlebarHeight);
 
 		GraphicsContext* m_Context;
 		

@@ -56,15 +56,20 @@ namespace Steins
 			s_GLFWInitialized = true;
 		}
 
-		//glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
 		glfwWindowHint(GLFW_TITLEBAR, false);
-		//glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
 
 		{
 			STS_PROFILE_SCOPE("glfwCreateWindow");
 			m_glfwWindow = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		}
+
+		glfwShowWindow(m_glfwWindow);
+
 
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
