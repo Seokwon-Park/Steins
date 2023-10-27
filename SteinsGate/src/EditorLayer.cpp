@@ -14,6 +14,81 @@
 
 namespace Steins
 {
+	namespace
+	{
+		bool BeginMenubar(const ImRect& barRectangle)
+		{
+			ImGuiWindow* window = ImGui::GetCurrentWindow();
+			if (window->SkipItems)
+				return false;
+			/*if (!(window->Flags & ImGuiWindowFlags_MenuBar))
+				return false;*/
+
+			IM_ASSERT(!window->DC.MenuBarAppending);
+			ImGui::BeginGroup(); // Backup position on layer 0 // FIXME: Misleading to use a group for that backup/restore
+			ImGui::PushID("##menubar");
+
+			const ImVec2 padding = window->WindowPadding;
+
+			// We don't clip with current window clipping rectangle as it is already set to the area below. However we clip with window full rect.
+			// We remove 1 worth of rounding to Max.x to that text in long menus and small windows don't tend to display over the lower-right rounded area, which looks particularly glitchy.
+			ImRect bar_rect = barRectangle;// window->MenuBarRect();
+			ImRect clip_rect(IM_ROUND(ImMax(window->Pos.x, bar_rect.Min.x + window->WindowBorderSize + window->Pos.x - 10.0f)), IM_ROUND(bar_rect.Min.y + window->WindowBorderSize + window->Pos.y),
+				IM_ROUND(ImMax(bar_rect.Min.x + window->Pos.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize))), IM_ROUND(bar_rect.Max.y + window->Pos.y));
+
+			clip_rect.ClipWith(window->OuterRectClipped);
+			ImGui::PushClipRect(clip_rect.Min, clip_rect.Max, false);
+
+			// We overwrite CursorMaxPos because BeginGroup sets it to CursorPos (essentially the .EmitItem hack in EndMenuBar() would need something analogous here, maybe a BeginGroupEx() with flags).
+			window->DC.CursorPos = window->DC.CursorMaxPos = ImVec2(bar_rect.Min.x + window->Pos.x, bar_rect.Min.y + window->Pos.y);
+			window->DC.LayoutType = ImGuiLayoutType_Horizontal;
+			window->DC.NavLayerCurrent = ImGuiNavLayer_Menu;
+			window->DC.MenuBarAppending = true;
+			ImGui::AlignTextToFramePadding();
+			return true;
+		}
+
+		void EndMenubar()
+		{
+			ImGuiWindow* window = ImGui::GetCurrentWindow();
+			if (window->SkipItems)
+				return;
+			ImGuiContext& g = *GImGui;
+
+			// Nav: When a move request within one of our child menu failed, capture the request to navigate among our siblings.
+			if (ImGui::NavMoveRequestButNoResultYet() && (g.NavMoveDir == ImGuiDir_Left || g.NavMoveDir == ImGuiDir_Right) && (g.NavWindow->Flags & ImGuiWindowFlags_ChildMenu))
+			{
+				// Try to find out if the request is for one of our child menu
+				ImGuiWindow* nav_earliest_child = g.NavWindow;
+				while (nav_earliest_child->ParentWindow && (nav_earliest_child->ParentWindow->Flags & ImGuiWindowFlags_ChildMenu))
+					nav_earliest_child = nav_earliest_child->ParentWindow;
+				if (nav_earliest_child->ParentWindow == window && nav_earliest_child->DC.ParentLayoutType == ImGuiLayoutType_Horizontal && (g.NavMoveFlags & ImGuiNavMoveFlags_Forwarded) == 0)
+				{
+					// To do so we claim focus back, restore NavId and then process the movement request for yet another frame.
+					// This involve a one-frame delay which isn't very problematic in this situation. We could remove it by scoring in advance for multiple window (probably not worth bothering)
+					const ImGuiNavLayer layer = ImGuiNavLayer_Menu;
+					IM_ASSERT(window->DC.NavLayersActiveMaskNext & (1 << layer)); // Sanity check
+					ImGui::FocusWindow(window);
+					ImGui::SetNavID(window->NavLastIds[layer], layer, 0, window->NavRectRel[layer]);
+					g.NavDisableHighlight = true; // Hide highlight for the current frame so we don't see the intermediary selection.
+					g.NavDisableMouseHover = g.NavMousePosDirty = true;
+					ImGui::NavMoveRequestForward(g.NavMoveDir, g.NavMoveClipDir, g.NavMoveFlags, g.NavMoveScrollFlags); // Repeat
+				}
+			}
+
+			IM_MSVC_WARNING_SUPPRESS(6011); // Static Analysis false positive "warning C6011: Dereferencing NULL pointer 'window'"
+			// IM_ASSERT(window->Flags & ImGuiWindowFlags_MenuBar); // NOTE(Yan): Needs to be commented out because Jay
+			IM_ASSERT(window->DC.MenuBarAppending);
+			ImGui::PopClipRect();
+			ImGui::PopID();
+			window->DC.MenuBarOffset.x = window->DC.CursorPos.x - window->Pos.x; // Save horizontal position so next append can reuse it. This is kinda equivalent to a per-layer CursorPos.
+			g.GroupStack.back().EmitItem = false;
+			ImGui::EndGroup(); // Restore position on layer 0
+			window->DC.LayoutType = ImGuiLayoutType_Vertical;
+			window->DC.NavLayerCurrent = ImGuiNavLayer_Main;
+			window->DC.MenuBarAppending = false;
+		}
+	}
 	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()
@@ -103,6 +178,8 @@ namespace Steins
 	{
 		STS_PROFILE_FUNCTION();
 
+		m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+
 		// Resize
 #if APITYPE == 0
 		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
@@ -112,7 +189,6 @@ namespace Steins
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-			m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
 		}
 #endif
 		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
@@ -122,7 +198,6 @@ namespace Steins
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-			m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
 		}
 
 		// Render
@@ -546,14 +621,14 @@ namespace Steins
 
 		// Logo
 		{
-			const int logoWidth = 48;// m_LogoTex->GetWidth();
+			const int logoWidth = 36;// m_LogoTex->GetWidth();
 			const int logoHeight = 48;// m_LogoTex->GetHeight();
 			const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
 			const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
 			const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
 			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetRendererID(), logoRectStart, logoRectMax, ImVec2(0, 1), ImVec2(1, 0));
 		}
-
+		
 		//ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
 
 		static float moveOffsetX;
@@ -562,12 +637,7 @@ namespace Steins
 		const float buttonsAreaWidth = 96;
 
 		// Title bar drag area
-		// On Windows we hook into the GLFW win32 window internals
-		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
-		// DEBUG DRAG BOUNDS
-		// fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
-		//	 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
-		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth, titlebarHeight * 0.5f));
+		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth, titlebarHeight), ImGuiButtonFlags_AllowOverlap);
 
 		app.SetTitleBarHovered(ImGui::IsItemHovered());
 
@@ -578,6 +648,11 @@ namespace Steins
 				app.SetTitleBarHovered(true);// Account for the top-most pixels which don't register
 		}
 
+		// On Windows we hook into the GLFW win32 window internals
+		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
+		// DEBUG DRAG BOUNDS
+		//fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
+		//	 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
 		{
 			// Centered Window title
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
@@ -586,7 +661,7 @@ namespace Steins
 			ImGui::Text("%s", app.GetWindow().GetTitle().c_str()); // Draw title
 			ImGui::SetCursorPos(currentCursorPos);
 		}
-
+		
 		// Window buttons
 		const float buttonWidth = 32.0f;
 		const float buttonHeight = 28.0f;
@@ -607,7 +682,7 @@ namespace Steins
 		{
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth + 32.0f, 0.0f));
-			if (ImGui::Button("D", ImVec2(buttonWidth, buttonHeight)))
+			if (ImGui::Button("[]", ImVec2(buttonWidth, buttonHeight)))
 			{
 				//glfwMaximizeWindow((GLFWwindow*)m_Window->GetNativeWindow() );
 				//glfwRestoreWindow((GLFWwindow*)m_Window->GetNativeWindow());
@@ -628,113 +703,59 @@ namespace Steins
 			ImGui::PopStyleColor(3);
 			ImGui::SetCursorPos(currentCursorPos);
 		}
+		bool menuHovered = false;
+
+
+		ImGui::SuspendLayout();
 		{
+			ImGui::SetItemAllowOverlap();
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
-			ImGui::SetCursorPos(ImVec2(70.0f, 32.0f));
+			ImGui::SetCursorPos(ImVec2(70.0f,4.0f));
 
 			const ImRect menuBarRect = { ImGui::GetCursorPos(),
 				{ ImGui::GetContentRegionAvail().x + ImGui::GetCursorScreenPos().x,
-				58.0f } };
-
+				30.0f } };
 			ImGui::BeginGroup();
-			////////////BeginMenubar
-			ImGuiWindow* window = ImGui::GetCurrentWindow();
-			//if (window->SkipItems)
-			//	return false;
-			/*if (!(window->Flags & ImGuiWindowFlags_MenuBar))
-				return false;*/
-
-			IM_ASSERT(!window->DC.MenuBarAppending);
-			ImGui::BeginGroup(); // Backup position on layer 0 // FIXME: Misleading to use a group for that backup/restore
-			ImGui::PushID("##menubar");
-
-			const ImVec2 padding = window->WindowPadding;
-
-			// We don't clip with current window clipping rectangle as it is already set to the area below. However we clip with window full rect.
-			// We remove 1 worth of rounding to Max.x to that text in long menus and small windows don't tend to display over the lower-right rounded area, which looks particularly glitchy.
-			ImRect bar_rect = menuBarRect;// window->MenuBarRect();
-			ImRect clip_rect(IM_ROUND(ImMax(window->Pos.x, bar_rect.Min.x + window->WindowBorderSize + window->Pos.x - 10.0f)), IM_ROUND(bar_rect.Min.y + window->WindowBorderSize + window->Pos.y),
-				IM_ROUND(ImMax(bar_rect.Min.x + window->Pos.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize))), IM_ROUND(bar_rect.Max.y + window->Pos.y));
-
-			clip_rect.ClipWith(window->OuterRectClipped);
-			ImGui::PushClipRect(clip_rect.Min, clip_rect.Max, false);
-
-			// We overwrite CursorMaxPos because BeginGroup sets it to CursorPos (essentially the .EmitItem hack in EndMenuBar() would need something analogous here, maybe a BeginGroupEx() with flags).
-			window->DC.CursorPos = window->DC.CursorMaxPos = ImVec2(bar_rect.Min.x + window->Pos.x, bar_rect.Min.y + window->Pos.y);
-			window->DC.LayoutType = ImGuiLayoutType_Horizontal;
-			window->DC.NavLayerCurrent = ImGuiNavLayer_Menu;
-			window->DC.MenuBarAppending = true;
-			ImGui::AlignTextToFramePadding();
-			///////////////////////////////////
-			if (ImGui::BeginMenu("File"))
+			if (BeginMenubar(menuBarRect))
 			{
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
-				if (ImGui::MenuItem("New", "Ctrl+N"))
+				if (ImGui::BeginMenu("File"))
 				{
-					NewScene();
-				}
+					//menuHovered = ImGui::IsItemHovered();
+					//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+					// Disabling fullscreen would allow the window to be moved to the front of other windows,
+					// which we can't undo at the moment without finer window depth/z control.
+					if (ImGui::MenuItem("New", "Ctrl+N"))
+					{
+						NewScene();
+					}
 
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-				{
-					OpenScene();
-				}
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-				{
-					SaveSceneAs();
-				}
+					if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					{
+						OpenScene();
+					}
+					if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					{
+						SaveSceneAs();
+					}
 
-				ImGui::Separator();
-				if (ImGui::MenuItem("Exit"))
-				{
-					Application::Get().Close();
-				}
+					ImGui::Separator();
+					if (ImGui::MenuItem("Exit"))
+					{
+						Application::Get().Close();
+					}
 
-				ImGui::EndMenu();
-			}
-			/////////////////
-			window = ImGui::GetCurrentWindow();
-			if (window->SkipItems)
-				return;
-			ImGuiContext& g = *GImGui;
-
-			// Nav: When a move request within one of our child menu failed, capture the request to navigate among our siblings.
-			if (ImGui::NavMoveRequestButNoResultYet() && (g.NavMoveDir == ImGuiDir_Left || g.NavMoveDir == ImGuiDir_Right) && (g.NavWindow->Flags & ImGuiWindowFlags_ChildMenu))
-			{
-				// Try to find out if the request is for one of our child menu
-				ImGuiWindow* nav_earliest_child = g.NavWindow;
-				while (nav_earliest_child->ParentWindow && (nav_earliest_child->ParentWindow->Flags & ImGuiWindowFlags_ChildMenu))
-					nav_earliest_child = nav_earliest_child->ParentWindow;
-				if (nav_earliest_child->ParentWindow == window && nav_earliest_child->DC.ParentLayoutType == ImGuiLayoutType_Horizontal && (g.NavMoveFlags & ImGuiNavMoveFlags_Forwarded) == 0)
-				{
-					// To do so we claim focus back, restore NavId and then process the movement request for yet another frame.
-					// This involve a one-frame delay which isn't very problematic in this situation. We could remove it by scoring in advance for multiple window (probably not worth bothering)
-					const ImGuiNavLayer layer = ImGuiNavLayer_Menu;
-					IM_ASSERT(window->DC.NavLayersActiveMaskNext & (1 << layer)); // Sanity check
-					ImGui::FocusWindow(window);
-					ImGui::SetNavID(window->NavLastIds[layer], layer, 0, window->NavRectRel[layer]);
-					g.NavDisableHighlight = true; // Hide highlight for the current frame so we don't see the intermediary selection.
-					g.NavDisableMouseHover = g.NavMousePosDirty = true;
-					ImGui::NavMoveRequestForward(g.NavMoveDir, g.NavMoveClipDir, g.NavMoveFlags, g.NavMoveScrollFlags); // Repeat
+					ImGui::EndMenu();
 				}
 			}
-
-			IM_MSVC_WARNING_SUPPRESS(6011); // Static Analysis false positive "warning C6011: Dereferencing NULL pointer 'window'"
-			// IM_ASSERT(window->Flags & ImGuiWindowFlags_MenuBar); // NOTE(Yan): Needs to be commented out because Jay
-			IM_ASSERT(window->DC.MenuBarAppending);
-			ImGui::PopClipRect();
-			ImGui::PopID();
-			window->DC.MenuBarOffset.x = window->DC.CursorPos.x - window->Pos.x; // Save horizontal position so next append can reuse it. This is kinda equivalent to a per-layer CursorPos.
-			g.GroupStack.back().EmitItem = false;
-			ImGui::EndGroup(); // Restore position on layer 0
-			window->DC.LayoutType = ImGuiLayoutType_Vertical;
-			window->DC.NavLayerCurrent = ImGuiNavLayer_Main;
-			window->DC.MenuBarAppending = false;
-			///////////////////////////
+			EndMenubar();
 			ImGui::EndGroup();
+			if (ImGui::IsItemHovered())
+				app.SetTitleBarHovered(false);
 			ImGui::SetCursorPos(currentCursorPos);
 		}
+		ImGui::ResumeLayout();
+
+
 
 		//ImGui::EndHorizontal();
 		outTitlebarHeight = titlebarHeight;
