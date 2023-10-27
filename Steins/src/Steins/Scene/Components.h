@@ -1,18 +1,25 @@
 #pragma once
 
+#include "SceneCamera.h"
+#include "Steins/Core/UUID.h"
+#include "Steins/Renderer/Texture.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include "SceneCamera.h"
-#include "ScriptableEntity.h"
-#include "Steins/Renderer/Texture.h"
-
-
 namespace Steins
 {
+	struct IDComponent
+	{
+		UUID ID;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+	};
+
 	struct TagComponent
 	{
 		std::string Tag;
@@ -66,6 +73,7 @@ namespace Steins
 		CameraComponent(const CameraComponent&) = default;
 	};
 
+	class ScriptableEntity;
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* Instance = nullptr;

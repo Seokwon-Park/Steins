@@ -181,6 +181,7 @@
     <ClInclude Include="src\Steins\Core\MouseCodes.h" />
     <ClInclude Include="src\Steins\Core\PlatformDetection.h" />
     <ClInclude Include="src\Steins\Core\Timestep.h" />
+    <ClInclude Include="src\Steins\Core\UUID.h" />
     <ClInclude Include="src\Steins\Core\Window.h" />
     <ClInclude Include="src\Steins\Debug\Instrumentor.h" />
     <ClInclude Include="src\Steins\Events\ApplicationEvent.h" />
@@ -654,6 +655,7 @@
     <ClCompile Include="src\Steins\Core\Layer.cpp" />
     <ClCompile Include="src\Steins\Core\LayerStack.cpp" />
     <ClCompile Include="src\Steins\Core\Log.cpp" />
+    <ClCompile Include="src\Steins\Core\UUID.cpp" />
     <ClCompile Include="src\Steins\Core\Window.cpp" />
     <ClCompile Include="src\Steins\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Steins\ImGui\imGuiLayer.cpp" />

@@ -137,8 +137,10 @@ namespace Steins
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity)
 	{
+		STS_CORE_ASSERT(entity.HasComponent<IDComponent>());
+
 		out << YAML::BeginMap; // Entity
-		out << YAML::Key << "Entity" << YAML::Value << "12342131245"; // TODO: Entity ID goes here
+		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID(); // TODO: Entity ID goes here
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -278,7 +280,7 @@ namespace Steins
 		{
 			for (auto entity : entities)
 			{
-				u64 uuid = entity["Entity"].as<u64>(); //TODO
+				u64 uuid = entity["Entity"].as<u64>();
 
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
@@ -287,7 +289,7 @@ namespace Steins
 
 				STS_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
 
-				Entity deserializedEntity = m_Scene->CreateEntity(name);
+				Entity deserializedEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent)

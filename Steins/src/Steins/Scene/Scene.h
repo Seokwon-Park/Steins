@@ -3,6 +3,7 @@
 #include "entt.hpp"
 
 #include "Steins/Core/Timestep.h"
+#include "Steins/Core/UUID.h"
 #include "Steins/Renderer/EditorCamera.h"
 
 class b2World;
@@ -18,6 +19,7 @@ namespace Steins
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = std::string());
+		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
 		void OnRuntimeStart();
