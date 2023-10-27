@@ -457,12 +457,23 @@ namespace Steins
 	}
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
-		m_ActiveScene = CreateRef<Scene>();
-		m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		if (m_SceneState != SceneState::Edit)
+			OnSceneStop();
 
-		SceneSerializer serializer(m_ActiveScene);
-		serializer.Deserialize(path.string());
+		if (path.extension().string() != ".steins")
+		{
+			STS_WARN("Could not load {0} - not a scene file", path.filename().string());
+			return;
+		}
+
+		Ref<Scene> newScene = CreateRef<Scene>();
+		SceneSerializer serializer(newScene);
+		if (serializer.Deserialize(path.string()))
+		{
+			m_ActiveScene = newScene;
+			m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		}
 	}
 	void EditorLayer::SaveSceneAs()
 	{
@@ -540,7 +551,7 @@ namespace Steins
 			const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
 			const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
 			const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
-			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetRendererID(), logoRectStart, logoRectMax, ImVec2(0,1), ImVec2(1,0));
+			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetRendererID(), logoRectStart, logoRectMax, ImVec2(0, 1), ImVec2(1, 0));
 		}
 
 		//ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
@@ -601,7 +612,7 @@ namespace Steins
 				//glfwMaximizeWindow((GLFWwindow*)m_Window->GetNativeWindow() );
 				//glfwRestoreWindow((GLFWwindow*)m_Window->GetNativeWindow());
 			}
-			
+
 			ImGui::SetCursorPos(currentCursorPos);
 		}
 		{
@@ -622,7 +633,7 @@ namespace Steins
 			ImGui::SetCursorPos(ImVec2(70.0f, 32.0f));
 
 			const ImRect menuBarRect = { ImGui::GetCursorPos(),
-				{ ImGui::GetContentRegionAvail().x + ImGui::GetCursorScreenPos().x, 
+				{ ImGui::GetContentRegionAvail().x + ImGui::GetCursorScreenPos().x,
 				58.0f } };
 
 			ImGui::BeginGroup();
