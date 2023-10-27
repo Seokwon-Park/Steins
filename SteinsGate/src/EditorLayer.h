@@ -34,6 +34,7 @@ namespace Steins
 
 		// UI Panels
 		void UI_Toolbar();
+		void UI_DrawTitlebar(float& outTitlebarHeight);
 	private:
 		OrthographicCameraController m_CameraController;
 
@@ -55,6 +56,7 @@ namespace Steins
 		EditorCamera m_EditorCamera;
 
 		Ref<Texture2D> m_CheckerboardTexture;
+		Ref<Texture2D> m_LogoTexture;
 
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered= false;

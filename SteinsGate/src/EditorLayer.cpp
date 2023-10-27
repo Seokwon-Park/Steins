@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -25,6 +26,7 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard2.png");
+		m_LogoTexture = Texture2D::Create("Resources/Icons/Logo.png");
 		m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
 		m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
 
@@ -135,7 +137,7 @@ namespace Steins
 		//Renderer2D::BeginScene(m_CameraController.GetCamera());
 		//Steins::Renderer2D::DrawQuad({ -1.0f,0.0f, -.05f }, { .8f,.8f }, m_SquareColor);
 		//Renderer2D::EndScene();
-		
+
 		// Update
 		// Update scene
 		switch (m_SceneState)
@@ -241,9 +243,9 @@ namespace Steins
 			ImGui::PopStyleVar(2);
 
 		float titleBarHeight;
-		Application::Get().UI_DrawTitlebar(titleBarHeight);
+		UI_DrawTitlebar(titleBarHeight);
 		ImGui::SetCursorPosY(titleBarHeight);
-		
+
 		// Submit the DockSpace
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -256,37 +258,7 @@ namespace Steins
 		}
 
 		style.WindowMinSize.x = minWinSizeX;
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
-				if (ImGui::MenuItem("New", "Ctrl+N"))
-				{
-					NewScene();
-				}
 
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-				{
-					OpenScene();
-				}
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-				{
-					SaveSceneAs();
-				}
-
-				ImGui::Separator();
-				if (ImGui::MenuItem("Exit"))
-				{
-					Application::Get().Close();
-				}
-
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
 
 		m_SceneHierarchyPanel.OnImGuiRender();
 		m_ContentBrowserPanel.OnImGuiRender();
@@ -542,4 +514,212 @@ namespace Steins
 		ImGui::PopStyleColor(3);
 		ImGui::End();
 	}
+
+	void EditorLayer::UI_DrawTitlebar(float& outTitlebarHeight)
+	{
+		auto& app = Application::Get();
+		const float titlebarHeight = 58.0f;
+		const bool isMaximized = app.IsMaximized();
+		float titlebarVerticalOffset = isMaximized ? -6.0f : 0.0f;
+		const ImVec2 windowPadding = ImGui::GetCurrentWindow()->WindowPadding;
+
+		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset));
+		const ImVec2 titlebarMin = ImGui::GetCursorScreenPos();
+		const ImVec2 titlebarMax = { ImGui::GetCursorScreenPos().x + ImGui::GetWindowWidth() - windowPadding.y * 2.0f,
+									 ImGui::GetCursorScreenPos().y + titlebarHeight };
+		auto* bgDrawList = ImGui::GetBackgroundDrawList();
+		auto* fgDrawList = ImGui::GetForegroundDrawList();
+		bgDrawList->AddRectFilled(titlebarMin, titlebarMax, IM_COL32(21, 21, 21, 255));
+		// DEBUG TITLEBAR BOUNDS
+		// fgDrawList->AddRect(titlebarMin, titlebarMax, IM_COL32(222, 43, 43, 255));
+
+		// Logo
+		{
+			const int logoWidth = 48;// m_LogoTex->GetWidth();
+			const int logoHeight = 48;// m_LogoTex->GetHeight();
+			const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
+			const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
+			const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
+			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetRendererID(), logoRectStart, logoRectMax, ImVec2(0,1), ImVec2(1,0));
+		}
+
+		//ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
+
+		static float moveOffsetX;
+		static float moveOffsetY;
+		const float w = ImGui::GetContentRegionAvail().x;
+		const float buttonsAreaWidth = 96;
+
+		// Title bar drag area
+		// On Windows we hook into the GLFW win32 window internals
+		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
+		// DEBUG DRAG BOUNDS
+		// fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
+		//	 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
+		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth, titlebarHeight * 0.5f));
+
+		app.SetTitleBarHovered(ImGui::IsItemHovered());
+
+		if (isMaximized)
+		{
+			float windowMousePosY = ImGui::GetMousePos().y - ImGui::GetCursorScreenPos().y;
+			if (windowMousePosY >= 0.0f && windowMousePosY <= 5.0f)
+				app.SetTitleBarHovered(true);// Account for the top-most pixels which don't register
+		}
+
+		{
+			// Centered Window title
+			ImVec2 currentCursorPos = ImGui::GetCursorPos();
+			ImVec2 textSize = ImGui::CalcTextSize(app.GetWindow().GetTitle().c_str());
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f - textSize.x * 0.5f, 2.0f + windowPadding.y + 6.0f));
+			ImGui::Text("%s", app.GetWindow().GetTitle().c_str()); // Draw title
+			ImGui::SetCursorPos(currentCursorPos);
+		}
+
+		// Window buttons
+		const float buttonWidth = 32.0f;
+		const float buttonHeight = 28.0f;
+
+		// Minimize Button
+		//ImGui::Spring();
+		{
+			ImVec2 currentCursorPos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth, 0.0f));
+			if (ImGui::Button("_", ImVec2(buttonWidth, buttonHeight)))
+			{
+				// Application::Get().QueueEvent([windowHandle = m_WindowHandle]() { glfwIconifyWindow(windowHandle); });
+			}
+			ImGui::SetCursorPos(currentCursorPos);
+		}
+		{
+			ImVec2 currentCursorPos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth + 32.0f, 0.0f));
+			if (ImGui::Button("D", ImVec2(buttonWidth, buttonHeight)))
+			{
+				//glfwMaximizeWindow((GLFWwindow*)m_Window->GetNativeWindow() );
+				//glfwRestoreWindow((GLFWwindow*)m_Window->GetNativeWindow());
+			}
+			ImGui::SetCursorPos(currentCursorPos);
+		}
+		{
+			ImVec2 currentCursorPos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth + 64.0f, 0.0f));
+			if (ImGui::Button("X", ImVec2(buttonWidth, buttonHeight)))
+			{
+				app.Close();
+			}
+			ImGui::SetCursorPos(currentCursorPos);
+		}
+		{
+			ImVec2 currentCursorPos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(70.0f, 32.0f));
+
+			const ImRect menuBarRect = { ImGui::GetCursorPos(),
+				{ ImGui::GetContentRegionAvail().x + ImGui::GetCursorScreenPos().x, 
+				58.0f } };
+
+			ImGui::BeginGroup();
+			////////////BeginMenubar
+			ImGuiWindow* window = ImGui::GetCurrentWindow();
+			//if (window->SkipItems)
+			//	return false;
+			/*if (!(window->Flags & ImGuiWindowFlags_MenuBar))
+				return false;*/
+
+			IM_ASSERT(!window->DC.MenuBarAppending);
+			ImGui::BeginGroup(); // Backup position on layer 0 // FIXME: Misleading to use a group for that backup/restore
+			ImGui::PushID("##menubar");
+
+			const ImVec2 padding = window->WindowPadding;
+
+			// We don't clip with current window clipping rectangle as it is already set to the area below. However we clip with window full rect.
+			// We remove 1 worth of rounding to Max.x to that text in long menus and small windows don't tend to display over the lower-right rounded area, which looks particularly glitchy.
+			ImRect bar_rect = menuBarRect;// window->MenuBarRect();
+			ImRect clip_rect(IM_ROUND(ImMax(window->Pos.x, bar_rect.Min.x + window->WindowBorderSize + window->Pos.x - 10.0f)), IM_ROUND(bar_rect.Min.y + window->WindowBorderSize + window->Pos.y),
+				IM_ROUND(ImMax(bar_rect.Min.x + window->Pos.x, bar_rect.Max.x - ImMax(window->WindowRounding, window->WindowBorderSize))), IM_ROUND(bar_rect.Max.y + window->Pos.y));
+
+			clip_rect.ClipWith(window->OuterRectClipped);
+			ImGui::PushClipRect(clip_rect.Min, clip_rect.Max, false);
+
+			// We overwrite CursorMaxPos because BeginGroup sets it to CursorPos (essentially the .EmitItem hack in EndMenuBar() would need something analogous here, maybe a BeginGroupEx() with flags).
+			window->DC.CursorPos = window->DC.CursorMaxPos = ImVec2(bar_rect.Min.x + window->Pos.x, bar_rect.Min.y + window->Pos.y);
+			window->DC.LayoutType = ImGuiLayoutType_Horizontal;
+			window->DC.NavLayerCurrent = ImGuiNavLayer_Menu;
+			window->DC.MenuBarAppending = true;
+			ImGui::AlignTextToFramePadding();
+			///////////////////////////////////
+			if (ImGui::BeginMenu("File"))
+			{
+				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+				// Disabling fullscreen would allow the window to be moved to the front of other windows,
+				// which we can't undo at the moment without finer window depth/z control.
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+				{
+					NewScene();
+				}
+
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+				{
+					OpenScene();
+				}
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				{
+					SaveSceneAs();
+				}
+
+				ImGui::Separator();
+				if (ImGui::MenuItem("Exit"))
+				{
+					Application::Get().Close();
+				}
+
+				ImGui::EndMenu();
+			}
+			/////////////////
+			window = ImGui::GetCurrentWindow();
+			if (window->SkipItems)
+				return;
+			ImGuiContext& g = *GImGui;
+
+			// Nav: When a move request within one of our child menu failed, capture the request to navigate among our siblings.
+			if (ImGui::NavMoveRequestButNoResultYet() && (g.NavMoveDir == ImGuiDir_Left || g.NavMoveDir == ImGuiDir_Right) && (g.NavWindow->Flags & ImGuiWindowFlags_ChildMenu))
+			{
+				// Try to find out if the request is for one of our child menu
+				ImGuiWindow* nav_earliest_child = g.NavWindow;
+				while (nav_earliest_child->ParentWindow && (nav_earliest_child->ParentWindow->Flags & ImGuiWindowFlags_ChildMenu))
+					nav_earliest_child = nav_earliest_child->ParentWindow;
+				if (nav_earliest_child->ParentWindow == window && nav_earliest_child->DC.ParentLayoutType == ImGuiLayoutType_Horizontal && (g.NavMoveFlags & ImGuiNavMoveFlags_Forwarded) == 0)
+				{
+					// To do so we claim focus back, restore NavId and then process the movement request for yet another frame.
+					// This involve a one-frame delay which isn't very problematic in this situation. We could remove it by scoring in advance for multiple window (probably not worth bothering)
+					const ImGuiNavLayer layer = ImGuiNavLayer_Menu;
+					IM_ASSERT(window->DC.NavLayersActiveMaskNext & (1 << layer)); // Sanity check
+					ImGui::FocusWindow(window);
+					ImGui::SetNavID(window->NavLastIds[layer], layer, 0, window->NavRectRel[layer]);
+					g.NavDisableHighlight = true; // Hide highlight for the current frame so we don't see the intermediary selection.
+					g.NavDisableMouseHover = g.NavMousePosDirty = true;
+					ImGui::NavMoveRequestForward(g.NavMoveDir, g.NavMoveClipDir, g.NavMoveFlags, g.NavMoveScrollFlags); // Repeat
+				}
+			}
+
+			IM_MSVC_WARNING_SUPPRESS(6011); // Static Analysis false positive "warning C6011: Dereferencing NULL pointer 'window'"
+			// IM_ASSERT(window->Flags & ImGuiWindowFlags_MenuBar); // NOTE(Yan): Needs to be commented out because Jay
+			IM_ASSERT(window->DC.MenuBarAppending);
+			ImGui::PopClipRect();
+			ImGui::PopID();
+			window->DC.MenuBarOffset.x = window->DC.CursorPos.x - window->Pos.x; // Save horizontal position so next append can reuse it. This is kinda equivalent to a per-layer CursorPos.
+			g.GroupStack.back().EmitItem = false;
+			ImGui::EndGroup(); // Restore position on layer 0
+			window->DC.LayoutType = ImGuiLayoutType_Vertical;
+			window->DC.NavLayerCurrent = ImGuiNavLayer_Main;
+			window->DC.MenuBarAppending = false;
+			///////////////////////////
+			ImGui::EndGroup();
+			ImGui::SetCursorPos(currentCursorPos);
+		}
+
+		//ImGui::EndHorizontal();
+		outTitlebarHeight = titlebarHeight;
+	}
+
 }

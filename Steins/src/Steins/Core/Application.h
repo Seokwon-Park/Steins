@@ -28,13 +28,13 @@ namespace Steins {
 
 		inline Window& GetWindow() { return *m_Window; }
 		bool IsTitleBarHovered() const { return m_TitleBarHovered; }
+		void SetTitleBarHovered(bool titleBarHovered) { m_TitleBarHovered = titleBarHovered; }
 
 		void Close();
 
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline static Application& Get() { return *s_Instance; }
-		void UI_DrawTitlebar(float& outTitlebarHeight);
 		bool IsMaximized() const;
 	private:
 		void Run();
