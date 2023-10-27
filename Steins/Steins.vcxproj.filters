@@ -1510,6 +1510,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Core\UUID.h" />
+    <ClInclude Include="src\Steins\Renderer\Renderer3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1651,5 +1652,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Steins\Core\UUID.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Renderer3D.cpp" />
   </ItemGroup>
 </Project>

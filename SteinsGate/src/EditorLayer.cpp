@@ -585,6 +585,8 @@ namespace Steins
 		{
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth, 0.0f));
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f });
 			if (ImGui::Button("_", ImVec2(buttonWidth, buttonHeight)))
 			{
 				// Application::Get().QueueEvent([windowHandle = m_WindowHandle]() { glfwIconifyWindow(windowHandle); });
@@ -599,15 +601,20 @@ namespace Steins
 				//glfwMaximizeWindow((GLFWwindow*)m_Window->GetNativeWindow() );
 				//glfwRestoreWindow((GLFWwindow*)m_Window->GetNativeWindow());
 			}
+			
 			ImGui::SetCursorPos(currentCursorPos);
 		}
 		{
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
 			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth + 64.0f, 0.0f));
+
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.8f, 0.3f, 0.3f, 1.0f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.7f, 0.2f, 0.2f, 1.0f });
 			if (ImGui::Button("X", ImVec2(buttonWidth, buttonHeight)))
 			{
 				app.Close();
 			}
+			ImGui::PopStyleColor(3);
 			ImGui::SetCursorPos(currentCursorPos);
 		}
 		{

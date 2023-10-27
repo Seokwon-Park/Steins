@@ -201,6 +201,7 @@
     <ClInclude Include="src\Steins\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Steins\Renderer\Renderer.h" />
     <ClInclude Include="src\Steins\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Steins\Renderer\Renderer3D.h" />
     <ClInclude Include="src\Steins\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Steins\Renderer\Shader.h" />
     <ClInclude Include="src\Steins\Renderer\SubTexture2D.h" />
@@ -669,6 +670,7 @@
     <ClCompile Include="src\Steins\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Steins\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\Steins\Renderer\Renderer3D.cpp" />
     <ClCompile Include="src\Steins\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Steins\Renderer\Shader.cpp" />
     <ClCompile Include="src\Steins\Renderer\SubTexture2D.cpp" />
