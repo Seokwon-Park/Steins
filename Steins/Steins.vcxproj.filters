@@ -159,6 +159,9 @@
     <ClInclude Include="src\Steins\Core\Timestep.h">
       <Filter>src\Steins\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Steins\Core\UUID.h">
+      <Filter>src\Steins\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Steins\Core\Window.h">
       <Filter>src\Steins\Core</Filter>
     </ClInclude>
@@ -214,6 +217,9 @@
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\Renderer2D.h">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Steins\Renderer\Renderer3D.h">
       <Filter>src\Steins\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Steins\Renderer\RendererAPI.h">
@@ -1509,8 +1515,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Steins\Core\UUID.h" />
-    <ClInclude Include="src\Steins\Renderer\Renderer3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DirectX11\D3D11Buffer.cpp">
@@ -1576,6 +1580,9 @@
     <ClCompile Include="src\Steins\Core\Log.cpp">
       <Filter>src\Steins\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Core\UUID.cpp">
+      <Filter>src\Steins\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\Core\Window.cpp">
       <Filter>src\Steins\Core</Filter>
     </ClCompile>
@@ -1615,6 +1622,9 @@
     <ClCompile Include="src\Steins\Renderer\Renderer2D.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Steins\Renderer\Renderer3D.cpp">
+      <Filter>src\Steins\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Steins\Renderer\RendererAPI.cpp">
       <Filter>src\Steins\Renderer</Filter>
     </ClCompile>
@@ -1651,7 +1661,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Steins\Core\UUID.cpp" />
-    <ClCompile Include="src\Steins\Renderer\Renderer3D.cpp" />
   </ItemGroup>
 </Project>

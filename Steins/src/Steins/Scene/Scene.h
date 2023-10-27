@@ -18,6 +18,8 @@ namespace Steins
 		Scene();
 		~Scene();
 
+		static Ref<Scene> Copy(Ref<Scene> other);
+
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
@@ -28,6 +30,8 @@ namespace Steins
 		void OnUpdateEditor(Timestep dt, EditorCamera& camera);
 		void OnUpdateRuntime(Timestep dt);
 		void OnViewportResize(u32 width, u32 height);
+
+		void DuplicateEntity(Entity entity);
 
 		Entity GetPrimaryCameraEntity();
 	private:
