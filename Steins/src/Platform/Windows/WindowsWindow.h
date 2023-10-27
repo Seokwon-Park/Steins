@@ -15,6 +15,7 @@ namespace Steins
 
 		void OnUpdate() override;
 
+		inline std::string GetTitle() const override { return m_Data.Title; }
 		inline u32 GetWidth() const override { return m_Data.Width; }
 		inline u32 GetHeight() const override { return m_Data.Height; }
 

@@ -27,6 +27,7 @@ namespace Steins {
 		void PushOverlay(Layer* layer);
 
 		inline Window& GetWindow() { return *m_Window; }
+		bool IsTitleBarHovered() const { return m_TitleBarHovered; }
 
 		void Close();
 
@@ -47,6 +48,7 @@ namespace Steins {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;
+		bool m_TitleBarHovered;
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0f;			
 	private:

@@ -7,10 +7,11 @@
 #include "Steins/Renderer/Renderer.h"
 #include "Platform/DirectX11/D3D11Context.h"
 
-#include "Input.h"
+#include "Steins/Core/Input.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
+#include <imgui_internal.h>
 
 namespace Steins {
 
@@ -25,6 +26,11 @@ namespace Steins {
 
 		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(STS_BIND_EVENT_FN(OnEvent));
+
+		glfwSetTitlebarHitTestCallback((GLFWwindow*)m_Window->GetNativeWindow(), [](GLFWwindow* window, int x, int y, int* hit)
+			{
+				*hit = s_Instance->IsTitleBarHovered();
+			});
 
 		m_Context = m_Window->GetContext();
 		Renderer::Init(m_Context);
@@ -145,50 +151,51 @@ namespace Steins {
 		const float titlebarHeight = 58.0f;
 		const bool isMaximized = IsMaximized();
 		float titlebarVerticalOffset = isMaximized ? -6.0f : 0.0f;
-		//const ImVec2 windowPadding = ImGui::GetCurrentWindow()->WindowPadding;
+		const ImVec2 windowPadding = ImGui::GetCurrentWindow()->WindowPadding;
 
-		//ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset));
+		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset));
 		const ImVec2 titlebarMin = ImGui::GetCursorScreenPos();
-		//const ImVec2 titlebarMax = { ImGui::GetCursorScreenPos().x + ImGui::GetWindowWidth() - windowPadding.y * 2.0f,
-		//							 ImGui::GetCursorScreenPos().y + titlebarHeight };
+		const ImVec2 titlebarMax = { ImGui::GetCursorScreenPos().x + ImGui::GetWindowWidth() - windowPadding.y * 2.0f,
+									 ImGui::GetCursorScreenPos().y + titlebarHeight };
 		auto* bgDrawList = ImGui::GetBackgroundDrawList();
 		auto* fgDrawList = ImGui::GetForegroundDrawList();
-		//bgDrawList->AddRectFilled(titlebarMin, titlebarMax, UI::Colors::Theme::titlebar);
+		bgDrawList->AddRectFilled(titlebarMin, titlebarMax, IM_COL32(21, 21, 21, 255));
 		// DEBUG TITLEBAR BOUNDS
-		// fgDrawList->AddRect(titlebarMin, titlebarMax, UI::Colors::Theme::invalidPrefab);
+		 fgDrawList->AddRect(titlebarMin, titlebarMax, IM_COL32(222, 43, 43, 255));
 
 		// Logo
 		{
 			const int logoWidth = 48;// m_LogoTex->GetWidth();
 			const int logoHeight = 48;// m_LogoTex->GetHeight();
-			//const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
-			//const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
-			//const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
-			//fgDrawList->AddImage(m_AppHeaderIcon->GetDescriptorSet(), logoRectStart, logoRectMax);
+			const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
+			const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
+			const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
+			fgDrawList->AddImage(nullptr, logoRectStart, logoRectMax);
 		}
 
-		//ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
+		ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
 
 		static float moveOffsetX;
 		static float moveOffsetY;
 		const float w = ImGui::GetContentRegionAvail().x;
-		const float buttonsAreaWidth = 94;
+		const float buttonsAreaWidth = 96;
 
 		// Title bar drag area
 		// On Windows we hook into the GLFW win32 window internals
-		//ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
+		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
 		// DEBUG DRAG BOUNDS
-		// fgDrawList->AddRect(ImGui::GetCursorScreenPos(), ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth, ImGui::GetCursorScreenPos().y + titlebarHeight), UI::Colors::Theme::invalidPrefab);
-		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth, titlebarHeight));
+		// fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
+		//	 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
+		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth, titlebarHeight*0.5f));
 
-		//m_TitleBarHovered = ImGui::IsItemHovered();
+		m_TitleBarHovered = ImGui::IsItemHovered();
 
-		//if (isMaximized)
-		//{
-		//	float windowMousePosY = ImGui::GetMousePos().y - ImGui::GetCursorScreenPos().y;
-		//	if (windowMousePosY >= 0.0f && windowMousePosY <= 5.0f)
-		//		m_TitleBarHovered = true; // Account for the top-most pixels which don't register
-		//}
+		if (isMaximized)
+		{
+			float windowMousePosY = ImGui::GetMousePos().y - ImGui::GetCursorScreenPos().y;
+			if (windowMousePosY >= 0.0f && windowMousePosY <= 5.0f)
+				m_TitleBarHovered = true; // Account for the top-most pixels which don't register
+		}
 
 		// Draw Menubar
 		//if (m_MenubarCallback)
@@ -210,38 +217,70 @@ namespace Steins {
 		{
 			// Centered Window title
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
-		//	ImVec2 textSize = ImGui::CalcTextSize(m_Specification.Name.c_str());
-		//	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f - textSize.x * 0.5f, 2.0f + windowPadding.y + 6.0f));
-		//	ImGui::Text("%s", m_Specification.Name.c_str()); // Draw title
+			ImVec2 textSize = ImGui::CalcTextSize(m_Window->GetTitle().c_str());
+			ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f - textSize.x * 0.5f, 2.0f + windowPadding.y + 6.0f));
+			ImGui::Text("%s", m_Window->GetTitle().c_str()); // Draw title
 			ImGui::SetCursorPos(currentCursorPos);
 		}
 
 		// Window buttons
-		//const ImU32 buttonColN = UI::Colors::ColorWithMultipliedValue(UI::Colors::Theme::text, 0.9f);
-		//const ImU32 buttonColH = UI::Colors::ColorWithMultipliedValue(UI::Colors::Theme::text, 1.2f);
-		//const ImU32 buttonColP = UI::Colors::Theme::textDarker;
+		const ImU32 buttonColN = IM_COL32(192, 192, 192, 255);
+		const ImU32 buttonColH = IM_COL32(192, 192, 192, 255);
+		const ImU32 buttonColP = IM_COL32(128, 128, 128, 255);
 		const float buttonWidth = 14.0f;
 		const float buttonHeight = 14.0f;
 
 		// Minimize Button
-
 		//ImGui::Spring();
+		{
+		ImVec2 currentCursorPos = ImGui::GetCursorPos();
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - buttonsAreaWidth, 16.0f));
+		if (ImGui::Button("Test"))
+		{
+			s_Instance->Close();
+		}
+		ImGui::SetCursorPos(currentCursorPos);
+
+		}
+
+		const float padY = (buttonHeight - (float)2) / 2.0f;
+
+		if (ImGui::InvisibleButton("Minimize", ImVec2(buttonWidth, buttonHeight)))
+		{
+			//		// TODO: move this stuff to a better place, like Window class
+			//		if (m_WindowHandle)
+			//		{
+			//			Application::Get().QueueEvent([windowHandle = m_WindowHandle]() { glfwIconifyWindow(windowHandle); });
+			//		}
+			ImRect result = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+			result.Min.x -= ImGui::GetCursorScreenPos().x + ImGui::GetWindowWidth() - buttonsAreaWidth;
+			result.Min.y -= -padY;
+			result.Max.x += ImGui::GetCursorScreenPos().x + ImGui::GetWindowWidth() - buttonsAreaWidth+ 14;
+			result.Max.y += -padY;
+
+			if (ImGui::IsItemActive())
+				fgDrawList->AddImage(nullptr, ImVec2{ 0,0 }, ImVec2{ 100,100 }, ImVec2(0, 0), ImVec2(1, 1));
+			else if (ImGui::IsItemHovered())
+				fgDrawList->AddImage(nullptr, ImVec2{ 0,0 }, ImVec2{ 100,100 }, ImVec2(0, 0), ImVec2(1, 1));
+			else
+				fgDrawList->AddRect(result.Min, result.Max, IM_COL32(128, 128, 128, 255));
+
 		//UI::ShiftCursorY(8.0f);
-		//{
-		//	const int iconWidth = m_IconMinimize->GetWidth();
-		//	const int iconHeight = m_IconMinimize->GetHeight();
-		//	const float padY = (buttonHeight - (float)iconHeight) / 2.0f;
-		//	if (ImGui::InvisibleButton("Minimize", ImVec2(buttonWidth, buttonHeight)))
-		//	{
-		//		// TODO: move this stuff to a better place, like Window class
-		//		if (m_WindowHandle)
-		//		{
-		//			Application::Get().QueueEvent([windowHandle = m_WindowHandle]() { glfwIconifyWindow(windowHandle); });
-		//		}
-		//	}
-		//
-		//	UI::DrawButtonImage(m_IconMinimize, buttonColN, buttonColH, buttonColP, UI::RectExpanded(UI::GetItemRect(), 0.0f, -padY));
-		//}
+		//ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 8.0f);
+		{
+			///const int iconWidth = m_IconMinimize->GetWidth();
+			//const int iconHeight = m_IconMinimize->GetHeight();
+			}
+
+
+
+			//
+			// 		auto* drawList = ImGui::GetForegroundDrawList();
+			
+
+				//fgDrawList->AddImage(nullptr, result.Min, result.Max, ImVec2(0, 0), ImVec2(1, 1));
+			//	UI::DrawButtonImage(m_IconMinimize, buttonColN, buttonColH, buttonColP, UI::RectExpanded(UI::GetItemRect(), 0.0f, -padY));
+		}
 
 
 		// Maximize Button
@@ -280,8 +319,7 @@ namespace Steins {
 		//}
 		//
 		//ImGui::Spring(-1.0f, 18.0f);
-		//ImGui::EndHorizontal();
-
+		ImGui::EndHorizontal();
 		outTitlebarHeight = titlebarHeight;
 	}
 	bool Application::IsMaximized() const

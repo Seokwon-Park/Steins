@@ -1,7 +1,7 @@
 #include "stspch.h"
 #include "Texture.h"
 
-#include "Renderer.h"
+#include "Steins/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 #include "Platform/DirectX11/D3D11Texture.h"
 

@@ -9,7 +9,7 @@ namespace Steins
 	{
 	public:
 		SteinsGate()
-			:Application("SteinsGate")
+			:Application("Engine Editor")
 		{
 			PushLayer(new EditorLayer());
 		}

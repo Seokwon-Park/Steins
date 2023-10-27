@@ -11,22 +11,4 @@ namespace Steins
 #elif APITYPE == 1
 	RendererAPI* RenderCommand::s_RendererAPI = new D3D11RendererAPI;
 #endif
-
-	//void RenderCommand::SetAPI()
-	//{
-	//	switch (RendererAPI::GetAPI())
-	//	{
-	//		case RendererAPI::API::OpenGL:
-	//		{
-	//			RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
-	//			break;
-	//		}
-	//		case RendererAPI::API::Direct3D11:
-	//		{
-	//			RenderCommand::s_RendererAPI = new D3D11RendererAPI;
-	//			break;
-	//		}
-	//		break;
-	//	}
-	//}
 }

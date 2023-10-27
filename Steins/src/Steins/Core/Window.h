@@ -34,6 +34,7 @@ namespace Steins
 
 		virtual void OnUpdate() = 0;
 		
+		virtual std::string GetTitle() const = 0;
 		virtual u32 GetWidth() const = 0;
 		virtual u32 GetHeight() const = 0;
 
