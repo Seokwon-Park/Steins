@@ -53,7 +53,7 @@ namespace Steins
 
 	struct SpriteRendererComponent
 	{
-		glm::vec4 Color{ 1.0f, 1.0f,1.0f, 1.0f };
+		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
 		Ref<Texture2D> Texture;
 		float TilingFactor = 1.0f;
 
@@ -62,6 +62,17 @@ namespace Steins
 		SpriteRendererComponent(const glm::vec4& color)
 			:Color(color) {}
 	};
+
+	struct CircleRendererComponent
+	{
+		glm::vec4 Color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		float Thickness = 1.0f;
+		float Fade = 0.005f;
+
+		CircleRendererComponent() = default;
+		CircleRendererComponent(const CircleRendererComponent&) = default;
+	};
+
 
 	struct CameraComponent
 	{

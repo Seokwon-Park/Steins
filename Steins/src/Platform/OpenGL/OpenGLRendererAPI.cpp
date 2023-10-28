@@ -29,7 +29,7 @@ namespace Steins
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount)
 	{
 		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+		vertexArray->Bind();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
