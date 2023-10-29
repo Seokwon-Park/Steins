@@ -16,6 +16,8 @@ namespace Steins
 {
 	namespace
 	{
+		// From imgui_widgets.cpp BeginMenuBar(), EndMenuBar()
+		// (remove check ImGuiWindowFlags_Menubar) for custom titlebar
 		bool BeginMenubar(const ImRect& barRectangle)
 		{
 			ImGuiWindow* window = ImGui::GetCurrentWindow();
