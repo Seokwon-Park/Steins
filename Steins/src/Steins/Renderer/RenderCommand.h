@@ -28,12 +28,20 @@ namespace Steins
 			s_RendererAPI->Clear();
 		}
 
-		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 count = 0)
+		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount = 0)
 		{
-			s_RendererAPI->DrawIndexed(vertexArray, count);
+			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 
-		//static void SetAPI();
+		inline static void DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount)
+		{
+			s_RendererAPI->DrawLines(vertexArray, vertexCount);
+		}
+		static void SetLineWidth(float width)
+		{
+			s_RendererAPI->SetLineWidth(width);
+		}
+
 
 	private:
 		static RendererAPI* s_RendererAPI;

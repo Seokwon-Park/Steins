@@ -13,5 +13,9 @@ namespace Steins
 		virtual void Clear() override;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount) override;
+		virtual void DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount) override;
+
+		virtual void SetLineWidth(float width) override;
+
 	};
 }

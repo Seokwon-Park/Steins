@@ -53,7 +53,7 @@ namespace Steins
 		STS_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!");
 
 		//glBindVertexArray(m_RendererID);
-		vertexBuffer->Bind();
+		//vertexBuffer->Bind();
 
 		//for (key, value) -> (TEXCOORD, 0), (TEXCOORD, 1), (TEXCOORD, 2) ...
 		std::map<std::string, UINT> m;

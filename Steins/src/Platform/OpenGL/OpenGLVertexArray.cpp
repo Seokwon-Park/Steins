@@ -57,7 +57,7 @@ namespace Steins
 		STS_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!");
 		
 		glBindVertexArray(m_RendererID);
-		vertexBuffer->Bind();
+		//vertexBuffer->Bind();
 
 		//In DX11
 		//std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements = {

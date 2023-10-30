@@ -168,7 +168,6 @@ namespace Steins
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-				//Renderer::Submit(mesh, transform);
 			}
 		}
 
@@ -179,9 +178,9 @@ namespace Steins
 				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 
 				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-				//Renderer::Submit(mesh, transform);
 			}
 		}
+
 		Renderer2D::EndScene();
 	}
 
