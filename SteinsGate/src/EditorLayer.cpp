@@ -16,6 +16,71 @@ namespace Steins
 {
 	namespace
 	{
+		static void RenderWindowOuterBorders(ImGuiWindow* window)
+		{
+			struct ImGuiResizeBorderDef
+			{
+				ImVec2 InnerDir;
+				ImVec2 SegmentN1, SegmentN2;
+				float  OuterAngle;
+			};
+
+			static const ImGuiResizeBorderDef resize_border_def[4] =
+			{
+				{ ImVec2(+1, 0), ImVec2(0, 1), ImVec2(0, 0), IM_PI * 1.00f }, // Left
+				{ ImVec2(-1, 0), ImVec2(1, 0), ImVec2(1, 1), IM_PI * 0.00f }, // Right
+				{ ImVec2(0, +1), ImVec2(0, 0), ImVec2(1, 0), IM_PI * 1.50f }, // Up
+				{ ImVec2(0, -1), ImVec2(1, 1), ImVec2(0, 1), IM_PI * 0.50f }  // Down
+			};
+
+			auto GetResizeBorderRect = [](ImGuiWindow* window, int border_n, float perp_padding, float thickness)
+				{
+					ImRect rect = window->Rect();
+					if (thickness == 0.0f)
+					{
+						rect.Max.x -= 1;
+						rect.Max.y -= 1;
+					}
+					if (border_n == ImGuiDir_Left) { return ImRect(rect.Min.x - thickness, rect.Min.y + perp_padding, rect.Min.x + thickness, rect.Max.y - perp_padding); }
+					if (border_n == ImGuiDir_Right) { return ImRect(rect.Max.x - thickness, rect.Min.y + perp_padding, rect.Max.x + thickness, rect.Max.y - perp_padding); }
+					if (border_n == ImGuiDir_Up) { return ImRect(rect.Min.x + perp_padding, rect.Min.y - thickness, rect.Max.x - perp_padding, rect.Min.y + thickness); }
+					if (border_n == ImGuiDir_Down) { return ImRect(rect.Min.x + perp_padding, rect.Max.y - thickness, rect.Max.x - perp_padding, rect.Max.y + thickness); }
+					IM_ASSERT(0);
+					return ImRect();
+				};
+
+
+			ImGuiContext& g = *GImGui;
+			float rounding = window->WindowRounding;
+			float border_size = 1.0f; // window->WindowBorderSize;
+			if (border_size > 0.0f && !(window->Flags & ImGuiWindowFlags_NoBackground))
+				window->DrawList->AddRect(window->Pos, { window->Pos.x + window->Size.x,  window->Pos.y + window->Size.y }, ImGui::GetColorU32(ImGuiCol_Border), rounding, 0, border_size);
+
+			int border_held = window->ResizeBorderHeld;
+			if (border_held != -1)
+			{
+				const ImGuiResizeBorderDef& def = resize_border_def[border_held];
+				ImRect border_r = GetResizeBorderRect(window, border_held, rounding, 0.0f);
+				ImVec2 p1 = ImLerp(border_r.Min, border_r.Max, def.SegmentN1);
+				const float offsetX = def.InnerDir.x * rounding;
+				const float offsetY = def.InnerDir.y * rounding;
+				p1.x += 0.5f + offsetX;
+				p1.y += 0.5f + offsetY;
+
+				ImVec2 p2 = ImLerp(border_r.Min, border_r.Max, def.SegmentN2);
+				p2.x += 0.5f + offsetX;
+				p2.y += 0.5f + offsetY;
+
+				window->DrawList->PathArcTo(p1, rounding, def.OuterAngle - IM_PI * 0.25f, def.OuterAngle);
+				window->DrawList->PathArcTo(p2, rounding, def.OuterAngle, def.OuterAngle + IM_PI * 0.25f);
+				window->DrawList->PathStroke(ImGui::GetColorU32(ImGuiCol_SeparatorActive), 0, ImMax(2.0f, border_size)); // Thicker than usual
+			}
+			if (g.Style.FrameBorderSize > 0 && !(window->Flags & ImGuiWindowFlags_NoTitleBar) && !window->DockIsActive)
+			{
+				float y = window->Pos.y + window->TitleBarHeight() - 1;
+				window->DrawList->AddLine(ImVec2(window->Pos.x + border_size, y), ImVec2(window->Pos.x + window->Size.x - border_size, y), ImGui::GetColorU32(ImGuiCol_Border), g.Style.FrameBorderSize);
+			}
+		}
 		// From imgui_widgets.cpp BeginMenuBar(), EndMenuBar()
 		// (remove check ImGuiWindowFlags_Menubar) for custom titlebar
 		bool BeginMenubar(const ImRect& barRectangle)
@@ -201,7 +266,6 @@ namespace Steins
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
-
 		// Render
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
@@ -309,15 +373,24 @@ namespace Steins
 		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 		if (!opt_padding)
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, Application::Get().IsMaximized() ? ImVec2(6.0f, 6.0f) : ImVec2(1.0f, 1.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.0f);
+		ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4{ 0.0f, 0.0f, 0.0f, 0.0f });
+
 		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
 		//m_DockSpacePos = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y };
 		//STS_CORE_WARN("Dock Space Coord = {0}, {1}", m_DockSpacePos.x, m_DockSpacePos.y);
+		ImGui::PopStyleColor(); // MenuBarBg
+		ImGui::PopStyleVar(2);
 
 		if (!opt_padding)
 			ImGui::PopStyleVar();
 
 		if (opt_fullscreen)
 			ImGui::PopStyleVar(2);
+
+		RenderWindowOuterBorders(ImGui::GetCurrentWindow());
 
 		float titleBarHeight;
 		UI_DrawTitlebar(titleBarHeight);
@@ -335,7 +408,6 @@ namespace Steins
 		}
 
 		style.WindowMinSize.x = minWinSizeX;
-
 
 		m_SceneHierarchyPanel.OnImGuiRender();
 		m_ContentBrowserPanel.OnImGuiRender();
@@ -363,12 +435,10 @@ namespace Steins
 		auto viewportOffset = ImGui::GetWindowPos(); // Includes tab bar(height 21)
 		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
 		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
-		//STS_CORE_WARN("Mouse Coord = {0}, {1}", viewportOffset.x, viewportOffset.y);
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
-
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
 
@@ -677,7 +747,11 @@ namespace Steins
 			const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
 			const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
 			const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
+#if APITYPE == 0
 			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetRendererID(), logoRectStart, logoRectMax, ImVec2(0, 1), ImVec2(1, 0));
+#elif APITYPE == 1
+			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetSRV(), logoRectStart, logoRectMax, ImVec2(0, 1), ImVec2(1, 0));
+#endif
 		}
 		
 		//ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
@@ -805,8 +879,6 @@ namespace Steins
 			ImGui::SetCursorPos(currentCursorPos);
 		}
 		ImGui::ResumeLayout();
-
-
 
 		//ImGui::EndHorizontal();
 		outTitlebarHeight = titlebarHeight;

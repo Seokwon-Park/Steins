@@ -122,6 +122,10 @@ namespace Steins
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
 
+		if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
+			s_Data.QuadShader = Shader::Create("assets/HLSLshaders/Renderer2D_Quad.hlsl");
+
+
 		// Circles
 		s_Data.CircleVertexArray = VertexArray::Create();
 		s_Data.CircleVertexBuffer= VertexBuffer::Create(s_Data.MaxVertices * sizeof(CircleVertex), sizeof(CircleVertex));
@@ -143,7 +147,7 @@ namespace Steins
 			s_Data.CircleVertexBuffer->SetLayout(
 				{
 					{ ShaderDataType::Float3, "POSITION"},
-					{ ShaderDataType::Float3, "POSITION"},
+					{ ShaderDataType::Float3, "TEXCOORD"},
 					{ ShaderDataType::Float4, "COLOR"},
 					{ ShaderDataType::Float,  "TEXCOORD"},
 					{ ShaderDataType::Float,  "TEXCOORD"},
@@ -172,7 +176,7 @@ namespace Steins
 		}
 		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
 		{
-			s_Data.QuadShader = Shader::Create("assets/HLSLshaders/Renderer2D_Quad.hlsl");
+			s_Data.CircleShader = Shader::Create("assets/HLSLshaders/Renderer2D_Circle.hlsl");
 		}
 
 		// Set all texture slots 0
@@ -195,7 +199,7 @@ namespace Steins
 		STS_PROFILE_FUNCTION();
 
 		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
-		s_Data.QuadShader->Bind();
+		//s_Data.QuadShader->Bind();
 		if (RendererAPI::GetAPI() == RendererAPI::API::OpenGL)
 		{
 			s_Data.QuadShader->Bind();
@@ -206,6 +210,8 @@ namespace Steins
 		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
 		{
 			s_Data.QuadShader->SetMat4("0", viewProj);
+			s_Data.CircleShader->SetMat4("0", viewProj);
+
 		}
 
 		StartBatch();
@@ -227,6 +233,7 @@ namespace Steins
 		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
 		{
 			s_Data.QuadShader->SetMat4("0", viewProj);
+			s_Data.CircleShader->SetMat4("0", viewProj);
 		}
 
 		StartBatch();
@@ -236,7 +243,7 @@ namespace Steins
 	{
 		STS_PROFILE_FUNCTION();
 
-		s_Data.QuadShader->Bind();
+		//s_Data.QuadShader->Bind();
 		if (RendererAPI::GetAPI() == RendererAPI::API::OpenGL)
 		{
 			s_Data.QuadShader->Bind();
@@ -247,6 +254,7 @@ namespace Steins
 		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
 		{
 			s_Data.QuadShader->SetMat4("0", camera.GetViewProjectionMatrix());
+			s_Data.CircleShader->SetMat4("0", camera.GetViewProjectionMatrix());
 		}
 
 		StartBatch();

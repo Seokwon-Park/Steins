@@ -41,6 +41,8 @@ namespace Steins
 		//m_Context->GetD3DContext()->OMSetRenderTargets(1, m_Context->GetRTV().GetAddressOf(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->OMSetRenderTargets(m_Context->GetRTVs().size(), m_Context->GetRTVs().data()->GetAddressOf(), m_Context->GetDSV().Get());
 		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//TODO:
+		vertexArray->GetVertexBuffers()[0]->Bind();
 		if (indexCount != 0)
 		{
 			m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);
