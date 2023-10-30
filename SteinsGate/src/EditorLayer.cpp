@@ -374,7 +374,7 @@ namespace Steins
 		if (!opt_padding)
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, Application::Get().IsMaximized() ? ImVec2(6.0f, 6.0f) : ImVec2(1.0f, 1.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, Application::Get().IsMaximized() ? ImVec2(6.0f, 6.0f) : ImVec2(0.0f, 0.0f));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 2.0f);
 		ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4{ 0.0f, 0.0f, 0.0f, 0.0f });
 
@@ -395,6 +395,9 @@ namespace Steins
 		float titleBarHeight;
 		UI_DrawTitlebar(titleBarHeight);
 		ImGui::SetCursorPosY(titleBarHeight);
+
+		STS_CORE_TRACE("{0}, {1}", ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		STS_CORE_TRACE("{0}, {1}", ImGui::GetMousePos().x, ImGui::GetMousePos().y);
 
 		// Submit the DockSpace
 		ImGuiIO& io = ImGui::GetIO();
@@ -738,7 +741,7 @@ namespace Steins
 		auto* fgDrawList = ImGui::GetForegroundDrawList();
 		bgDrawList->AddRectFilled(titlebarMin, titlebarMax, IM_COL32(21, 21, 21, 255));
 		// DEBUG TITLEBAR BOUNDS
-		// fgDrawList->AddRect(titlebarMin, titlebarMax, IM_COL32(222, 43, 43, 255));
+		fgDrawList->AddRect(titlebarMin, titlebarMax, IM_COL32(222, 43, 43, 255));
 
 		// Logo
 		{
@@ -754,7 +757,7 @@ namespace Steins
 #endif
 		}
 		
-		//ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
+		ImGui::BeginHorizontal("Titlebar", { ImGui::GetWindowWidth() - windowPadding.y * 2.0f, ImGui::GetFrameHeightWithSpacing() });
 
 		static float moveOffsetX;
 		static float moveOffsetY;
@@ -762,7 +765,7 @@ namespace Steins
 		const float buttonsAreaWidth = 96;
 
 		// Title bar drag area
-		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth, titlebarHeight), ImGuiButtonFlags_AllowOverlap);
+		ImGui::InvisibleButton("##titleBarDragZone", ImVec2(w - buttonsAreaWidth-20, titlebarHeight), ImGuiButtonFlags_AllowOverlap);
 
 		app.SetTitleBarHovered(ImGui::IsItemHovered());
 
@@ -776,8 +779,8 @@ namespace Steins
 		// On Windows we hook into the GLFW win32 window internals
 		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
 		// DEBUG DRAG BOUNDS
-		//fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
-		//	 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
+		fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
+			 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth-20, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
 		{
 			// Centered Window title
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
@@ -858,6 +861,12 @@ namespace Steins
 					{
 						OpenScene();
 					}
+
+					if (ImGui::MenuItem("Save...", "Ctrl+S"))
+					{
+						SaveScene();
+					}
+
 					if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 					{
 						SaveSceneAs();
@@ -880,7 +889,7 @@ namespace Steins
 		}
 		ImGui::ResumeLayout();
 
-		//ImGui::EndHorizontal();
+		ImGui::EndHorizontal();
 		outTitlebarHeight = titlebarHeight;
 	}
 

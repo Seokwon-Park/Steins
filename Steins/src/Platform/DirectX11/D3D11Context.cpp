@@ -101,6 +101,8 @@ namespace Steins
 			DXGI_SWAP_CHAIN_DESC scd;
 			ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
 
+			//scd.BufferDesc.Width = m_WindowProps.Width;
+			//scd.BufferDesc.Height = m_WindowProps.Height;	
 			scd.BufferDesc.Width = m_WindowProps.Width;
 			scd.BufferDesc.Height = m_WindowProps.Height;
 			scd.BufferDesc.RefreshRate.Numerator = 60;
@@ -174,7 +176,7 @@ namespace Steins
 			STS_CORE_INFO("DirectX11 Info:");
 			STS_CORE_INFO("  Vendor: {0}", GetVendor(adapterDescription.VendorId));
 			STS_CORE_INFO("  Renderer: {0}", videoCardDescription);
-			STS_CORE_INFO("  Version: {0}", version);			
+			STS_CORE_INFO("  Version: {0}", version);
 
 			if (SUCCEEDED(hr))return;
 		}
@@ -203,7 +205,7 @@ namespace Steins
 		// 텍스처의 너비와 높이 변경
 		textureDesc.SampleDesc.Count = 1;
 		textureDesc.SampleDesc.Quality = 0;
-		textureDesc.Usage= D3D11_USAGE_DEFAULT;   // 새로운 너비
+		textureDesc.Usage = D3D11_USAGE_DEFAULT;   // 새로운 너비
 
 		m_D3DDevice->CreateTexture2D(&textureDesc, nullptr, &m_Backbuffer);
 		m_D3DDevice->CreateTexture2D(&textureDesc, nullptr, &m_Testbuffer);
@@ -245,7 +247,7 @@ namespace Steins
 		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].RenderTargetWriteMask	= D3D11_COLOR_WRITE_ENABLE_ALL;
+		blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 		blendDesc.RenderTarget[1].BlendEnable = false;
 		blendDesc.RenderTarget[1].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 		m_D3DDevice->CreateBlendState(&blendDesc, m_BlendState.GetAddressOf());
@@ -330,7 +332,7 @@ namespace Steins
 		bbDesc.SampleDesc.Quality = 0;
 		bbDesc.Usage = D3D11_USAGE_DEFAULT;
 		m_D3DDevice->CreateTexture2D(&bbDesc, nullptr, &m_Backbuffer);
-				
+
 		D3D11_TEXTURE2D_DESC depthStencilDesc;
 		depthStencilDesc.Width = bbDesc.Width;
 		depthStencilDesc.Height = bbDesc.Height;

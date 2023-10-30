@@ -70,11 +70,16 @@ namespace Steins
 
 		glfwShowWindow(m_glfwWindow);
 
+		//You make window for custom title bar, so window size changed.
+		//And RenderTargetView Size also need to be resized.
+		int width, height;
+		glfwGetWindowSize(m_glfwWindow, &width, &height);
+		WindowProps newWindowProps(props.Title, width, height);
 
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::Direct3D11:
 		{
-			m_Context = new D3D11Context(m_glfwWindow, props);
+			m_Context = new D3D11Context(m_glfwWindow, newWindowProps);
 			break;
 		}
 		case RendererAPI::API::OpenGL:
