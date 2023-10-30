@@ -62,7 +62,6 @@ namespace Steins
 
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-
 		{
 			STS_PROFILE_SCOPE("glfwCreateWindow");
 			m_glfwWindow = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);

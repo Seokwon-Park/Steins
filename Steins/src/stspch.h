@@ -19,7 +19,10 @@
 #include "Steins/Debug/Instrumentor.h"
 
 //platforms
-#define APITYPE 1
+#define OPENGL 0
+#define DIRECTX11 1
+
+#define RENDER_API DIRECTX11
 
 #ifdef STS_PLATFORM_WINDOWS
 	#ifndef NOMINMAX

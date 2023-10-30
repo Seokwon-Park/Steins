@@ -54,9 +54,9 @@ namespace Steins
 			ImGui::PushID(filenameString.c_str());
 			Ref<Texture2D> icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-#if APITYPE == 0
+#if RENDER_API == 0
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0,1 }, { 1,0 });
-#elif APITYPE == 1
+#elif RENDER_API == 1
 			ImGui::ImageButton((ImTextureID)icon->GetSRV(), { thumbnailSize, thumbnailSize }, { 0,1 }, { 1,0 });
 #endif
 			ImGui::PopStyleColor();

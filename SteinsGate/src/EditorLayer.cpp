@@ -248,7 +248,7 @@ namespace Steins
 		m_ActiveScene->OnViewportResize((u32)m_ViewportSize.x, (u32)m_ViewportSize.y);
 
 		// Resize
-#if APITYPE == 0
+#if RENDER_API == 0
 		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
@@ -301,7 +301,7 @@ namespace Steins
 		}
 		}
 
-#if APITYPE == 0
+#if RENDER_API == 0
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_ViewportBounds[0].x;
 		my -= m_ViewportBounds[0].y;
@@ -396,8 +396,8 @@ namespace Steins
 		UI_DrawTitlebar(titleBarHeight);
 		ImGui::SetCursorPosY(titleBarHeight);
 
-		STS_CORE_TRACE("{0}, {1}", ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-		STS_CORE_TRACE("{0}, {1}", ImGui::GetMousePos().x, ImGui::GetMousePos().y);
+		// STS_CORE_TRACE("{0}, {1}", ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		// STS_CORE_TRACE("{0}, {1}", ImGui::GetMousePos().x, ImGui::GetMousePos().y);
 
 		// Submit the DockSpace
 		ImGuiIO& io = ImGui::GetIO();
@@ -445,10 +445,10 @@ namespace Steins
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x ,viewportPanelSize.y };
 
-#if APITYPE	== 0
+#if RENDER_API	== 0
 		auto textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x ,m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-#elif APITYPE == 1
+#elif RENDER_API == 1
 		auto textureID = m_Framebuffer->GetSRV(0);
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x ,m_ViewportSize.y });
 #endif
@@ -709,9 +709,9 @@ namespace Steins
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-#if APITYPE == 0
+#if RENDER_API == 0
 		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-#elif APITYPE == 1
+#elif RENDER_API == 1
 		if (ImGui::ImageButton((ImTextureID)icon->GetSRV(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 #endif
 		{
@@ -741,7 +741,7 @@ namespace Steins
 		auto* fgDrawList = ImGui::GetForegroundDrawList();
 		bgDrawList->AddRectFilled(titlebarMin, titlebarMax, IM_COL32(21, 21, 21, 255));
 		// DEBUG TITLEBAR BOUNDS
-		fgDrawList->AddRect(titlebarMin, titlebarMax, IM_COL32(222, 43, 43, 255));
+		//fgDrawList->AddRect(titlebarMin, titlebarMax, IM_COL32(222, 43, 43, 255));
 
 		// Logo
 		{
@@ -750,9 +750,9 @@ namespace Steins
 			const ImVec2 logoOffset(16.0f + windowPadding.x, 5.0f + windowPadding.y + titlebarVerticalOffset);
 			const ImVec2 logoRectStart = { ImGui::GetItemRectMin().x + logoOffset.x, ImGui::GetItemRectMin().y + logoOffset.y };
 			const ImVec2 logoRectMax = { logoRectStart.x + logoWidth, logoRectStart.y + logoHeight };
-#if APITYPE == 0
+#if RENDER_API == 0
 			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetRendererID(), logoRectStart, logoRectMax, ImVec2(0, 1), ImVec2(1, 0));
-#elif APITYPE == 1
+#elif RENDER_API == 1
 			fgDrawList->AddImage((ImTextureID)m_LogoTexture->GetSRV(), logoRectStart, logoRectMax, ImVec2(0, 1), ImVec2(1, 0));
 #endif
 		}
@@ -779,8 +779,8 @@ namespace Steins
 		// On Windows we hook into the GLFW win32 window internals
 		ImGui::SetCursorPos(ImVec2(windowPadding.x, windowPadding.y + titlebarVerticalOffset)); // Reset cursor pos
 		// DEBUG DRAG BOUNDS
-		fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
-			 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth-20, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
+		//fgDrawList->AddRect(ImGui::GetCursorScreenPos(), 
+		//	 ImVec2(ImGui::GetCursorScreenPos().x + w - buttonsAreaWidth-20, ImGui::GetCursorScreenPos().y + titlebarHeight), IM_COL32(222, 43, 43, 255));
 		{
 			// Centered Window title
 			ImVec2 currentCursorPos = ImGui::GetCursorPos();
