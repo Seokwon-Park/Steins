@@ -178,6 +178,11 @@ namespace Steins
 		s_Data.CircleVertexArray->SetIndexBuffer(quadIB); // Use quad IB
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
 
+		if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
+		{
+			s_Data.CircleShader = Shader::Create("assets/HLSLshaders/Renderer2D_Circle.hlsl");
+		}
+
 		// Lines
 		s_Data.LineVertexArray = VertexArray::Create();
 		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex), sizeof(LineVertex));
@@ -222,7 +227,7 @@ namespace Steins
 		}
 		else if (RendererAPI::GetAPI() == RendererAPI::API::Direct3D11)
 		{
-			s_Data.CircleShader = Shader::Create("assets/HLSLshaders/Renderer2D_Circle.hlsl");
+			s_Data.LineShader = Shader::Create("assets/HLSLshaders/Renderer2D_Line.hlsl");
 		}
 
 		// Set all texture slots 0
@@ -257,6 +262,7 @@ namespace Steins
 		{
 			s_Data.QuadShader->SetMat4("0", viewProj);
 			s_Data.CircleShader->SetMat4("0", viewProj);
+			s_Data.LineShader->SetMat4("0", viewProj);
 
 		}
 
@@ -282,6 +288,7 @@ namespace Steins
 		{
 			s_Data.QuadShader->SetMat4("0", viewProj);
 			s_Data.CircleShader->SetMat4("0", viewProj);
+			s_Data.LineShader->SetMat4("0", viewProj);
 		}
 
 		StartBatch();

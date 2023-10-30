@@ -47,11 +47,25 @@ namespace Steins
 		{
 			m_Context->GetD3DContext()->DrawIndexed(count, 0, 0);
 		}
-		ComPtr<ID3D11Texture2D> backBuffer;
-		m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
-		m_Context->GetD3DContext()->CopyResource(m_Context->GetBackbuffer().Get(), backBuffer.Get());
-		backBuffer.Reset();
+		//ComPtr<ID3D11Texture2D> backBuffer;
+		//m_Context->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
+		//m_Context->GetD3DContext()->CopyResource(m_Context->GetBackbuffer().Get(), backBuffer.Get());
+		//backBuffer.Reset();
 
+
+	}
+	void D3D11RendererAPI::DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount)
+	{
+		m_Context->GetD3DContext()->OMSetBlendState(m_Context->GetBS().Get(), m_ClearColor, 0xFFFFFFFF);
+		m_Context->GetD3DContext()->OMSetRenderTargets(m_Context->GetRTVs().size(), m_Context->GetRTVs().data()->GetAddressOf(), m_Context->GetDSV().Get());
+		vertexArray->GetVertexBuffers()[0]->Bind();
+		m_Context->GetD3DContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+		m_Context->GetD3DContext()->Draw(vertexCount, 0);
+
+	}
+
+	void D3D11RendererAPI::SetLineWidth(float width)
+	{
 
 	}
 }
