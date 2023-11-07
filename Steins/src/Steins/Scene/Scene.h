@@ -27,8 +27,12 @@ namespace Steins
 		void OnRuntimeStart();
 		void OnRuntimeStop();
 
-		void OnUpdateEditor(Timestep dt, EditorCamera& camera);
+		void OnSimulationStart();
+		void OnSimulationStop();
+
 		void OnUpdateRuntime(Timestep dt);
+		void OnUpdateSimulation(Timestep dt, EditorCamera& camera);
+		void OnUpdateEditor(Timestep dt, EditorCamera& camera);
 		void OnViewportResize(u32 width, u32 height);
 
 		void DuplicateEntity(Entity entity);
@@ -43,6 +47,11 @@ namespace Steins
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
+
+		void OnPhysics2DStart();
+		void OnPhysics2DStop();
+
+		void RenderScene(EditorCamera& camera);
 	private:
 		entt::registry m_Registry;
 		u32 m_ViewportWidth = 0, m_ViewportHeight = 0;

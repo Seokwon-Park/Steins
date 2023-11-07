@@ -22,7 +22,8 @@
 #define OPENGL 0
 #define DIRECTX11 1
 
-#define RENDER_API OPENGL
+//#define RENDER_API OPENGL
+#define RENDER_API DIRECTX11
 
 #ifdef STS_PLATFORM_WINDOWS
 	#ifndef NOMINMAX

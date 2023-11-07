@@ -378,12 +378,15 @@ namespace Steins
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 			{
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
-				//Texture
-				//if (component.Texture)
-				//{
-				//	ImGui::Image((ImTextureID)component.Texture->GetSRV(), ImVec2(50,50));
-				//	ImGui::SameLine();
-				//}
+				if (component.Texture)
+				{
+					ImGui::Image((ImTextureID)component.Texture->GetSRV(), ImVec2(50, 50), { 0,1 }, { 1,0 });
+				}
+				else
+				{
+					ImGui::Image(nullptr, ImVec2(50, 50));
+				}
+				ImGui::SameLine();
 				ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
