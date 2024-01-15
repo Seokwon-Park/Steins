@@ -550,7 +550,7 @@ namespace Steins
 	}
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetRepeatCount() > 0)
+		if (e.IsRepeat())
 			return false;
 
 		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
@@ -671,6 +671,13 @@ namespace Steins
 				}
 			}
 		}
+		if (Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity()) {
+			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
+
+			Renderer2D::SetLineWidth(3.0f);
+			Renderer2D::DrawRect(transform.GetTransform(), glm::vec4(0, 1, 1, 1));
+		}
+
 		Renderer2D::EndScene();
 	}
 	void EditorLayer::NewScene()

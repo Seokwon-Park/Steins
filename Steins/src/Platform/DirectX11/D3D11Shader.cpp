@@ -161,18 +161,18 @@ namespace Steins
 	}
 	void D3D11Shader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
-		glm::mat4 transpose = glm::transpose(value);
+		glm::mat4 transpose = glm::transpose(value); // glm matrix need transform for dx11
 		//TODO:update constant buffer ex)..viewproj,
 		D3D11_BUFFER_DESC vertexConstantDesc;
 		ZeroMemory(&vertexConstantDesc, sizeof(vertexConstantDesc));
-		vertexConstantDesc.Usage = D3D11_USAGE_IMMUTABLE; // ÃÊ±âÈ­ ÈÄ º¯°æX
+		vertexConstantDesc.Usage = D3D11_USAGE_IMMUTABLE; // ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½X
 		vertexConstantDesc.ByteWidth = sizeof(glm::mat4);
 		vertexConstantDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		vertexConstantDesc.CPUAccessFlags = 0; // 0 if no CPU access is necessary.
 		vertexConstantDesc.StructureByteStride = sizeof(float);
 
 		D3D11_SUBRESOURCE_DATA initData;
-		initData.pSysMem = &transpose; // ÃÊ±â µ¥ÀÌÅÍÀÇ Æ÷ÀÎÅÍ
+		initData.pSysMem = &transpose; // glm matrix need transform.
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 

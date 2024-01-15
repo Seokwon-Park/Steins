@@ -10,6 +10,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
+//Components
 namespace Steins
 {
 	struct IDComponent
@@ -84,7 +85,9 @@ namespace Steins
 		CameraComponent(const CameraComponent&) = default;
 	};
 
+	//What is this?
 	class ScriptableEntity;
+
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* Instance = nullptr;
@@ -151,5 +154,15 @@ namespace Steins
 		CircleCollider2DComponent() = default;
 		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
 	};
+
+	template<typename... Component>
+	struct ComponentGroup
+	{
+	};
+
+	using AllComponents =
+		ComponentGroup<TransformComponent, SpriteRendererComponent,
+		CircleRendererComponent, CameraComponent, NativeScriptComponent,
+		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
 
 }

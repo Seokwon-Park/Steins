@@ -293,11 +293,16 @@ namespace Steins
 
 	bool SceneSerializer::Deserialize(const std::string& filepath)
 	{
-		std::ifstream stream(filepath);
-		std::stringstream strStream;
-		strStream << stream.rdbuf();
-
-		YAML::Node data = YAML::Load(strStream.str());
+		YAML::Node data;
+		try
+		{
+			data = YAML::LoadFile(filepath);
+		}
+		catch (YAML::ParserException e)
+		{
+			STS_CORE_ERROR("Failed to load .hazel file '{0}'\n     {1}", filepath, e.what());
+			return false;
+		}
 		if (!data["Scene"])
 			return false;
 

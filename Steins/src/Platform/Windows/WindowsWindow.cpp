@@ -58,7 +58,7 @@ namespace Steins
 
 		//glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-		glfwWindowHint(GLFW_TITLEBAR, false);
+		glfwWindowHint(GLFW_TITLEBAR, true);
 
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
@@ -133,7 +133,7 @@ namespace Steins
 				}
 				case GLFW_REPEAT:
 				{
-					KeyPressedEvent event(key, 1);
+					KeyPressedEvent event(key, true);
 					data.EventCallback(event);
 					break;
 				}

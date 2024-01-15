@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+std::wstring tetromino[7];
+
 static const u32 s_MapWidth = 24;
 static const char* s_MapTiles =
 "WWWWWWWWWWWWWWWWWWWWWWWW"
@@ -30,6 +32,18 @@ Sandbox2D::Sandbox2D()
 void Sandbox2D::OnAttach()
 {
 	STS_PROFILE_FUNCTION();
+
+	tetromino[0].append(L"..X.");
+	tetromino[0].append(L"..X.");
+	tetromino[0].append(L"..X.");
+	tetromino[0].append(L"..X.");
+
+	tetromino[1].append(L"..X..XX...X.....");
+	tetromino[2].append(L".....XX..XX.....");
+	tetromino[3].append(L"..X..XX..X......");
+	tetromino[4].append(L".X...XX...X.....");
+	tetromino[5].append(L".X...X...XX.....");
+	tetromino[6].append(L"..X...X..XX.....");
 
 	m_CheckerboardTexture = Steins::Texture2D::Create("assets/textures/Checkerboard2.png");
 	m_SpriteSheet = Steins::Texture2D::Create("game/textures/RPGpack_sheet_2X.png");
@@ -92,6 +106,7 @@ void Sandbox2D::OnUpdate(Steins::Timestep dt)
 		Steins::Renderer2D::DrawQuad({ 0.5f,-0.5f, -.1f}, { .5f,0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
 		Steins::Renderer2D::DrawQuad({ 0.0f, 0.0f, -.2f}, { 20.0f,20.0f }, m_CheckerboardTexture, 10.0f);
 		Steins::Renderer2D::DrawRotatedQuad({ -2.0f,-0.0f, -.1f }, { 1.0f,1.0f }, glm::radians(rotation), m_CheckerboardTexture, 20.0f);
+		Steins::Renderer2D::DrawQuad({ -3.0f,-0.0f, -.1f }, { 1.0f,1.0f }, s_TextureMap['W']);
 		Steins::Renderer2D::EndScene();
 
 		Steins::Renderer2D::BeginScene(m_CameraController.GetCamera());

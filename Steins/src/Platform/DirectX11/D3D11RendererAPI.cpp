@@ -27,7 +27,7 @@ namespace Steins
 	}
 	void D3D11RendererAPI::Clear()
 	{
-		//m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTV().Get(), m_ClearColor);
+		m_Context->GetD3DContext()->ClearRenderTargetView(m_Context->GetRTV().Get(), m_ClearColor);
 		for(auto rtv : m_Context->GetRTVs())
 		{
 			m_Context->GetD3DContext()->ClearRenderTargetView(rtv.Get(), m_ClearColor);
