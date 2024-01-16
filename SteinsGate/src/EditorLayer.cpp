@@ -156,6 +156,7 @@ namespace Steins
 			window->DC.MenuBarAppending = false;
 		}
 	}
+
 	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()

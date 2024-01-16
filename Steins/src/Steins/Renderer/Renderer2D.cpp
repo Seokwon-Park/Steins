@@ -511,6 +511,7 @@ namespace Steins
 			NextBatch();
 		}
 
+
 		float textureIndex = 0.0f;
 		for (u32 i = 1; i < s_Data.TextureSlotIndex; i++)
 		{
