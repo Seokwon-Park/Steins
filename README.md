@@ -31,5 +31,4 @@ If you want to change the renderer API, use #define APITYPE in stspch.h to chang
 렌더러 API를 변경하려면 stspch.h에서 #define APITYPE를 사용하여 변경합니다. (OpenGL = 0, DirectX11 = 1)
 
 ## TODO
-DirectX11 Collider Line 그리기 안됨..
-유튜브 영상까지는 브랜치로 사용하고 DirectX11에 맞게 다시 만들지 결정하기.
+
